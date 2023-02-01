@@ -1,10 +1,11 @@
 package com.fmf.algafood.notification;
 
+import com.fmf.algafood.annotations.TipoDoNotificador;
+import com.fmf.algafood.enums.NivelUrgencia;
 import com.fmf.algafood.model.Cliente;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@Qualifier("email")
+@TipoDoNotificador(NivelUrgencia.NORMAL)
 @Component
 public class NotificadorEmail implements Notificador {
 
