@@ -5,31 +5,21 @@ import com.fmf.algafood.notification.Notificador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class AtivacaoClienteService {
 
-	// Mesmo sendo privado, é possível injetar dependencia diretamente no atributo
-	@Autowired
+	@Autowired(required = false)
 	private Notificador notificador;
-
-//	// Em uma classe com vários construtores disponíveis, essa anotação pode dizer ao Spring em qual deles fazer a injeção de dependencia
-//	@Autowired
-//	public AtivacaoClienteService(Notificador notificador) {
-//		this.notificador = notificador;
-//	}
-//
-//	public AtivacaoClienteService(String exemplo) {
-//	}
-
-//	// É possível usar métodos "setters" para definir ponto de injeção de dependencia
-//	@Autowired
-//	public void setNotificador(Notificador notificador) {
-//		this.notificador = notificador;
-//	}
 
 	public void ativar(Cliente cliente) {
 		cliente.ativar();
 
-		notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
+		if (Objects.nonNull(notificador)) {
+			notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
+		} else {
+			System.out.println("Não existe notificador definido, mas cliente foi ativado!");
+		}
 	}
 }

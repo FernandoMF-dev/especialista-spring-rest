@@ -1,9 +1,8 @@
 package com.fmf.algafood.notification;
 
 import com.fmf.algafood.model.Cliente;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class NotificadorEmail implements Notificador {
 
 	@Override
