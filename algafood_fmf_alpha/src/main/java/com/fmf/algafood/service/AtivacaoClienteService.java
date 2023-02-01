@@ -9,13 +9,19 @@ import org.springframework.stereotype.Component;
 public class AtivacaoClienteService {
 	private Notificador notificador;
 
-	// Em uma classe com vários construtores disponíveis, essa anotação pode dizer ao Spring em qual deles fazer a injeção de dependencia
-	@Autowired
-	public AtivacaoClienteService(Notificador notificador) {
-		this.notificador = notificador;
-	}
+//	// Em uma classe com vários construtores disponíveis, essa anotação pode dizer ao Spring em qual deles fazer a injeção de dependencia
+//	@Autowired
+//	public AtivacaoClienteService(Notificador notificador) {
+//		this.notificador = notificador;
+//	}
+//
+//	public AtivacaoClienteService(String exemplo) {
+//	}
 
-	public AtivacaoClienteService(String exemplo) {
+	// É possível usar métodos "setters" para definir ponto de injeção de dependencia
+	@Autowired
+	public void setNotificador(Notificador notificador) {
+		this.notificador = notificador;
 	}
 
 	public void ativar(Cliente cliente) {
