@@ -1,8 +1,10 @@
 package com.fmf.algafood.notification;
 
 import com.fmf.algafood.model.Cliente;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+@Qualifier("email")
 @Component
 public class NotificadorEmail implements Notificador {
 
