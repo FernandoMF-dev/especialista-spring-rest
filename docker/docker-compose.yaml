@@ -1,0 +1,8 @@
+version: "2.4"
+
+services:
+    database-postgresql:
+        extends:
+            file: containers/postgresql.yaml
+            service: database-postgresql
+        container_name: database-postgresql

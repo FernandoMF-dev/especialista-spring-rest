@@ -1,0 +1,11 @@
+version: "2.4"
+
+services:
+    database-postgresql:
+        image: postgres:14.1-alpine
+        environment:
+            - POSTGRES_USER=db_user
+            - POSTGRES_PASSWORD=db_password
+            - POSTGRES_DB=db_database
+        ports:
+            - "5432:5432"
