@@ -2,12 +2,12 @@ package br.com.colatina.fmf.algafood.service.jpa;
 
 import br.com.colatina.fmf.algafood.service.FmfAlgafoodServiceApplication;
 import br.com.colatina.fmf.algafood.service.domain.entity.Kitchen;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
-import java.util.List;
-
+@Slf4j
 public class KitchenRegisterMain {
 
 	public static void main(String[] args) {
@@ -17,8 +17,13 @@ public class KitchenRegisterMain {
 
 		KitchenRegister kitchenRegister = applicationContext.getBean(KitchenRegister.class);
 
-		List<Kitchen> kitchens = kitchenRegister.findAll();
+		Kitchen kitchen1 = new Kitchen();
+		kitchen1.setName("Brasileira");
 
-		kitchens.forEach(value -> System.out.println(value.getNome()));
+		Kitchen kitchen2 = new Kitchen();
+		kitchen2.setName("Japonesa");
+
+		kitchenRegister.save(kitchen1);
+		kitchenRegister.save(kitchen2);
 	}
 }

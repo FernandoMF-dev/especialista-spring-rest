@@ -23,12 +23,12 @@ public class Restaurant {
 	private Long id;
 
 	@Column(name = "name")
-	private String nome;
+	private String name;
 
 	@Column(name = "freight_rate")
 	private Double freightRate;
 
 	@Column(name = "excluded")
-	private Boolean excluido = Boolean.FALSE;
+	private Boolean excluded = Boolean.FALSE;
 
 }

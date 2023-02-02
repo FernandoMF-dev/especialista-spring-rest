@@ -3,13 +3,7 @@ package br.com.colatina.fmf.algafood.service.domain.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
@@ -24,10 +18,10 @@ public class Kitchen {
 	private Long id;
 
 	@Column(name = "name")
-	private String nome;
+	private String name;
 
 	@Column(name = "excluded")
-	private Boolean excluido = Boolean.FALSE;
+	private Boolean excluded = Boolean.FALSE;
 
 	@Override
 	public boolean equals(Object o) {
