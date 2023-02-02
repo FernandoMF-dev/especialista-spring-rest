@@ -17,13 +17,8 @@ public class KitchenRegisterMain {
 
 		KitchenRegister kitchenRegister = applicationContext.getBean(KitchenRegister.class);
 
-		Kitchen kitchen1 = new Kitchen();
-		kitchen1.setName("Brasileira");
+		Kitchen kitchen = kitchenRegister.findById(1L);
 
-		Kitchen kitchen2 = new Kitchen();
-		kitchen2.setName("Japonesa");
-
-		kitchenRegister.save(kitchen1);
-		kitchenRegister.save(kitchen2);
+		log.debug(kitchen.getId() + " - " + kitchen.getName());
 	}
 }

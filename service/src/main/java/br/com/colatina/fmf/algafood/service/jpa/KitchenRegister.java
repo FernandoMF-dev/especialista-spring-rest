@@ -24,4 +24,8 @@ public class KitchenRegister {
 	public Kitchen save(Kitchen entity) {
 		return entityManager.merge(entity);
 	}
+
+	public Kitchen findById(Long id) {
+		return entityManager.find(Kitchen.class, id);
+	}
 }
