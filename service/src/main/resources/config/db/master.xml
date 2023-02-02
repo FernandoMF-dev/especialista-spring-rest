@@ -6,4 +6,5 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
 	<include file="/config/db/changelogs/20230202141000_create_table_kitchen.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20230202143000_create_table_restaurant.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
