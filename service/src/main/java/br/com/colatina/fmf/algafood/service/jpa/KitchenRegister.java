@@ -28,4 +28,9 @@ public class KitchenRegister {
 	public Kitchen findById(Long id) {
 		return entityManager.find(Kitchen.class, id);
 	}
+
+	public void delete(Kitchen entity) {
+		Kitchen kitchen = findById(entity.getId());
+		entityManager.remove(kitchen);
+	}
 }

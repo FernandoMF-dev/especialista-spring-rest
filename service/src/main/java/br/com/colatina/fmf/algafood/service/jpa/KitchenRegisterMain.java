@@ -21,9 +21,6 @@ public class KitchenRegisterMain {
 		kitchen.setName("Tailandesa");
 		kitchen = kitchenRegister.save(kitchen);
 		log.debug(kitchen.getId() + " - " + kitchen.getName());
-
-		kitchen.setName("Chinesa");
-		kitchen = kitchenRegister.save(kitchen);
-		log.debug(kitchen.getId() + " - " + kitchen.getName());
+		kitchenRegister.delete(kitchen);
 	}
 }
