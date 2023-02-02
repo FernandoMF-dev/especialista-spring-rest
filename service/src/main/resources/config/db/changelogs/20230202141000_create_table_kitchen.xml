@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20230202141000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_kitchen">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="name" type="VARCHAR" remarks="Name of the kitchen">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_kitchen"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230202141000-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_kitchen" columnNames="id" constraintName="pk_kitchen"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_kitchen" constraintName="pk_kitchen"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230202141000-3" author="Fernando Martins Ferreira">
+		<createSequence sequenceName="seq_kitchen" incrementBy="1" startValue="1"/>
+
+		<rollback>
+			<dropSequence sequenceName="seq_kitchen"/>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>
