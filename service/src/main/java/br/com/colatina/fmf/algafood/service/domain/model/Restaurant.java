@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -31,4 +32,20 @@ public class Restaurant {
 	@Column(name = "excluded")
 	private Boolean excluded = Boolean.FALSE;
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Restaurant)) {
+			return false;
+		}
+		Restaurant that = (Restaurant) o;
+		return id.equals(that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }
