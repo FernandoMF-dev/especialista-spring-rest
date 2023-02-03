@@ -1,9 +1,9 @@
 package br.com.colatina.fmf.algafood.service.domain.repository;
 
-import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
+import br.com.colatina.fmf.algafood.service.domain.model.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+public interface StateRepository extends JpaRepository<State, Long> {
 }

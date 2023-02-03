@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20230203201000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_state">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="acronym" type="CHAR(2)"
+					remarks="Acronym that uniquely identifies the state within it's country">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="name" type="VARCHAR" remarks="Full name of the state">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_state"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230203201000-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_state" columnNames="id" constraintName="pk_state"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_state" constraintName="pk_state"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230203201000-3" author="Fernando Martins Ferreira">
+		<createSequence sequenceName="seq_state" incrementBy="1" startValue="1"/>
+
+		<rollback>
+			<dropSequence sequenceName="seq_state"/>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

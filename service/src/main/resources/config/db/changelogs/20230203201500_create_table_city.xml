@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+
+	<changeSet id="20230203201500-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_city">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="acronym" type="CHAR(5)"
+					remarks="Acronym that uniquely identifies the city within it's state">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="name" type="VARCHAR" remarks="Full name of the city">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="state_id" type="BIGINT"
+					remarks="Unique identifier of the state where the city is located"/>
+
+			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_city"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230203201500-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_city" columnNames="id" constraintName="pk_city"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_city" constraintName="pk_city"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230203201500-3" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="tb_city" baseColumnNames="state_id"
+								 referencedTableName="tb_state" referencedColumnNames="id"
+								 constraintName="fk_city_state"/>
+
+		<rollback>
+			<dropAllForeignKeyConstraints baseTableName="tb_city"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230203201500-4" author="Fernando Martins Ferreira">
+		<createSequence sequenceName="seq_city" incrementBy="1" startValue="1"/>
+
+		<rollback>
+			<dropSequence sequenceName="seq_city"/>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

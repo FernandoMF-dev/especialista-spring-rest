@@ -1,17 +1,7 @@
 package br.com.colatina.fmf.algafood.service.domain.repository;
 
 import br.com.colatina.fmf.algafood.service.domain.model.Kitchen;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface KitchenRepository {
-
-	List<Kitchen> findAll();
-
-	Kitchen findById(Long id);
-
-	Kitchen save(Kitchen entity);
-
-	void delete(Kitchen entity);
-
+public interface KitchenRepository extends JpaRepository<Kitchen, Long> {
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20230203200500-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_permission">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="name" type="VARCHAR" remarks="Name of the permission">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="description" type="VARCHAR" remarks="Description of what the permission allows">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_permission"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230203200500-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_permission" columnNames="id" constraintName="pk_permission"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_permission" constraintName="pk_permission"/>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

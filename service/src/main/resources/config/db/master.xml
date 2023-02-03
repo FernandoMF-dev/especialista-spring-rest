@@ -7,4 +7,9 @@
 
 	<include file="/config/db/changelogs/20230202141000_create_table_kitchen.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20230202143000_create_table_restaurant.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20230203200000_create_table_payment_method.xml"
+			 relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20230203200500_create_table_permission.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20230203201000_create_table_state.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20230203201500_create_table_city.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

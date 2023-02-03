@@ -29,7 +29,7 @@ public class RestaurantRegisterMain {
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		restaurants.forEach(value -> log.debug(String.format("LIST = %d - %s - %f", value.getId(), value.getName(), value.getFreightRate())));
 
-		restaurant = restaurantRepository.findById(restaurant.getId());
+		restaurant = restaurantRepository.getReferenceById(restaurant.getId());
 		log.debug(String.format("FIND BY ID = %d - %s - %f", restaurant.getId(), restaurant.getName(), restaurant.getFreightRate()));
 
 		restaurantRepository.delete(restaurant);
