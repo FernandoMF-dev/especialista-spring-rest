@@ -1,4 +1,4 @@
-package br.com.colatina.fmf.algafood.service.domain.entity;
+package br.com.colatina.fmf.algafood.service.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
-package br.com.colatina.fmf.algafood.service.repository.impl;
+package br.com.colatina.fmf.algafood.service.infrastructure.repository;
 
-import br.com.colatina.fmf.algafood.service.domain.entity.Kitchen;
-import br.com.colatina.fmf.algafood.service.repository.KitchenRepository;
+import br.com.colatina.fmf.algafood.service.domain.model.Kitchen;
+import br.com.colatina.fmf.algafood.service.domain.repository.KitchenRepository;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

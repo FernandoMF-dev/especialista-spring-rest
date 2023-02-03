@@ -1,6 +1,6 @@
-package br.com.colatina.fmf.algafood.service.repository;
+package br.com.colatina.fmf.algafood.service.domain.repository;
 
-import br.com.colatina.fmf.algafood.service.domain.entity.Kitchen;
+import br.com.colatina.fmf.algafood.service.domain.model.Kitchen;
 
 import java.util.List;
 

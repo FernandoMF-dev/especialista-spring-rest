@@ -1,8 +1,8 @@
 package br.com.colatina.fmf.algafood.service.jpa;
 
 import br.com.colatina.fmf.algafood.service.FmfAlgafoodServiceApplication;
-import br.com.colatina.fmf.algafood.service.domain.entity.Kitchen;
-import br.com.colatina.fmf.algafood.service.repository.KitchenRepository;
+import br.com.colatina.fmf.algafood.service.domain.model.Kitchen;
+import br.com.colatina.fmf.algafood.service.domain.repository.KitchenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
