@@ -20,6 +20,24 @@
 				<constraints nullable="false"/>
 			</column>
 
+			<column name="registration_date" type="DATETIME"
+					remarks="Date and time of when the restaurant was first registered into the system">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="update_date" type="DATETIME"
+					remarks="Date and time of the last time the restaurant informations have been altered">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="kitchen_id" type="BIGINT"
+					remarks="Unique identifier of the kitchen that the restaurant operates with"/>
+
+			<column name="active" type="BOOLEAN" defaultValueBoolean="true"
+					remarks="Determines whether or not the restaurant is currently functioning">
+				<constraints nullable="false"/>
+			</column>
+
 			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
 				<constraints nullable="false"/>
 			</column>
@@ -39,6 +57,16 @@
 	</changeSet>
 
 	<changeSet id="20230202143000-3" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="tb_restaurant" baseColumnNames="kitchen_id"
+								 referencedTableName="tb_kitchen" referencedColumnNames="id"
+								 constraintName="fk_restaurant_kitchen"/>
+
+		<rollback>
+			<dropAllForeignKeyConstraints baseTableName="tb_restaurant"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20230202143000-4" author="Fernando Martins Ferreira">
 		<createSequence sequenceName="seq_restaurant" incrementBy="1" startValue="1"/>
 
 		<rollback>

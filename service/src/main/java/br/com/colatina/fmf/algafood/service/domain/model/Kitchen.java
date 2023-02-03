@@ -10,13 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
 @Setter
 @Table(name = "tb_kitchen")
 @Entity
-public class Kitchen {
+public class Kitchen implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_kitchen")
 	@SequenceGenerator(name = "seq_kitchen", allocationSize = 1, sequenceName = "seq_kitchen")
