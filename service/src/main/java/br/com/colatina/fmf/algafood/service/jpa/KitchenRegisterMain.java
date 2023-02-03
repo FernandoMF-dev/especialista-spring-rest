@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.jpa;
 
 import br.com.colatina.fmf.algafood.service.FmfAlgafoodServiceApplication;
 import br.com.colatina.fmf.algafood.service.domain.entity.Kitchen;
+import br.com.colatina.fmf.algafood.service.repository.KitchenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -15,12 +16,12 @@ public class KitchenRegisterMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 
-		KitchenRegister kitchenRegister = applicationContext.getBean(KitchenRegister.class);
+		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);
 
 		Kitchen kitchen = new Kitchen();
 		kitchen.setName("Tailandesa");
-		kitchen = kitchenRegister.save(kitchen);
+		kitchen = kitchenRepository.save(kitchen);
 		log.debug(kitchen.getId() + " - " + kitchen.getName());
-		kitchenRegister.delete(kitchen);
+		kitchenRepository.delete(kitchen);
 	}
 }
