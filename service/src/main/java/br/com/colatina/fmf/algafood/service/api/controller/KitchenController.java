@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,6 +39,8 @@ public class KitchenController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Kitchen> findById(@PathVariable Long id) {
 		log.debug("REST request to find the Kitchen with ID: {}", id);
-		return new ResponseEntity<>(kitchenRepository.findById(id).orElseThrow(() -> new RuntimeException("Kitchen not found")), HttpStatus.OK);
+		Optional<Kitchen> kitchen = kitchenRepository.findById(id);
+		return kitchen.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 }
