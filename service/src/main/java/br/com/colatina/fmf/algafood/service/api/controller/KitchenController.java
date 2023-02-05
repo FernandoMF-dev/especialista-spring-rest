@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,6 +67,20 @@ public class KitchenController {
 		BeanUtils.copyProperties(entity, saved.get(), "id");
 
 		return new ResponseEntity<>(kitchenRepository.save(saved.get()), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> update(@PathVariable Long id) {
+		log.debug("REST request to delete kitchen with id {}", id);
+
+		Optional<Kitchen> saved = kitchenRepository.findByIdAndExcludedIsFalse(id);
+		if (saved.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		saved.get().setExcluded(true);
+		kitchenRepository.save(saved.get());
+
+		return ResponseEntity.noContent().build();
 	}
 
 }
