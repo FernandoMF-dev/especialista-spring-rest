@@ -3,7 +3,9 @@ package br.com.colatina.fmf.algafood.service.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +21,7 @@ import java.util.Objects;
 @Setter
 @Table(name = "tb_kitchen")
 @Entity
+@ToString
 @JsonRootName("kitchen")
 public class Kitchen implements Serializable {
 	@Id
@@ -27,6 +30,7 @@ public class Kitchen implements Serializable {
 	@Column(name = "id")
 	private Long id;
 
+	@NonNull
 	@Column(name = "name")
 	private String name;
 
