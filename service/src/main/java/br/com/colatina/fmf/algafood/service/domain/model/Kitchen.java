@@ -1,5 +1,7 @@
 package br.com.colatina.fmf.algafood.service.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +19,7 @@ import java.util.Objects;
 @Setter
 @Table(name = "tb_kitchen")
 @Entity
+@JsonRootName("kitchen")
 public class Kitchen implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_kitchen")
@@ -27,6 +30,7 @@ public class Kitchen implements Serializable {
 	@Column(name = "name")
 	private String name;
 
+	@JsonIgnore
 	@Column(name = "excluded")
 	private Boolean excluded = Boolean.FALSE;
 
