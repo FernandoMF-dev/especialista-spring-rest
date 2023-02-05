@@ -44,7 +44,7 @@ public class KitchenController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Kitchen> findById(@PathVariable Long id) {
 		log.debug("REST request to find the Kitchen with ID: {}", id);
-		Optional<Kitchen> kitchen = kitchenRepository.findById(id);
+		Optional<Kitchen> kitchen = kitchenRepository.findByIdAndExcludedIsFalse(id);
 		return kitchen.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
 				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
@@ -56,10 +56,10 @@ public class KitchenController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Kitchen> insert(@Valid @RequestBody Kitchen entity, @PathVariable Long id) {
+	public ResponseEntity<Kitchen> update(@Valid @RequestBody Kitchen entity, @PathVariable Long id) {
 		log.debug("REST request to update kitchen with id {}: {}", id, entity);
 
-		Optional<Kitchen> saved = kitchenRepository.findById(id);
+		Optional<Kitchen> saved = kitchenRepository.findByIdAndExcludedIsFalse(id);
 		if (saved.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
