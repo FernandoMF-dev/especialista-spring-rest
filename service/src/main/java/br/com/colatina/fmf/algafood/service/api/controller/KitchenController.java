@@ -2,8 +2,8 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.model.KitchensXmlWrapper;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRule;
-import br.com.colatina.fmf.algafood.service.domain.model.Kitchen;
 import br.com.colatina.fmf.algafood.service.domain.service.KitchenCrudService;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.KitchenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class KitchenController {
 	private final KitchenCrudService kitchenCrudService;
 
 	@GetMapping()
-	public ResponseEntity<List<Kitchen>> findAll() {
+	public ResponseEntity<List<KitchenDto>> findAll() {
 		log.debug("REST request to find all Kitchens");
 
 		try {
@@ -54,11 +54,11 @@ public class KitchenController {
 
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Kitchen> findById(@PathVariable Long id) {
+	public ResponseEntity<KitchenDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the Kitchen with ID: {}", id);
 
 		try {
-			Kitchen kitchen = kitchenCrudService.findById(id);
+			KitchenDto kitchen = kitchenCrudService.findDtoById(id);
 			return new ResponseEntity<>(kitchen, HttpStatus.OK);
 		} catch (BusinessRule e) {
 			log.error(e.getMessage(), e);
@@ -67,11 +67,11 @@ public class KitchenController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Kitchen> insert(@Valid @RequestBody Kitchen entity) {
-		log.debug("REST request to insert a new kitchen: {}", entity);
+	public ResponseEntity<KitchenDto> insert(@Valid @RequestBody KitchenDto dto) {
+		log.debug("REST request to insert a new kitchen: {}", dto);
 
 		try {
-			return new ResponseEntity<>(kitchenCrudService.insert(entity), HttpStatus.CREATED);
+			return new ResponseEntity<>(kitchenCrudService.insert(dto), HttpStatus.CREATED);
 		} catch (BusinessRule e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
@@ -79,12 +79,12 @@ public class KitchenController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Kitchen> update(@Valid @RequestBody Kitchen entity, @PathVariable Long id) {
-		log.debug("REST request to update kitchen with id {}: {}", id, entity);
+	public ResponseEntity<KitchenDto> update(@Valid @RequestBody KitchenDto dto, @PathVariable Long id) {
+		log.debug("REST request to update kitchen with id {}: {}", id, dto);
 
 		try {
-			entity = kitchenCrudService.update(entity, id);
-			return new ResponseEntity<>(entity, HttpStatus.OK);
+			dto = kitchenCrudService.update(dto, id);
+			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (BusinessRule e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
