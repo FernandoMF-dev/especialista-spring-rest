@@ -8,4 +8,8 @@ public class ResourceNotFound extends BusinessRule {
 		super(message, HttpStatus.NOT_FOUND);
 	}
 
+	public ResourceNotFound(String message, HttpStatus httpStatus) {
+		super(message, httpStatus);
+	}
+
 }

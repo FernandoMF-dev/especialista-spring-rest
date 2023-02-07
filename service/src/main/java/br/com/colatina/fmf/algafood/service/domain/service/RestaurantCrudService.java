@@ -7,6 +7,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -18,6 +19,8 @@ import java.util.List;
 public class RestaurantCrudService {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantMapper restaurantMapper;
+
+	private final KitchenCrudService kitchenCrudService;
 
 	public List<RestaurantDto> findAll() {
 		return restaurantRepository.findAllDto();
@@ -54,9 +57,18 @@ public class RestaurantCrudService {
 
 	private RestaurantDto save(RestaurantDto dto) {
 		dto.setUpdateDate(LocalDateTime.now());
+		validateSave(dto);
 
 		Restaurant entity = restaurantMapper.toEntity(dto);
 		entity = restaurantRepository.save(entity);
 		return restaurantMapper.toDto(entity);
+	}
+
+	private void validateSave(RestaurantDto dto) {
+		try {
+			kitchenCrudService.findEntityById(dto.getKitchenId());
+		} catch (ResourceNotFound e) {
+			throw new ResourceNotFound(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 }
