@@ -7,9 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -17,28 +16,24 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestaurantDto implements Serializable {
+public class StateDto implements Serializable {
 	private Long id;
 	@NotBlank
+	@Size(max = 2)
+	private String acronym;
+	@NotBlank
 	private String name;
-	@NotNull
-	private Double freightRate;
-	private LocalDateTime registrationDate;
-	private LocalDateTime updateDate;
-	@NotNull
-	private Boolean active;
-	private Long kitchenId;
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof RestaurantDto)) {
+		if (!(o instanceof StateDto)) {
 			return false;
 		}
-		RestaurantDto that = (RestaurantDto) o;
-		return id.equals(that.id);
+		StateDto stateDto = (StateDto) o;
+		return id.equals(stateDto.id);
 	}
 
 	@Override
