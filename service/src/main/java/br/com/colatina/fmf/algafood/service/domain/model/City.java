@@ -27,7 +27,7 @@ public class City {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "acronym", length = 2)
+	@Column(name = "acronym", length = 5)
 	private String acronym;
 
 	@Column(name = "name")
