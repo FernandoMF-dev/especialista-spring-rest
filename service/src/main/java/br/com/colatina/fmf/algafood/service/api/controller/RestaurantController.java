@@ -40,8 +40,8 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/freight-rate")
-	public ResponseEntity<List<RestaurantDto>> filterByFreightRate(@RequestParam("min") Double min,
-																   @RequestParam("max") Double max) {
+	public ResponseEntity<List<RestaurantDto>> filterByFreightRate(@RequestParam(value = "min", required = false) Double min,
+																   @RequestParam(value = "max", required = false) Double max) {
 		log.debug("REST request to find all Restaurants with it's greight rate between {} and {}", min, max);
 
 		try {
