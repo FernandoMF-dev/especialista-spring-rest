@@ -25,11 +25,6 @@ public interface KitchenRepository extends JpaRepository<Kitchen, Long> {
 
 	Optional<Kitchen> findByIdAndExcludedIsFalse(Long id);
 
-	@Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END " +
-			" FROM Restaurant r " +
-			" WHERE r.kitchen.id = :kitchenId " +
-			" AND r.excluded = FALSE " +
-			" AND r.kitchen.excluded = FALSE ")
 	boolean isKitchenInUse(Long kitchenId);
 
 }

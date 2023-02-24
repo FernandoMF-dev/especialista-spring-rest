@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+		version="2.2">
+
+	<named-query name="Kitchen.isKitchenInUse">
+		<query>
+			SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END
+			FROM Restaurant r
+			WHERE r.kitchen.id = :kitchenId
+			AND r.excluded = FALSE
+			AND r.kitchen.excluded = FALSE
+		</query>
+	</named-query>
+
+</entity-mappings>
