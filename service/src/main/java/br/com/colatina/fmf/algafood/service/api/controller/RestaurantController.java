@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -32,6 +33,20 @@ public class RestaurantController {
 
 		try {
 			return new ResponseEntity<>(restaurantCrudService.findAll(), HttpStatus.OK);
+		} catch (BusinessRule e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<>(e.getResponseStatus());
+		}
+	}
+
+	@GetMapping("/freight-rate")
+	public ResponseEntity<List<RestaurantDto>> filterByFreightRate(@RequestParam("min") Double min,
+																   @RequestParam("max") Double max) {
+		log.debug("REST request to find all Restaurants with it's greight rate between {} and {}", min, max);
+
+		try {
+			List<RestaurantDto> result = restaurantCrudService.filterByFreightRate(min, max);
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (BusinessRule e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());

@@ -36,6 +36,10 @@ public class RestaurantCrudService {
 				.orElseThrow(() -> new ResourceNotFound(String.format("Restaurant %d not found", id)));
 	}
 
+	public List<RestaurantDto> filterByFreightRate(Double min, Double max) {
+		return restaurantRepository.filterByFreightRate(min, max);
+	}
+
 	public RestaurantDto insert(RestaurantDto dto) {
 		dto.setId(null);
 		dto.setActive(Boolean.TRUE);
