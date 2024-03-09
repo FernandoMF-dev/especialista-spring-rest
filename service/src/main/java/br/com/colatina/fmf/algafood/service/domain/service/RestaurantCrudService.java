@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,13 @@ public class RestaurantCrudService {
 	}
 
 	public List<RestaurantDto> filterByFreightRate(Double min, Double max) {
-		return restaurantRepository.filterByFreightRate(min, max);
+		return restaurantRepository.filterDtoByFreightRate(min, max);
+	}
+
+	public List<RestaurantDto> filterByFreightRate(String name, Double min, Double max) {
+		return restaurantRepository.filterEntityByFreightRate(name, min, max).stream()
+				.map(restaurantMapper::toDto)
+				.collect(Collectors.toList());
 	}
 
 	public RestaurantDto insert(RestaurantDto dto) {

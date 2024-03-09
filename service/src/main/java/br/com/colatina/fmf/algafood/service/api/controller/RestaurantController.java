@@ -5,6 +5,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,17 +41,13 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/freight-rate")
-	public ResponseEntity<List<RestaurantDto>> filterByFreightRate(@RequestParam(value = "min", required = false) Double min,
+	public ResponseEntity<List<RestaurantDto>> filterByFreightRate(@RequestParam(value = "name", required = false) String name,
+																   @RequestParam(value = "min", required = false) Double min,
 																   @RequestParam(value = "max", required = false) Double max) {
-		log.debug("REST request to find all Restaurants with it's greight rate between {} and {}", min, max);
-
-		try {
-			List<RestaurantDto> result = restaurantCrudService.filterByFreightRate(min, max);
-			return new ResponseEntity<>(result, HttpStatus.OK);
-		} catch (BusinessRule e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
+		if (Strings.isEmpty(name)) {
+			return _filterByFreightRate(min, max);
 		}
+		return _filterByFreightRate(name, min, max);
 	}
 
 	@GetMapping("/{id}")
@@ -98,6 +95,30 @@ public class RestaurantController {
 		try {
 			restaurantCrudService.delete(id);
 			return ResponseEntity.noContent().build();
+		} catch (BusinessRule e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<>(e.getResponseStatus());
+		}
+	}
+
+	private ResponseEntity<List<RestaurantDto>> _filterByFreightRate(Double min, Double max) {
+		log.debug("REST request to find all Restaurants with freight rate between {} and {}", min, max);
+
+		try {
+			List<RestaurantDto> result = restaurantCrudService.filterByFreightRate(min, max);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} catch (BusinessRule e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<>(e.getResponseStatus());
+		}
+	}
+
+	private ResponseEntity<List<RestaurantDto>> _filterByFreightRate(String name, Double min, Double max) {
+		log.debug("REST request to find all Restaurants with name like \"{}\" and freight rate between {} and {}", name, min, max);
+
+		try {
+			List<RestaurantDto> result = restaurantCrudService.filterByFreightRate(name, min, max);
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (BusinessRule e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
