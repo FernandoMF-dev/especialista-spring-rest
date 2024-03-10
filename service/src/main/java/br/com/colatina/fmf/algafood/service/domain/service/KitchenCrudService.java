@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,15 @@ public class KitchenCrudService {
 	public Kitchen findEntityById(Long id) {
 		return kitchenRepository.findByIdAndExcludedIsFalse(id)
 				.orElseThrow(() -> new ResourceNotFound(String.format("Kitchen %d not found", id)));
+	}
+
+	public KitchenDto findFirst() {
+		Optional<Kitchen> entity = kitchenRepository.findFirst();
+
+		if (entity.isEmpty()) {
+			throw new ResourceNotFound("No kitchen found");
+		}
+		return kitchenMapper.toDto(entity.get());
 	}
 
 	public KitchenDto insert(KitchenDto dto) {

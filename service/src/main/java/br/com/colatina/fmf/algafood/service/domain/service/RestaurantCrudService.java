@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,6 +65,15 @@ public class RestaurantCrudService {
 		);
 
 		return restaurantRepository.findAll(spec, pageable).map(restaurantMapper::toDto);
+	}
+
+	public RestaurantDto findFirst() {
+		Optional<Restaurant> entity = restaurantRepository.findFirst();
+
+		if (entity.isEmpty()) {
+			throw new ResourceNotFound("No restaurant found");
+		}
+		return restaurantMapper.toDto(entity.get());
 	}
 
 	public RestaurantDto insert(RestaurantDto dto) {

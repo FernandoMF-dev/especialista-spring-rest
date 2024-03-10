@@ -65,6 +65,16 @@ public class KitchenController {
 		}
 	}
 
+	@GetMapping("/first")
+	public ResponseEntity<KitchenDto> findFirst() {
+		try {
+			return new ResponseEntity<>(kitchenCrudService.findFirst(), HttpStatus.OK);
+		} catch (BusinessRule e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<>(e.getResponseStatus());
+		}
+	}
+
 	@PostMapping()
 	public ResponseEntity<KitchenDto> insert(@Valid @RequestBody KitchenDto dto) {
 		log.debug("REST request to insert a new kitchen: {}", dto);

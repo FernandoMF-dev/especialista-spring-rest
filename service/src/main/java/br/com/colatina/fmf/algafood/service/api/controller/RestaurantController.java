@@ -63,6 +63,16 @@ public class RestaurantController {
 		}
 	}
 
+	@GetMapping("/first")
+	public ResponseEntity<RestaurantDto> findFirst() {
+		try {
+			return new ResponseEntity<>(restaurantCrudService.findFirst(), HttpStatus.OK);
+		} catch (BusinessRule e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<>(e.getResponseStatus());
+		}
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<RestaurantDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the Restaurant with ID: {}", id);
