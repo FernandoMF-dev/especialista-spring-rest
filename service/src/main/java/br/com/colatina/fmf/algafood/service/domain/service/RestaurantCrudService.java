@@ -4,9 +4,14 @@ import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFound;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.repository.RestaurantRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
+import br.com.colatina.fmf.algafood.service.infrastructure.specification.RestaurantSpecs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +25,7 @@ import java.util.stream.Collectors;
 public class RestaurantCrudService {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantMapper restaurantMapper;
+	private final RestaurantSpecs restaurantSpecs;
 
 	private final KitchenCrudService kitchenCrudService;
 
@@ -45,6 +51,19 @@ public class RestaurantCrudService {
 		return restaurantRepository.filterEntityByFreightRate(name, min, max).stream()
 				.map(restaurantMapper::toDto)
 				.collect(Collectors.toList());
+	}
+
+	public Page<RestaurantDto> page(RestaurantPageFilter filter, Pageable pageable) {
+		Specification<Restaurant> spec = restaurantSpecs.composedAnd(
+				restaurantSpecs.byName(filter.getName()),
+				restaurantSpecs.byMinFreightRate(filter.getMinFreightRate()),
+				restaurantSpecs.byMaxFreightRate(filter.getMaxFreightRate()),
+				restaurantSpecs.byActive(filter.getActive()),
+				restaurantSpecs.byKitchenId(filter.getKitchenId()),
+				restaurantSpecs.byExcluded(Boolean.FALSE)
+		);
+
+		return restaurantRepository.findAll(spec, pageable).map(restaurantMapper::toDto);
 	}
 
 	public RestaurantDto insert(RestaurantDto dto) {

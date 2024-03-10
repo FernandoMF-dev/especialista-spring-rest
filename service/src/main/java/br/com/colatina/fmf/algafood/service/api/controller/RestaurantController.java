@@ -3,9 +3,12 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRule;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,6 +51,16 @@ public class RestaurantController {
 			return _filterByFreightRate(min, max);
 		}
 		return _filterByFreightRate(name, min, max);
+	}
+
+	@GetMapping("/page")
+	public ResponseEntity<Page<RestaurantDto>> page(RestaurantPageFilter filter, Pageable pageable) {
+		try {
+			return new ResponseEntity<>(restaurantCrudService.page(filter, pageable), HttpStatus.OK);
+		} catch (BusinessRule e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<>(e.getResponseStatus());
+		}
 	}
 
 	@GetMapping("/{id}")
