@@ -12,4 +12,8 @@
 	<include file="/config/db/changelogs/20230203200500_create_table_permission.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20230203201000_create_table_state.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20230203201500_create_table_city.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240314144000_drop_column_payment_method.xml"
+			 relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240314144400_create_table_restaurant_payment_method.xml"
+			 relativeToChangelogFile="false"/>
 </databaseChangeLog>

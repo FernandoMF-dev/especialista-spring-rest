@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+
+	<changeSet id="20240314144000-1" author="Fernando Martins Ferreira">
+		<dropAllForeignKeyConstraints baseTableName="tb_payment_method"/>
+
+		<rollback>
+			<addForeignKeyConstraint baseTableName="tb_payment_method" baseColumnNames="restaurant_id"
+									 referencedTableName="tb_restaurant" referencedColumnNames="id"
+									 constraintName="fk_payment_method_restaurant"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240314144000-2" author="Fernando Martins Ferreira">
+		<dropColumn tableName="tb_payment_method" columnName="restaurant_id"/>
+
+		<rollback>
+			<addColumn tableName="tb_payment_method">
+				<column name="restaurant_id" type="BIGINT"
+						remarks="Unique identifier of the restaurant that implements this payment method"/>
+			</addColumn>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

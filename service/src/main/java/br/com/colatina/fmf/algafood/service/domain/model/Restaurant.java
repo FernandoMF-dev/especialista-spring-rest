@@ -3,7 +3,6 @@ package br.com.colatina.fmf.algafood.service.domain.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,12 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,8 +54,11 @@ public class Restaurant implements Serializable {
 	@JoinColumn(name = "kitchen_id", referencedColumnName = "id")
 	private Kitchen kitchen;
 
-	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<PaymentMethod> paymentMethods;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "rel_restaurant_payment_method",
+			joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "payment_method_id", referencedColumnName = "id"))
+	private List<PaymentMethod> paymentMethods = new ArrayList<>();
 
 	@Override
 	public boolean equals(Object o) {

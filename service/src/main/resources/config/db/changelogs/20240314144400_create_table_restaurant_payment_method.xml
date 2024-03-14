@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240314144400-1" author="Fernando Martins Ferreira">
+		<createTable tableName="rel_restaurant_payment_method">
+			<column name="restaurant_id" type="BIGINT"
+					remarks="Unique identifier of the restaurant that implements the payment method">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="payment_method_id" type="BIGINT"
+					remarks="Unique identifier of the payment method being implemented by the restaurant">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="rel_restaurant_payment_method"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240314144400-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="rel_restaurant_payment_method" columnNames="restaurant_id, payment_method_id"
+					   constraintName="pk_restaurant_payment_method"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="rel_restaurant_payment_method" constraintName="pk_restaurant_payment_method"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240314144400-3" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="rel_restaurant_payment_method" baseColumnNames="restaurant_id"
+								 referencedTableName="tb_restaurant" referencedColumnNames="id"
+								 constraintName="fk_restaurant_payment_method_restaurant"/>
+
+		<addForeignKeyConstraint baseTableName="rel_restaurant_payment_method" baseColumnNames="payment_method_id"
+								 referencedTableName="tb_payment_method" referencedColumnNames="id"
+								 constraintName="fk_restaurant_payment_method_payment_method"/>
+
+		<rollback>
+			<dropAllForeignKeyConstraints baseTableName="rel_restaurant_payment_method"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
