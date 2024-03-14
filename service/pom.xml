@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>service</artifactId>
-	<version>0.0.1-SNAPSOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>FMF Algafood - Service</name>
 	<description>Servico responsável pelo tratamento da regra de negócio</description>
 
