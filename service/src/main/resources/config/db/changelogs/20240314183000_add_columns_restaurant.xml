@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240314183000-1" author="Fernando Martins Ferreira">
+		<addColumn tableName="tb_restaurant">
+			<column name="address_cep" type="VARCHAR" remarks="CEP of the restaurant's address"/>
+
+			<column name="address_public_space" type="VARCHAR" remarks="Public space of the restaurant's address"/>
+
+			<column name="address_street_number" type="VARCHAR" remarks="Number of the restaurant's address"/>
+
+			<column name="address_complement" type="VARCHAR" remarks="Complement for the restaurant's address"/>
+
+			<column name="address_district" type="VARCHAR" remarks="District of the restaurant's address"/>
+
+			<column name="address_city_id" type="BIGINT"
+					remarks="Unique identifier of the city where the restaurant is located"/>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="tb_restaurant" columnName="address_cep"/>
+			<dropColumn tableName="tb_restaurant" columnName="address_public_space"/>
+			<dropColumn tableName="tb_restaurant" columnName="address_street_number"/>
+			<dropColumn tableName="tb_restaurant" columnName="address_complement"/>
+			<dropColumn tableName="tb_restaurant" columnName="address_district"/>
+			<dropColumn tableName="tb_restaurant" columnName="address_city_id"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240314183000-2" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="tb_restaurant" baseColumnNames="address_city_id"
+								 referencedTableName="tb_city" referencedColumnNames="id"
+								 constraintName="fk_restaurant_address_city"/>
+
+		<rollback>
+			<dropForeignKeyConstraint baseTableName="tb_restaurant" constraintName="fk_restaurant_address_city"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

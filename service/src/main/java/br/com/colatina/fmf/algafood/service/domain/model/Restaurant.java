@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Objects;
 @Setter
 @Table(name = "tb_restaurant")
 @Entity
-public class Restaurant implements Serializable {
+public class Restaurant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_restaurant")
 	@SequenceGenerator(name = "seq_restaurant", allocationSize = 1, sequenceName = "seq_restaurant")
@@ -59,6 +59,9 @@ public class Restaurant implements Serializable {
 			joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id", referencedColumnName = "id"))
 	private List<PaymentMethod> paymentMethods = new ArrayList<>();
+
+	@Embedded
+	private Address address;
 
 	@Override
 	public boolean equals(Object o) {
