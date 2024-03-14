@@ -3,9 +3,11 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRule;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -31,7 +33,7 @@ public class RestaurantController {
 	private final RestaurantCrudService restaurantCrudService;
 
 	@GetMapping()
-	public ResponseEntity<List<RestaurantDto>> findAll() {
+	public ResponseEntity<List<RestaurantListDto>> findAll() {
 		log.debug("REST request to find all Restaurants");
 
 		try {
@@ -43,22 +45,17 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/freight-rate")
-	public ResponseEntity<List<RestaurantDto>> filterByFreightRate(@RequestParam(value = "name", required = false) String name,
+	public ResponseEntity<List<RestaurantListDto>> filterByFreightRate(@RequestParam(value = "name", required = false) String name,
 																   @RequestParam(value = "min", required = false) Double min,
 																   @RequestParam(value = "max", required = false) Double max) {
-		log.debug("REST request to find all Restaurants with name like \"{}\" and freight rate between {} and {}", name, min, max);
-
-		try {
-			List<RestaurantDto> result = restaurantCrudService.filterByFreightRate(name, min, max);
-			return new ResponseEntity<>(result, HttpStatus.OK);
-		} catch (BusinessRule e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
+		if (Strings.isEmpty(name)) {
+			return _filterByFreightRate(min, max);
 		}
+		return _filterByFreightRate(name, min, max);
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<Page<RestaurantDto>> page(RestaurantPageFilter filter, Pageable pageable) {
+	public ResponseEntity<Page<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
 		try {
 			return new ResponseEntity<>(restaurantCrudService.page(filter, pageable), HttpStatus.OK);
 		} catch (BusinessRule e) {
@@ -122,6 +119,30 @@ public class RestaurantController {
 		try {
 			restaurantCrudService.delete(id);
 			return ResponseEntity.noContent().build();
+		} catch (BusinessRule e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<>(e.getResponseStatus());
+		}
+	}
+
+	private ResponseEntity<List<RestaurantListDto>> _filterByFreightRate(Double min, Double max) {
+		log.debug("REST request to find all Restaurants with freight rate between {} and {}", min, max);
+
+		try {
+			List<RestaurantListDto> result = restaurantCrudService.filterByFreightRate(min, max);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} catch (BusinessRule e) {
+			log.error(e.getMessage(), e);
+			return new ResponseEntity<>(e.getResponseStatus());
+		}
+	}
+
+	private ResponseEntity<List<RestaurantListDto>> _filterByFreightRate(String name, Double min, Double max) {
+		log.debug("REST request to find all Restaurants with name like \"{}\" and freight rate between {} and {}", name, min, max);
+
+		try {
+			List<RestaurantListDto> result = restaurantCrudService.filterByFreightRate(name, min, max);
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (BusinessRule e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());

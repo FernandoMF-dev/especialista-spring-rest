@@ -4,6 +4,7 @@ import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFound;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.repository.RestaurantRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
 import br.com.colatina.fmf.algafood.service.infrastructure.specification.RestaurantSpecs;
@@ -30,8 +31,8 @@ public class RestaurantCrudService {
 
 	private final KitchenCrudService kitchenCrudService;
 
-	public List<RestaurantDto> findAll() {
-		return restaurantMapper.toDto(restaurantRepository.findAll());
+	public List<RestaurantListDto> findAll() {
+		return restaurantRepository.findAllDto();
 	}
 
 	public RestaurantDto findDtoById(Long id) {
@@ -43,13 +44,17 @@ public class RestaurantCrudService {
 				.orElseThrow(() -> new ResourceNotFound(String.format("Restaurant %d not found", id)));
 	}
 
-	public List<RestaurantDto> filterByFreightRate(String name, Double min, Double max) {
+	public List<RestaurantListDto> filterByFreightRate(Double min, Double max) {
+		return restaurantRepository.filterDtoByFreightRate(min, max);
+	}
+
+	public List<RestaurantListDto> filterByFreightRate(String name, Double min, Double max) {
 		return restaurantRepository.filterEntityByFreightRate(name, min, max).stream()
-				.map(restaurantMapper::toDto)
+				.map(restaurantMapper::toListDto)
 				.collect(Collectors.toList());
 	}
 
-	public Page<RestaurantDto> page(RestaurantPageFilter filter, Pageable pageable) {
+	public Page<RestaurantListDto> page(RestaurantPageFilter filter, Pageable pageable) {
 		Specification<Restaurant> spec = restaurantSpecs.composedAnd(
 				restaurantSpecs.byName(filter.getName()),
 				restaurantSpecs.byMinFreightRate(filter.getMinFreightRate()),
@@ -59,7 +64,7 @@ public class RestaurantCrudService {
 				restaurantSpecs.byExcluded(Boolean.FALSE)
 		);
 
-		return restaurantRepository.findAll(spec, pageable).map(restaurantMapper::toDto);
+		return restaurantRepository.findAll(spec, pageable).map(restaurantMapper::toListDto);
 	}
 
 	public RestaurantDto findFirst() {
