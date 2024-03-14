@@ -37,7 +37,7 @@ public abstract class BaseSpecs<E> {
 		return defaultReturn(criteriaBuilder);
 	}
 
-	protected Predicate compareBoolean(CriteriaBuilder criteriaBuilder, Path<String> rootPath, Boolean value) {
+	protected Predicate compareBoolean(CriteriaBuilder criteriaBuilder, Path<Boolean> rootPath, Boolean value) {
 		if (Objects.nonNull(value)) {
 			return criteriaBuilder.equal(rootPath, value);
 		}

@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.infrastructure.repository;
 
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
+import br.com.colatina.fmf.algafood.service.domain.model.Restaurant_;
 import br.com.colatina.fmf.algafood.service.domain.repository.queries.RestaurantRepositoryQueries;
 import org.springframework.stereotype.Repository;
 
@@ -28,13 +29,13 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 		Root<Restaurant> root = criteria.from(Restaurant.class);
 		List<Predicate> predicates = new ArrayList<>();
 
-		predicates.add(builder.like(root.get("name"), "%" + name + "%"));
-		predicates.add(builder.isFalse(root.get("excluded")));
+		predicates.add(builder.like(root.get(Restaurant_.name), "%" + name + "%"));
+		predicates.add(builder.isFalse(root.get(Restaurant_.excluded)));
 		if (Objects.nonNull(minFreightRate)) {
-			predicates.add(builder.greaterThanOrEqualTo(root.get("freightRate"), minFreightRate));
+			predicates.add(builder.greaterThanOrEqualTo(root.get(Restaurant_.freightRate), minFreightRate));
 		}
 		if (Objects.nonNull(maxFreightRate)) {
-			predicates.add(builder.lessThanOrEqualTo(root.get("freightRate"), maxFreightRate));
+			predicates.add(builder.lessThanOrEqualTo(root.get(Restaurant_.freightRate), maxFreightRate));
 		}
 
 		criteria.where(predicates.toArray(new Predicate[0]));
