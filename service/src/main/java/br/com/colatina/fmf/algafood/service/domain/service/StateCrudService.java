@@ -8,11 +8,13 @@ import br.com.colatina.fmf.algafood.service.domain.service.mapper.StateMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class StateCrudService {
 	private final StateRepository stateRepository;

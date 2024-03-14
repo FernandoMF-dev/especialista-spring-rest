@@ -10,12 +10,14 @@ import br.com.colatina.fmf.algafood.service.domain.service.mapper.KitchenMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class KitchenCrudService {
 	private final KitchenRepository kitchenRepository;
