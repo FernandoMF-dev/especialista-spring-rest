@@ -10,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -28,6 +30,7 @@ public class RestaurantDto implements Serializable {
 	@NotNull
 	private Boolean active;
 	private Long kitchenId;
+	private List<PaymentMethodDto> paymentMethods = new ArrayList<>();
 
 	@Override
 	public boolean equals(Object o) {

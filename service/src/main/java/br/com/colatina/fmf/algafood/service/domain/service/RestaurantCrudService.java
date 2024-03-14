@@ -31,21 +31,16 @@ public class RestaurantCrudService {
 	private final KitchenCrudService kitchenCrudService;
 
 	public List<RestaurantDto> findAll() {
-		return restaurantRepository.findAllDto();
+		return restaurantMapper.toDto(restaurantRepository.findAll());
 	}
 
 	public RestaurantDto findDtoById(Long id) {
-		return restaurantRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("Restaurant %d not found", id)));
+		return restaurantMapper.toDto(findEntityById(id));
 	}
 
 	public Restaurant findEntityById(Long id) {
 		return restaurantRepository.findByIdAndExcludedIsFalse(id)
 				.orElseThrow(() -> new ResourceNotFound(String.format("Restaurant %d not found", id)));
-	}
-
-	public List<RestaurantDto> filterByFreightRate(Double min, Double max) {
-		return restaurantRepository.filterDtoByFreightRate(min, max);
 	}
 
 	public List<RestaurantDto> filterByFreightRate(String name, Double min, Double max) {
