@@ -2,6 +2,8 @@ package br.com.colatina.fmf.algafood.service.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -38,9 +40,11 @@ public class Restaurant {
 	@Column(name = "freight_rate")
 	private Double freightRate;
 
+	@CreationTimestamp
 	@Column(name = "registration_date")
 	private LocalDateTime registrationDate;
 
+	@UpdateTimestamp
 	@Column(name = "update_date")
 	private LocalDateTime updateDate;
 

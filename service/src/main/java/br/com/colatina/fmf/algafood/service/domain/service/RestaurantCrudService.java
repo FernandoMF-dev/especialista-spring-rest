@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,7 +80,6 @@ public class RestaurantCrudService {
 	public RestaurantDto insert(RestaurantDto dto) {
 		dto.setId(null);
 		dto.setActive(Boolean.TRUE);
-		dto.setRegistrationDate(LocalDateTime.now());
 		return save(dto);
 	}
 
@@ -98,7 +96,6 @@ public class RestaurantCrudService {
 	}
 
 	private RestaurantDto save(RestaurantDto dto) {
-		dto.setUpdateDate(LocalDateTime.now());
 		validateSave(dto);
 
 		Restaurant entity = restaurantMapper.toEntity(dto);
