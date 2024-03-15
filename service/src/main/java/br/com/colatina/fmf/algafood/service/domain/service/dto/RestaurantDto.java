@@ -31,6 +31,7 @@ public class RestaurantDto implements Serializable {
 	private Boolean active;
 	private Long kitchenId;
 	private List<PaymentMethodDto> paymentMethods = new ArrayList<>();
+	private AddressDto address;
 
 	@Override
 	public boolean equals(Object o) {
