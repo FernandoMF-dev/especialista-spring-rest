@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.Objects;
 
-@Mapper(componentModel = "spring", uses = {PaymentMethodMapper.class, AddressMapper.class})
+@Mapper(componentModel = "spring", uses = {PaymentMethodMapper.class, AddressMapper.class, ProductMapper.class})
 public interface RestaurantMapper extends EntityMapper<RestaurantDto, Restaurant> {
 
 	@Override

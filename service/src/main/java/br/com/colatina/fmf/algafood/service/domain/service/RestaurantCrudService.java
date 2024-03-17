@@ -85,7 +85,7 @@ public class RestaurantCrudService {
 
 	public RestaurantDto update(RestaurantDto dto, @PathVariable Long id) {
 		RestaurantDto saved = findDtoById(id);
-		BeanUtils.copyProperties(dto, saved, "id", "registrationDate", "updateDate");
+		BeanUtils.copyProperties(dto, saved, "id", "registrationDate", "updateDate", "products");
 		return save(saved);
 	}
 

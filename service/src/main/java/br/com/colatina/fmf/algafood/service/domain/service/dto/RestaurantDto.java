@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -31,6 +32,8 @@ public class RestaurantDto implements Serializable {
 	private Boolean active;
 	private Long kitchenId;
 	private List<PaymentMethodDto> paymentMethods = new ArrayList<>();
+	private List<ProductDto> products = new ArrayList<>();
+	@Valid
 	private AddressDto address;
 
 	@Override
