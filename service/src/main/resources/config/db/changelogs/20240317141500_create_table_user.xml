@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+	<changeSet id="20240317141500-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_user">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="name" type="VARCHAR" remarks="Name of the user">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="email" type="VARCHAR" remarks="E-mail of the user">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="password" type="VARCHAR" remarks="Password of the user">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_user"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317141500-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_user" columnNames="id" constraintName="pk_user"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_user" constraintName="pk_user"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317141500-3" author="Fernando Martins Ferreira">
+		<createSequence sequenceName="seq_user" incrementBy="1" startValue="1"/>
+
+		<rollback>
+			<dropSequence sequenceName="seq_user"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

@@ -15,4 +15,8 @@
 	<include file="/config/db/changelogs/20240314144400_create_table_restaurant_payment_method.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240314183000_add_columns_restaurant.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240317124000_create_table_product.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240317140000_create_table_profile.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240317141000_create_table_profile_permission.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240317141500_create_table_user.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240317142000_create_table_user_profile.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

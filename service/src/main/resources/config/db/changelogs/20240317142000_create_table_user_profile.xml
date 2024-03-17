@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+	<changeSet id="20240317142000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="rel_user_profile">
+			<column name="user_id" type="BIGINT"
+					remarks="Unique identifier of the user that includes the profile">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="profile_id" type="BIGINT"
+					remarks="Unique identifier of the profile being included by the user">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="rel_user_profile"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317142000-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="rel_user_profile" columnNames="user_id, profile_id"
+					   constraintName="pk_user_profile"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="rel_user_profile" constraintName="pk_user_profile"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317142000-3" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="rel_user_profile" baseColumnNames="user_id"
+								 referencedTableName="tb_user" referencedColumnNames="id"
+								 constraintName="fk_user_profile_user"/>
+
+		<addForeignKeyConstraint baseTableName="rel_user_profile" baseColumnNames="profile_id"
+								 referencedTableName="tb_profile" referencedColumnNames="id"
+								 constraintName="fk_user_profile_profile"/>
+
+		<rollback>
+			<dropAllForeignKeyConstraints baseTableName="rel_user_profile"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

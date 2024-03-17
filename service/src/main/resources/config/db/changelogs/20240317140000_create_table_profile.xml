@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+	<changeSet id="20240317140000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_profile">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="name" type="VARCHAR" remarks="Name of the profile">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_profile"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317140000-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_profile" columnNames="id" constraintName="pk_profile"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_profile" constraintName="pk_profile"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317140000-3" author="Fernando Martins Ferreira">
+		<createSequence sequenceName="seq_profile" incrementBy="1" startValue="1"/>
+
+		<rollback>
+			<dropSequence sequenceName="seq_profile"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
