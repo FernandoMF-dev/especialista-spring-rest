@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240317124000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_product">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="name" type="VARCHAR" remarks="Name of the product">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="description" type="VARCHAR" remarks="Description of the product">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="price" type="DOUBLE" remarks="Standard price charged for the product">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="active" type="BOOLEAN" defaultValueBoolean="true"
+					remarks="Determines whether or not the product is currently available to order">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="restaurant_id" type="BIGINT"
+					remarks="Unique identifier of the restaurant that offers the product">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_product"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317124000-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_product" columnNames="id" constraintName="pk_product"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_product" constraintName="pk_product"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317124000-3" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="tb_product" baseColumnNames="restaurant_id"
+								 referencedTableName="tb_restaurant" referencedColumnNames="id"
+								 constraintName="fk_product_restaurant"/>
+
+		<rollback>
+			<dropAllForeignKeyConstraints baseTableName="tb_product"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240317124000-4" author="Fernando Martins Ferreira">
+		<createSequence sequenceName="seq_product" incrementBy="1" startValue="1"/>
+
+		<rollback>
+			<dropSequence sequenceName="seq_product"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
