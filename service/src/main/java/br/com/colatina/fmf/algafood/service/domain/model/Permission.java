@@ -16,16 +16,16 @@ import java.util.Objects;
 @Entity
 public class Permission implements Serializable {
 	@Id
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "description")
+	@Column(name = "description", nullable = false)
 	private String description;
 
-	@Column(name = "excluded")
+	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
 
 	@Override

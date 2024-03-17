@@ -26,13 +26,13 @@ public class Profile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_profile")
 	@SequenceGenerator(name = "seq_profile", allocationSize = 1, sequenceName = "seq_profile")
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "excluded")
+	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
 
 	@ManyToMany(fetch = FetchType.LAZY)

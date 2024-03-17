@@ -23,26 +23,26 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_product")
 	@SequenceGenerator(name = "seq_product", allocationSize = 1, sequenceName = "seq_product")
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "description")
+	@Column(name = "description", nullable = false)
 	private String description;
 
-	@Column(name = "price")
+	@Column(name = "price", nullable = false)
 	private Double price;
 
-	@Column(name = "active")
+	@Column(name = "active", nullable = false)
 	private Boolean active = Boolean.TRUE;
 
-	@Column(name = "excluded")
+	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+	@JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
 	private Restaurant restaurant;
 
 	@Override

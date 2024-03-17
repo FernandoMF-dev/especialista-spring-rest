@@ -21,13 +21,13 @@ public class PaymentMethod implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_payment_method")
 	@SequenceGenerator(name = "seq_payment_method", allocationSize = 1, sequenceName = "seq_payment_method")
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "description")
+	@Column(name = "description", nullable = false)
 	private String description;
 
-	@Column(name = "excluded")
+	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
 
 	@Override

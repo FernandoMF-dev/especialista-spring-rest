@@ -24,20 +24,20 @@ public class City {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_city")
 	@SequenceGenerator(name = "seq_city", allocationSize = 1, sequenceName = "seq_city")
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private Long id;
 
 	@Column(name = "acronym", length = 5)
 	private String acronym;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "state_id", referencedColumnName = "id")
+	@JoinColumn(name = "state_id", referencedColumnName = "id", nullable = false)
 	private State state;
 
-	@Column(name = "excluded")
+	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
 
 	@Override

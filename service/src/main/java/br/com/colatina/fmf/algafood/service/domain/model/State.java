@@ -21,16 +21,16 @@ public class State implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_state")
 	@SequenceGenerator(name = "seq_state", allocationSize = 1, sequenceName = "seq_state")
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "acronym", length = 2)
+	@Column(name = "acronym", length = 2, nullable = false)
 	private String acronym;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "excluded")
+	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
 
 	@Override

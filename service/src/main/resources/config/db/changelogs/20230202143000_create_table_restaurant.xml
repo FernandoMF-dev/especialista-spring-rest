@@ -31,7 +31,9 @@
 			</column>
 
 			<column name="kitchen_id" type="BIGINT"
-					remarks="Unique identifier of the kitchen that the restaurant operates with"/>
+					remarks="Unique identifier of the kitchen that the restaurant operates with">
+				<constraints nullable="false"/>
+			</column>
 
 			<column name="active" type="BOOLEAN" defaultValueBoolean="true"
 					remarks="Determines whether or not the restaurant is currently functioning">

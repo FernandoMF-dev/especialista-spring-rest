@@ -13,16 +13,16 @@
 			</column>
 
 			<column name="acronym" type="CHAR(5)"
-					remarks="Acronym that uniquely identifies the city within it's state">
-				<constraints nullable="false"/>
-			</column>
+					remarks="Acronym that uniquely identifies the city within it's state"/>
 
 			<column name="name" type="VARCHAR" remarks="Full name of the city">
 				<constraints nullable="false"/>
 			</column>
 
 			<column name="state_id" type="BIGINT"
-					remarks="Unique identifier of the state where the city is located"/>
+					remarks="Unique identifier of the state where the city is located">
+				<constraints nullable="false"/>
+			</column>
 
 			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
 				<constraints nullable="false"/>

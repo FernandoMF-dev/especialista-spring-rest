@@ -32,35 +32,35 @@ public class Restaurant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_restaurant")
 	@SequenceGenerator(name = "seq_restaurant", allocationSize = 1, sequenceName = "seq_restaurant")
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "freight_rate")
+	@Column(name = "freight_rate", nullable = false)
 	private Double freightRate;
 
 	@CreationTimestamp
-	@Column(name = "registration_date")
+	@Column(name = "registration_date", nullable = false)
 	private LocalDateTime registrationDate;
 
 	@UpdateTimestamp
-	@Column(name = "update_date")
+	@Column(name = "update_date", nullable = false)
 	private LocalDateTime updateDate;
 
-	@Column(name = "active")
+	@Column(name = "active", nullable = false)
 	private Boolean active = Boolean.TRUE;
 
-	@Column(name = "excluded")
+	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "kitchen_id", referencedColumnName = "id")
+	@JoinColumn(name = "kitchen_id", referencedColumnName = "id", nullable = false)
 	private Kitchen kitchen;
 
 	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
-	private List<Product> products;
+	private List<Product> products = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "rel_restaurant_payment_method",
