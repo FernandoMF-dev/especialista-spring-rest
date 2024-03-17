@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -57,6 +58,9 @@ public class Restaurant {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "kitchen_id", referencedColumnName = "id")
 	private Kitchen kitchen;
+
+	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+	private List<Product> products;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "rel_restaurant_payment_method",
