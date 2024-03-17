@@ -30,11 +30,19 @@ public class RestaurantDto implements Serializable {
 	private LocalDateTime updateDate;
 	@NotNull
 	private Boolean active;
-	private Long kitchenId;
+	@NotNull
+	private KitchenDto kitchen;
 	private List<PaymentMethodDto> paymentMethods = new ArrayList<>();
 	private List<ProductDto> products = new ArrayList<>();
 	@Valid
 	private AddressDto address;
+
+	public Long getKitchenId() {
+		if (Objects.isNull(this.getKitchen())) {
+			return null;
+		}
+		return this.getKitchen().getId();
+	}
 
 	@Override
 	public boolean equals(Object o) {

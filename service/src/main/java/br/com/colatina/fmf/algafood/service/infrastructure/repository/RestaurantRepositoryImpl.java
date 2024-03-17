@@ -27,7 +27,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 	@Override
 	public List<RestaurantListDto> filterDtoByFreightRate(Double minFreightRate, Double maxFreightRate) {
 		StringBuilder jpql = new StringBuilder("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto" +
-				"(r.id, r.name, r.freightRate, r.active, k.name) " +
+				"(r.id, r.name, r.freightRate, r.active, k.id, k.name) " +
 				" FROM Restaurant r LEFT JOIN r.kitchen k " +
 				" WHERE r.excluded = FALSE ");
 
