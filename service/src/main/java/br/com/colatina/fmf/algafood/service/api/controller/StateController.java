@@ -28,7 +28,7 @@ public class StateController {
 
 	@GetMapping()
 	public ResponseEntity<List<StateDto>> findAll() {
-		log.debug("REST request to find all States");
+		log.debug("REST request to find all states");
 
 		try {
 			return new ResponseEntity<>(stateCrudService.findAll(), HttpStatus.OK);
@@ -40,7 +40,7 @@ public class StateController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<StateDto> findById(@PathVariable Long id) {
-		log.debug("REST request to find the State with ID: {}", id);
+		log.debug("REST request to find the state with ID: {}", id);
 
 		try {
 			StateDto state = stateCrudService.findDtoById(id);
