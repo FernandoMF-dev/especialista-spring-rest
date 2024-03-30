@@ -15,8 +15,8 @@
 				<constraints nullable="false"/>
 			</column>
 
-			<column name="freight_rate" type="DOUBLE" defaultValueNumeric="0"
-					remarks="Standard freight rate charged by the restaurant">
+			<column name="freight_fee" type="DOUBLE" defaultValueNumeric="0"
+					remarks="Standard freight fee charged by the restaurant">
 				<constraints nullable="false"/>
 			</column>
 

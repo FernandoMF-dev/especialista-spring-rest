@@ -15,8 +15,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RestaurantPageFilter implements Serializable {
 	private String name;
-	private Double minFreightRate;
-	private Double maxFreightRate;
+	private Double minFreightFee;
+	private Double maxFreightFee;
 	private Boolean active;
 	private Long kitchenId;
 }

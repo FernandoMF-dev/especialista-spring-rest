@@ -7,15 +7,15 @@
 
 	<changeSet id="20240314183000-1" author="Fernando Martins Ferreira">
 		<addColumn tableName="tb_restaurant">
-			<column name="address_cep" type="VARCHAR" remarks="CEP of the restaurant's address"/>
+			<column name="address_cep" type="VARCHAR(9)" remarks="CEP of the restaurant's address"/>
 
-			<column name="address_public_space" type="VARCHAR" remarks="Public space of the restaurant's address"/>
+			<column name="address_public_space" type="VARCHAR(100)" remarks="Public space of the restaurant's address"/>
 
-			<column name="address_street_number" type="VARCHAR" remarks="Number of the restaurant's address"/>
+			<column name="address_street_number" type="VARCHAR(20)" remarks="Number of the restaurant's address"/>
 
-			<column name="address_complement" type="VARCHAR" remarks="Complement for the restaurant's address"/>
+			<column name="address_complement" type="VARCHAR(60)" remarks="Complement for the restaurant's address"/>
 
-			<column name="address_district" type="VARCHAR" remarks="District of the restaurant's address"/>
+			<column name="address_district" type="VARCHAR(60)" remarks="District of the restaurant's address"/>
 
 			<column name="address_city_id" type="BIGINT"
 					remarks="Unique identifier of the city where the restaurant is located"/>

@@ -6,7 +6,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto
 import java.util.List;
 
 public interface RestaurantRepositoryQueries {
-	List<RestaurantListDto> filterDtoByFreightRate(Double minFreightRate, Double maxFreightRate);
+	List<RestaurantListDto> filterDtoByFreightFee(Double minFreightFee, Double maxFreightFee);
 
-	List<Restaurant> filterEntityByFreightRate(String name, Double minFreightRate, Double maxFreightRate);
+	List<Restaurant> filterEntityByFreightFee(String name, Double minFreightFee, Double maxFreightFee);
 }

@@ -25,7 +25,7 @@ public class RestaurantDto implements Serializable {
 	@NotBlank
 	private String name;
 	@NotNull
-	private Double freightRate;
+	private Double freightFee;
 	private LocalDateTime registrationDate;
 	private LocalDateTime updateDate;
 	@NotNull

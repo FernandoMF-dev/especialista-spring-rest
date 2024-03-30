@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepository extends CustomJpaRepository<Restaurant, Long>, JpaSpecificationExecutor<Restaurant>, RestaurantRepositoryQueries {
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto" +
-			"(r.id, r.name, r.freightRate, r.active, k.id, k.name) " +
+			"(r.id, r.name, r.freightFee, r.active, k.id, k.name) " +
 			" FROM Restaurant r " +
 			" LEFT JOIN r.kitchen k " +
 			" WHERE r.excluded = FALSE ")

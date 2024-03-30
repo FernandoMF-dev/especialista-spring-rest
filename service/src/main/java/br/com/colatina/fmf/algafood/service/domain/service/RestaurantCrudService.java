@@ -45,12 +45,12 @@ public class RestaurantCrudService {
 				.orElseThrow(() -> new ResourceNotFound(String.format("Restaurant %d not found", id)));
 	}
 
-	public List<RestaurantListDto> filterByFreightRate(Double min, Double max) {
-		return restaurantRepository.filterDtoByFreightRate(min, max);
+	public List<RestaurantListDto> filterByFreightFee(Double min, Double max) {
+		return restaurantRepository.filterDtoByFreightFee(min, max);
 	}
 
-	public List<RestaurantListDto> filterByFreightRate(String name, Double min, Double max) {
-		return restaurantRepository.filterEntityByFreightRate(name, min, max).stream()
+	public List<RestaurantListDto> filterByFreightFee(String name, Double min, Double max) {
+		return restaurantRepository.filterEntityByFreightFee(name, min, max).stream()
 				.map(restaurantMapper::toListDto)
 				.collect(Collectors.toList());
 	}
@@ -58,8 +58,8 @@ public class RestaurantCrudService {
 	public Page<RestaurantListDto> page(RestaurantPageFilter filter, Pageable pageable) {
 		Specification<Restaurant> spec = restaurantSpecs.composedAnd(
 				restaurantSpecs.byName(filter.getName()),
-				restaurantSpecs.byMinFreightRate(filter.getMinFreightRate()),
-				restaurantSpecs.byMaxFreightRate(filter.getMaxFreightRate()),
+				restaurantSpecs.byMinFreightFee(filter.getMinFreightFee()),
+				restaurantSpecs.byMaxFreightFee(filter.getMaxFreightFee()),
 				restaurantSpecs.byActive(filter.getActive()),
 				restaurantSpecs.byKitchenId(filter.getKitchenId()),
 				restaurantSpecs.byExcluded(Boolean.FALSE)

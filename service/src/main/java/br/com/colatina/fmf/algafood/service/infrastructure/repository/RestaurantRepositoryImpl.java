@@ -25,22 +25,22 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 	private EntityManager entityManager;
 
 	@Override
-	public List<RestaurantListDto> filterDtoByFreightRate(Double minFreightRate, Double maxFreightRate) {
+	public List<RestaurantListDto> filterDtoByFreightFee(Double minFreightFee, Double maxFreightFee) {
 		StringBuilder jpql = new StringBuilder("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto" +
-				"(r.id, r.name, r.freightRate, r.active, k.id, k.name) " +
+				"(r.id, r.name, r.freightFee, r.active, k.id, k.name) " +
 				" FROM Restaurant r LEFT JOIN r.kitchen k " +
 				" WHERE r.excluded = FALSE ");
 
 		HashMap<String, Object> parameters = new HashMap<>();
 
-		if (Objects.nonNull(minFreightRate)) {
-			jpql.append(" AND r.freightRate >= :minFreightRate ");
-			parameters.put("minFreightRate", minFreightRate);
+		if (Objects.nonNull(minFreightFee)) {
+			jpql.append(" AND r.freightFee >= :minFreightFee ");
+			parameters.put("minFreightFee", minFreightFee);
 		}
 
-		if (Objects.nonNull(maxFreightRate)) {
-			jpql.append(" AND  r.freightRate <= :maxFreightRate ");
-			parameters.put("maxFreightRate", maxFreightRate);
+		if (Objects.nonNull(maxFreightFee)) {
+			jpql.append(" AND  r.freightFee <= :maxFreightFee ");
+			parameters.put("maxFreightFee", maxFreightFee);
 		}
 
 		TypedQuery<RestaurantListDto> query = entityManager.createQuery(jpql.toString(), RestaurantListDto.class);
@@ -51,7 +51,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 	}
 
 	@Override
-	public List<Restaurant> filterEntityByFreightRate(String name, Double minFreightRate, Double maxFreightRate) {
+	public List<Restaurant> filterEntityByFreightFee(String name, Double minFreightFee, Double maxFreightFee) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Restaurant> criteria = builder.createQuery(Restaurant.class);
 		Root<Restaurant> root = criteria.from(Restaurant.class);
@@ -59,11 +59,11 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 
 		predicates.add(builder.like(root.get(Restaurant_.name), "%" + name + "%"));
 		predicates.add(builder.isFalse(root.get(Restaurant_.excluded)));
-		if (Objects.nonNull(minFreightRate)) {
-			predicates.add(builder.greaterThanOrEqualTo(root.get(Restaurant_.freightRate), minFreightRate));
+		if (Objects.nonNull(minFreightFee)) {
+			predicates.add(builder.greaterThanOrEqualTo(root.get(Restaurant_.freightFee), minFreightFee));
 		}
-		if (Objects.nonNull(maxFreightRate)) {
-			predicates.add(builder.lessThanOrEqualTo(root.get(Restaurant_.freightRate), maxFreightRate));
+		if (Objects.nonNull(maxFreightFee)) {
+			predicates.add(builder.lessThanOrEqualTo(root.get(Restaurant_.freightFee), maxFreightFee));
 		}
 
 		criteria.where(predicates.toArray(new Predicate[0]));

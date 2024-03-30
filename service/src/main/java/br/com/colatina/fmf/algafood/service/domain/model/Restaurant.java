@@ -38,8 +38,8 @@ public class Restaurant {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "freight_rate", nullable = false)
-	private Double freightRate;
+	@Column(name = "freight_fee", nullable = false)
+	private Double freightFee;
 
 	@CreationTimestamp
 	@Column(name = "registration_date", nullable = false)

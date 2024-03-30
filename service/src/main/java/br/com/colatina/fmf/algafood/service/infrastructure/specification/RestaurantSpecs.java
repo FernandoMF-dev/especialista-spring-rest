@@ -18,10 +18,10 @@ public class RestaurantSpecs extends BaseSpecs<Restaurant> {
 	}
 
 	@NonNull
-	public Specification<Restaurant> byMinFreightRate(Double minFreightRate) {
+	public Specification<Restaurant> byMinFreightFee(Double minFreightFee) {
 		return (root, query, criteriaBuilder) -> {
-			if (Objects.nonNull(minFreightRate)) {
-				return criteriaBuilder.greaterThanOrEqualTo(root.get(Restaurant_.freightRate), minFreightRate);
+			if (Objects.nonNull(minFreightFee)) {
+				return criteriaBuilder.greaterThanOrEqualTo(root.get(Restaurant_.freightFee), minFreightFee);
 			}
 
 			return defaultReturn(criteriaBuilder);
@@ -29,10 +29,10 @@ public class RestaurantSpecs extends BaseSpecs<Restaurant> {
 	}
 
 	@NonNull
-	public Specification<Restaurant> byMaxFreightRate(Double maxFreightRate) {
+	public Specification<Restaurant> byMaxFreightFee(Double maxFreightFee) {
 		return (root, query, criteriaBuilder) -> {
-			if (Objects.nonNull(maxFreightRate)) {
-				return criteriaBuilder.lessThanOrEqualTo(root.get(Restaurant_.freightRate), maxFreightRate);
+			if (Objects.nonNull(maxFreightFee)) {
+				return criteriaBuilder.lessThanOrEqualTo(root.get(Restaurant_.freightFee), maxFreightFee);
 			}
 
 			return defaultReturn(criteriaBuilder);

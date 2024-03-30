@@ -44,14 +44,14 @@ public class RestaurantController {
 		}
 	}
 
-	@GetMapping("/freight-rate")
-	public ResponseEntity<List<RestaurantListDto>> filterByFreightRate(@RequestParam(value = "name", required = false) String name,
-																   @RequestParam(value = "min", required = false) Double min,
-																   @RequestParam(value = "max", required = false) Double max) {
+	@GetMapping("/freight-fee")
+	public ResponseEntity<List<RestaurantListDto>> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
+																	  @RequestParam(value = "min", required = false) Double min,
+																	  @RequestParam(value = "max", required = false) Double max) {
 		if (Strings.isEmpty(name)) {
-			return _filterByFreightRate(min, max);
+			return _filterByFreightFee(min, max);
 		}
-		return _filterByFreightRate(name, min, max);
+		return _filterByFreightFee(name, min, max);
 	}
 
 	@GetMapping("/page")
@@ -125,11 +125,11 @@ public class RestaurantController {
 		}
 	}
 
-	private ResponseEntity<List<RestaurantListDto>> _filterByFreightRate(Double min, Double max) {
-		log.debug("REST request to find all Restaurants with freight rate between {} and {}", min, max);
+	private ResponseEntity<List<RestaurantListDto>> _filterByFreightFee(Double min, Double max) {
+		log.debug("REST request to find all Restaurants with freight fee between {} and {}", min, max);
 
 		try {
-			List<RestaurantListDto> result = restaurantCrudService.filterByFreightRate(min, max);
+			List<RestaurantListDto> result = restaurantCrudService.filterByFreightFee(min, max);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (BusinessRule e) {
 			log.error(e.getMessage(), e);
@@ -137,11 +137,11 @@ public class RestaurantController {
 		}
 	}
 
-	private ResponseEntity<List<RestaurantListDto>> _filterByFreightRate(String name, Double min, Double max) {
-		log.debug("REST request to find all Restaurants with name like \"{}\" and freight rate between {} and {}", name, min, max);
+	private ResponseEntity<List<RestaurantListDto>> _filterByFreightFee(String name, Double min, Double max) {
+		log.debug("REST request to find all Restaurants with name like \"{}\" and freight fee between {} and {}", name, min, max);
 
 		try {
-			List<RestaurantListDto> result = restaurantCrudService.filterByFreightRate(name, min, max);
+			List<RestaurantListDto> result = restaurantCrudService.filterByFreightFee(name, min, max);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (BusinessRule e) {
 			log.error(e.getMessage(), e);

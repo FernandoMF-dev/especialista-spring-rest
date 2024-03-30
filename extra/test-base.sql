@@ -16,14 +16,16 @@ VALUES (nextval('seq_city'), 'UBE', 'Uberlândia', 1),
 	   (nextval('seq_city'), 'CP', 'Campinas', 2),
 	   (nextval('seq_city'), 'FTZ', 'Fortaleza', 3);
 
-INSERT INTO tb_restaurant (id, name, freight_rate, registration_date, update_date, kitchen_id, address_city_id,
-						   address_cep, address_public_space, address_street_number, address_district)
+INSERT INTO tb_restaurant (id, name, freight_fee, registration_date, update_date, kitchen_id, address_city_id,
+						   address_cep, address_public_space, address_street_number, address_district,
+						   address_complement)
 VALUES (nextval('seq_restaurant'), 'Thai Gourmet', 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1, '38400-999',
-		'Rua João Pinheiro', '1000', 'Centro');
+		'Rua João Pinheiro', '1000', 'Centro', ''),
+	   (nextval('seq_restaurant'), 'Thai Delivery', 9.50, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, '40567-387',
+		'Av. Carvalho Pedro', '154', 'Centro', '4ª Andar');
 
-INSERT INTO tb_restaurant (id, name, freight_rate, registration_date, update_date, kitchen_id)
-VALUES (nextval('seq_restaurant'), 'Thai Delivery', 9.50, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
-	   (nextval('seq_restaurant'), 'Tuk Tuk Comida Indiana', 15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2),
+INSERT INTO tb_restaurant (id, name, freight_fee, registration_date, update_date, kitchen_id)
+VALUES (nextval('seq_restaurant'), 'Tuk Tuk Comida Indiana', 15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2),
 	   (nextval('seq_restaurant'), 'Java Steakhouse', 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3),
 	   (nextval('seq_restaurant'), 'Lanchonete do Tio Sam', 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4),
 	   (nextval('seq_restaurant'), 'Bar da Maria', 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4);

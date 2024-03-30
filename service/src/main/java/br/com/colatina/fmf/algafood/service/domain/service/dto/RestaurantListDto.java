@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class RestaurantListDto implements Serializable {
 	private Long id;
 	private String name;
-	private Double freightRate;
+	private Double freightFee;
 	private Boolean active;
 	private Long kitchenId;
 	private String kitchenName;
