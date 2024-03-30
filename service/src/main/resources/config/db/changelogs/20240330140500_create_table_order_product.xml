@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240330140500-1" author="Fernando Martins Ferreira">
+		<createTable tableName="rel_order_product">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="order_id" type="BIGINT"
+					remarks="Unique identifier of the order that includes the product">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="product_id" type="BIGINT"
+					remarks="Unique identifier of the product being included by the order">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="quantity" type="INTEGER" defaultValueNumeric="1"
+					remarks="The number of product units included in the order">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="unit_price" type="DOUBLE" remarks="Price per unit of the product in the order">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="total_price" type="DOUBLE" remarks="Price total for all units of the product in the order">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="observation" type="VARCHAR" remarks="Observations included by the user regarding delivery or preparation of the product"/>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="rel_order_product"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240330140500-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="rel_order_product" columnNames="id"
+					   constraintName="pk_order_product"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="rel_order_product" constraintName="pk_order_product"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240330140500-3" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="rel_order_product" baseColumnNames="order_id"
+								 referencedTableName="tb_order" referencedColumnNames="id"
+								 constraintName="fk_order_product_order"/>
+
+		<addForeignKeyConstraint baseTableName="rel_order_product" baseColumnNames="product_id"
+								 referencedTableName="tb_product" referencedColumnNames="id"
+								 constraintName="fk_order_product_product"/>
+
+		<rollback>
+			<dropAllForeignKeyConstraints baseTableName="rel_order_product"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240330140500-4" author="Fernando Martins Ferreira">
+		<createSequence sequenceName="seq_order_product" incrementBy="1" startValue="1"/>
+
+		<rollback>
+			<dropSequence sequenceName="seq_order_product"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240330131200-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_order">
+			<column name="id" type="BIGINT" remarks="Unique identifier">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="user_id" type="BIGINT" remarks="Unique identifier of the user who placed the order">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="restaurant_id" type="BIGINT"
+					remarks="Unique identifier of the restaurant for which the order was placed">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="payment_method_id" type="BIGINT"
+					remarks="Unique identifier of the payment method chosen by the user who placed the order">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="total_value" type="DOUBLE" remarks="Total price to be paid for the order">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="subtotal" type="DOUBLE" remarks="Subtotal to be paid per installment of the order value">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="freight_fee" type="DOUBLE" defaultValueNumeric="0"
+					remarks="Freight fee charged by the restaurant for order delivery">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="registration_date" type="DATETIME" remarks="Date and time the order was opened">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="confirmation_date" type="DATETIME" remarks="Date and time the order was confirmed"/>
+
+			<column name="delivery_date" type="DATETIME" remarks="Date and time the order was delivered"/>
+
+			<column name="cancellation_date" type="DATETIME" remarks="Date and time the order was canceled"/>
+
+			<column name="status" type="VARCHAR(10)" remarks="Current order status">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="address_cep" type="VARCHAR(9)" remarks="CEP of the order's delivery address"/>
+
+			<column name="address_public_space" type="VARCHAR(100)" remarks="Public space of the order's delivery address"/>
+
+			<column name="address_street_number" type="VARCHAR(20)" remarks="Number of the order's delivery address"/>
+
+			<column name="address_complement" type="VARCHAR(60)" remarks="Complement for the order's delivery address"/>
+
+			<column name="address_district" type="VARCHAR(60)" remarks="District of the order's delivery address"/>
+
+			<column name="address_city_id" type="BIGINT"
+					remarks="Unique identifier of the city where the order's delivery address is located"/>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_order"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240330131200-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_order" columnNames="id" constraintName="pk_order"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_order" constraintName="pk_order"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240330131200-3" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="tb_order" baseColumnNames="user_id"
+								 referencedTableName="tb_user" referencedColumnNames="id"
+								 constraintName="fk_order_user"/>
+
+		<addForeignKeyConstraint baseTableName="tb_order" baseColumnNames="restaurant_id"
+								 referencedTableName="tb_restaurant" referencedColumnNames="id"
+								 constraintName="fk_order_restaurant"/>
+
+		<addForeignKeyConstraint baseTableName="tb_order" baseColumnNames="payment_method_id"
+								 referencedTableName="tb_payment_method" referencedColumnNames="id"
+								 constraintName="fk_order_payment_method"/>
+
+		<addForeignKeyConstraint baseTableName="tb_order" baseColumnNames="address_city_id"
+								 referencedTableName="tb_city" referencedColumnNames="id"
+								 constraintName="fk_order_address_city"/>
+
+		<rollback>
+			<dropAllForeignKeyConstraints baseTableName="tb_order"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240330131200-4" author="Fernando Martins Ferreira">
+		<createSequence sequenceName="seq_order" incrementBy="1" startValue="1"/>
+
+		<rollback>
+			<dropSequence sequenceName="seq_order"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
