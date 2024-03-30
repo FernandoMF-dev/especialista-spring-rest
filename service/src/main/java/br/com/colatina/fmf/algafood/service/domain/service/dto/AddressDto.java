@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Getter
@@ -14,10 +15,15 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressDto implements Serializable {
+	@NotBlank
 	private String cep;
+	@NotBlank
 	private String publicSpace;
+	@NotBlank
 	private String streetNumber;
 	private String complement;
+	@NotBlank
 	private String district;
+	@NotBlank
 	private CityDto city;
 }
