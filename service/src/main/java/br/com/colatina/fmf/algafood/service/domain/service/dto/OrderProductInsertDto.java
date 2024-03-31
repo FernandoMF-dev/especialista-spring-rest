@@ -20,8 +20,6 @@ public class OrderProductInsertDto implements Serializable {
 	@NotNull
 	private Integer quantity = 1;
 	@NotNull
-	private Long orderId;
-	@NotNull
 	private Long productId;
 	private String observation;
 }

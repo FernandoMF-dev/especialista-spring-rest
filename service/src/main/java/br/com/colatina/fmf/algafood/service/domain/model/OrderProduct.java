@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -44,4 +45,21 @@ public class OrderProduct {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
 	private Product product;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof OrderProduct)) {
+			return false;
+		}
+		OrderProduct that = (OrderProduct) o;
+		return id.equals(that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

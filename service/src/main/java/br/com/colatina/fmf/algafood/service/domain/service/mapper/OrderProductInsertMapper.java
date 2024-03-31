@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface OrderProductInsertMapper extends EntityMapper<OrderProductInsertDto, OrderProduct> {
 	@Override
-	@Mapping(source = "orderId", target = "order.id")
 	@Mapping(source = "productId", target = "product.id")
 	OrderProduct toEntity(OrderProductInsertDto dto);
 

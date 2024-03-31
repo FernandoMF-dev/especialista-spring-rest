@@ -25,6 +25,8 @@ public class OrderInsertDto implements Serializable {
 	private Long restaurantId;
 	@NotNull
 	private Long paymentMethodId;
+	@NotNull
+	private Integer installments;
 	@NotEmpty
 	@Valid
 	private List<OrderProductInsertDto> orderProducts = new ArrayList<>();

@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -24,6 +25,6 @@ public class AddressDto implements Serializable {
 	private String complement;
 	@NotBlank
 	private String district;
-	@NotBlank
+	@NotNull
 	private CityDto city;
 }

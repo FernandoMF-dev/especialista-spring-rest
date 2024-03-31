@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.domain.model;
 
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -22,11 +23,13 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Table(name = "tb_order")
 @Entity
+@NoArgsConstructor
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_order")
@@ -77,4 +80,25 @@ public class Order {
 
 	@Embedded
 	private Address address;
+
+	public Order(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Order)) {
+			return false;
+		}
+		Order that = (Order) o;
+		return id.equals(that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }
