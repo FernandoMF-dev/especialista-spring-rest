@@ -1,7 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.model.KitchensXmlWrapper;
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRule;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.KitchenCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.KitchenDto;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class KitchenController {
 
 		try {
 			return new ResponseEntity<>(kitchenCrudService.findAll(), HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -46,7 +46,7 @@ public class KitchenController {
 
 		try {
 			return new ResponseEntity<>(kitchenCrudService.findAllXml(), HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -59,7 +59,7 @@ public class KitchenController {
 		try {
 			KitchenDto kitchen = kitchenCrudService.findDtoById(id);
 			return new ResponseEntity<>(kitchen, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -69,7 +69,7 @@ public class KitchenController {
 	public ResponseEntity<KitchenDto> findFirst() {
 		try {
 			return new ResponseEntity<>(kitchenCrudService.findFirst(), HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -81,7 +81,7 @@ public class KitchenController {
 
 		try {
 			return new ResponseEntity<>(kitchenCrudService.insert(dto), HttpStatus.CREATED);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -94,7 +94,7 @@ public class KitchenController {
 		try {
 			dto = kitchenCrudService.update(dto, id);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -107,7 +107,7 @@ public class KitchenController {
 		try {
 			kitchenCrudService.delete(id);
 			return ResponseEntity.noContent().build();
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}

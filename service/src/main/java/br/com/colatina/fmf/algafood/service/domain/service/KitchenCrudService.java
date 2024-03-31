@@ -1,8 +1,8 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
 import br.com.colatina.fmf.algafood.service.api.model.KitchensXmlWrapper;
-import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceInUse;
-import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFound;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceInUseException;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.Kitchen;
 import br.com.colatina.fmf.algafood.service.domain.repository.KitchenRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.KitchenDto;
@@ -33,19 +33,19 @@ public class KitchenCrudService {
 
 	public KitchenDto findDtoById(Long id) {
 		return kitchenRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("Kitchen %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("Kitchen %d not found", id)));
 	}
 
 	public Kitchen findEntityById(Long id) {
 		return kitchenRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("Kitchen %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("Kitchen %d not found", id)));
 	}
 
 	public KitchenDto findFirst() {
 		Optional<Kitchen> entity = kitchenRepository.findFirst();
 
 		if (entity.isEmpty()) {
-			throw new ResourceNotFound("No kitchen found");
+			throw new ResourceNotFoundException("No kitchen found");
 		}
 		return kitchenMapper.toDto(entity.get());
 	}
@@ -77,7 +77,7 @@ public class KitchenCrudService {
 
 	private void validateDelete(Long id) {
 		if (kitchenRepository.isKitchenInUse(id)) {
-			throw new ResourceInUse(String.format("Kitchen %d is currently being used by another resource and cannot be deleted", id));
+			throw new ResourceInUseException(String.format("Kitchen %d is currently being used by another resource and cannot be deleted", id));
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFound;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.City;
 import br.com.colatina.fmf.algafood.service.domain.repository.CityRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
@@ -29,12 +29,12 @@ public class CityCrudService {
 
 	public CityDto findDtoById(Long id) {
 		return cityRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("City %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("City %d not found", id)));
 	}
 
 	public City findEntityById(Long id) {
 		return cityRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("City %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("City %d not found", id)));
 	}
 
 	public CityDto insert(CityDto dto) {
@@ -65,8 +65,8 @@ public class CityCrudService {
 	private void validateSave(CityDto dto) {
 		try {
 			stateCrudService.findEntityById(dto.getState().getId());
-		} catch (ResourceNotFound e) {
-			throw new ResourceNotFound(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (ResourceNotFoundException e) {
+			throw new ResourceNotFoundException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 }

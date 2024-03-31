@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRule;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
@@ -38,7 +38,7 @@ public class RestaurantController {
 
 		try {
 			return new ResponseEntity<>(restaurantCrudService.findAll(), HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -58,7 +58,7 @@ public class RestaurantController {
 	public ResponseEntity<Page<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
 		try {
 			return new ResponseEntity<>(restaurantCrudService.page(filter, pageable), HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -68,7 +68,7 @@ public class RestaurantController {
 	public ResponseEntity<RestaurantDto> findFirst() {
 		try {
 			return new ResponseEntity<>(restaurantCrudService.findFirst(), HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -81,7 +81,7 @@ public class RestaurantController {
 		try {
 			RestaurantDto restaurant = restaurantCrudService.findDtoById(id);
 			return new ResponseEntity<>(restaurant, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -93,7 +93,7 @@ public class RestaurantController {
 
 		try {
 			return new ResponseEntity<>(restaurantCrudService.insert(dto), HttpStatus.CREATED);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -106,7 +106,7 @@ public class RestaurantController {
 		try {
 			dto = restaurantCrudService.update(dto, id);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -119,7 +119,7 @@ public class RestaurantController {
 		try {
 			restaurantCrudService.delete(id);
 			return ResponseEntity.noContent().build();
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -131,7 +131,7 @@ public class RestaurantController {
 		try {
 			List<RestaurantListDto> result = restaurantCrudService.filterByFreightFee(min, max);
 			return new ResponseEntity<>(result, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -143,7 +143,7 @@ public class RestaurantController {
 		try {
 			List<RestaurantListDto> result = restaurantCrudService.filterByFreightFee(name, min, max);
 			return new ResponseEntity<>(result, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}

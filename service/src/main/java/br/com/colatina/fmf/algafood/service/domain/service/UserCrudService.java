@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFound;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.User;
 import br.com.colatina.fmf.algafood.service.domain.repository.UserRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
@@ -26,12 +26,12 @@ public class UserCrudService {
 
 	public UserDto findDtoById(Long id) {
 		return userRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("User %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("User %d not found", id)));
 	}
 
 	public User findEntityById(Long id) {
 		return userRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("User %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("User %d not found", id)));
 	}
 
 	public UserDto insert(UserDto dto) {

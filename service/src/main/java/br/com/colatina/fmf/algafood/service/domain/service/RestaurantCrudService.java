@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFound;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.repository.RestaurantRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
@@ -42,7 +42,7 @@ public class RestaurantCrudService {
 
 	public Restaurant findEntityById(Long id) {
 		return restaurantRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("Restaurant %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("Restaurant %d not found", id)));
 	}
 
 	public List<RestaurantListDto> filterByFreightFee(Double min, Double max) {
@@ -72,7 +72,7 @@ public class RestaurantCrudService {
 		Optional<Restaurant> entity = restaurantRepository.findFirst();
 
 		if (entity.isEmpty()) {
-			throw new ResourceNotFound("No restaurant found");
+			throw new ResourceNotFoundException("No restaurant found");
 		}
 		return restaurantMapper.toDto(entity.get());
 	}
@@ -106,8 +106,8 @@ public class RestaurantCrudService {
 	private void validateSave(RestaurantDto dto) {
 		try {
 			kitchenCrudService.findEntityById(dto.getKitchenId());
-		} catch (ResourceNotFound e) {
-			throw new ResourceNotFound(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (ResourceNotFoundException e) {
+			throw new ResourceNotFoundException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 }

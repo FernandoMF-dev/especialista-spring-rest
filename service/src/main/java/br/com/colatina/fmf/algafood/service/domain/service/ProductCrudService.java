@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFound;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.Product;
 import br.com.colatina.fmf.algafood.service.domain.repository.ProductRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
@@ -30,13 +30,13 @@ public class ProductCrudService {
 	public ProductDto findDtoById(Long restaurantId, Long productId) {
 		validateRestaurant(restaurantId);
 		return productRepository.findDtoByIdAndRestaurant(restaurantId, productId)
-				.orElseThrow(() -> new ResourceNotFound(String.format("Product %d not found in restaurant %d", productId, restaurantId)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("Product %d not found in restaurant %d", productId, restaurantId)));
 	}
 
 	public Product findEntityById(Long restaurantId, Long productId) {
 		validateRestaurant(restaurantId);
 		return productRepository.findEntityByIdAndRestaurant(restaurantId, productId)
-				.orElseThrow(() -> new ResourceNotFound(String.format("Product %d not found in restaurant %d", productId, restaurantId)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("Product %d not found in restaurant %d", productId, restaurantId)));
 	}
 
 	public ProductDto insert(Long restaurantId, ProductDto dto) {

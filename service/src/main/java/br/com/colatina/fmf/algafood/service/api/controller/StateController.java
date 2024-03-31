@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRule;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.StateCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.StateDto;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class StateController {
 
 		try {
 			return new ResponseEntity<>(stateCrudService.findAll(), HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -45,7 +45,7 @@ public class StateController {
 		try {
 			StateDto state = stateCrudService.findDtoById(id);
 			return new ResponseEntity<>(state, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -57,7 +57,7 @@ public class StateController {
 
 		try {
 			return new ResponseEntity<>(stateCrudService.insert(dto), HttpStatus.CREATED);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -70,7 +70,7 @@ public class StateController {
 		try {
 			dto = stateCrudService.update(dto, id);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -83,7 +83,7 @@ public class StateController {
 		try {
 			stateCrudService.delete(id);
 			return ResponseEntity.noContent().build();
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}

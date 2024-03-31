@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRule;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.ProductCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class RestaurantProductController {
 
 		try {
 			return new ResponseEntity<>(productCrudService.findAll(restaurantId), HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -45,7 +45,7 @@ public class RestaurantProductController {
 		try {
 			ProductDto state = productCrudService.findDtoById(restaurantId, productId);
 			return new ResponseEntity<>(state, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -57,7 +57,7 @@ public class RestaurantProductController {
 
 		try {
 			return new ResponseEntity<>(productCrudService.insert(restaurantId, dto), HttpStatus.CREATED);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -71,7 +71,7 @@ public class RestaurantProductController {
 		try {
 			dto = productCrudService.update(restaurantId, dto, productId);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}
@@ -84,7 +84,7 @@ public class RestaurantProductController {
 		try {
 			productCrudService.delete(restaurantId, productId);
 			return ResponseEntity.noContent().build();
-		} catch (BusinessRule e) {
+		} catch (BusinessRuleException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<>(e.getResponseStatus());
 		}

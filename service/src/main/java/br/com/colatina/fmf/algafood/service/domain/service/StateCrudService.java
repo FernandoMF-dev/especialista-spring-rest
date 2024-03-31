@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFound;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.State;
 import br.com.colatina.fmf.algafood.service.domain.repository.StateRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.StateDto;
@@ -26,12 +26,12 @@ public class StateCrudService {
 
 	public StateDto findDtoById(Long id) {
 		return stateRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("State %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("State %d not found", id)));
 	}
 
 	public State findEntityById(Long id) {
 		return stateRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFound(String.format("State %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("State %d not found", id)));
 	}
 
 	public StateDto insert(StateDto dto) {

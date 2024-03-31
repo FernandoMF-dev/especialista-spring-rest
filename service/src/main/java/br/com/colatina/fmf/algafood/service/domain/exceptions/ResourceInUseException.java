@@ -2,9 +2,9 @@ package br.com.colatina.fmf.algafood.service.domain.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class ResourceInUse extends BusinessRule {
+public class ResourceInUseException extends BusinessRuleException {
 
-	public ResourceInUse(String message) {
+	public ResourceInUseException(String message) {
 		super(message, HttpStatus.CONFLICT);
 	}
 
