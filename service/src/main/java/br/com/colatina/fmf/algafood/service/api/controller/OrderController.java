@@ -1,6 +1,5 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
@@ -25,12 +24,6 @@ public class OrderController {
 	@PostMapping()
 	public ResponseEntity<OrderDto> insert(@Valid @RequestBody OrderInsertDto dto) {
 		log.debug("REST request to insert a new order: {}", dto);
-
-		try {
-			return new ResponseEntity<>(orderCrudService.insert(dto), HttpStatus.CREATED);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(orderCrudService.insert(dto), HttpStatus.CREATED);
 	}
 }

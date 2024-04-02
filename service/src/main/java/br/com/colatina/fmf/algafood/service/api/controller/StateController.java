@@ -1,6 +1,5 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.StateCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.StateDto;
 import lombok.RequiredArgsConstructor;
@@ -29,63 +28,32 @@ public class StateController {
 	@GetMapping()
 	public ResponseEntity<List<StateDto>> findAll() {
 		log.debug("REST request to find all states");
-
-		try {
-			return new ResponseEntity<>(stateCrudService.findAll(), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(stateCrudService.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<StateDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the state with ID: {}", id);
-
-		try {
-			StateDto state = stateCrudService.findDtoById(id);
-			return new ResponseEntity<>(state, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(stateCrudService.findDtoById(id), HttpStatus.OK);
 	}
 
 	@PostMapping()
 	public ResponseEntity<StateDto> insert(@Valid @RequestBody StateDto dto) {
 		log.debug("REST request to insert a new state: {}", dto);
-
-		try {
-			return new ResponseEntity<>(stateCrudService.insert(dto), HttpStatus.CREATED);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(stateCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<StateDto> update(@Valid @RequestBody StateDto dto, @PathVariable Long id) {
 		log.debug("REST request to update state with id {}: {}", id, dto);
+		return new ResponseEntity<>(stateCrudService.update(dto, id), HttpStatus.OK);
 
-		try {
-			dto = stateCrudService.update(dto, id);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete state with id {}", id);
-
-		try {
-			stateCrudService.delete(id);
-			return ResponseEntity.noContent().build();
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		stateCrudService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

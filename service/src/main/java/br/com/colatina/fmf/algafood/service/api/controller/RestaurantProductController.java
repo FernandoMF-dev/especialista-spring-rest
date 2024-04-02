@@ -1,6 +1,5 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.ProductCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
@@ -29,64 +28,32 @@ public class RestaurantProductController {
 	@GetMapping()
 	public ResponseEntity<List<ProductDto>> findAll(@PathVariable Long restaurantId) {
 		log.debug("REST request to find all products from restaurant {}", restaurantId);
-
-		try {
-			return new ResponseEntity<>(productCrudService.findAll(restaurantId), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(productCrudService.findAll(restaurantId), HttpStatus.OK);
 	}
 
 	@GetMapping("/{productId}")
 	public ResponseEntity<ProductDto> findById(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to find the product with id {} from restaurant {}", productId, restaurantId);
-
-		try {
-			ProductDto state = productCrudService.findDtoById(restaurantId, productId);
-			return new ResponseEntity<>(state, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(productCrudService.findDtoById(restaurantId, productId), HttpStatus.OK);
 	}
 
 	@PostMapping()
 	public ResponseEntity<ProductDto> insert(@PathVariable Long restaurantId, @Valid @RequestBody ProductDto dto) {
 		log.debug("REST request to insert a new product in restaurant {}: {}", restaurantId, dto);
-
-		try {
-			return new ResponseEntity<>(productCrudService.insert(restaurantId, dto), HttpStatus.CREATED);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(productCrudService.insert(restaurantId, dto), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{productId}")
 	public ResponseEntity<ProductDto> update(@PathVariable Long restaurantId, @PathVariable Long productId,
 											 @Valid @RequestBody ProductDto dto) {
 		log.debug("REST request to update product with id {} in restaurant {}: {}", productId, restaurantId, dto);
-
-		try {
-			dto = productCrudService.update(restaurantId, dto, productId);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(productCrudService.update(restaurantId, dto, productId), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{productId}")
 	public ResponseEntity<Void> delete(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to delete product with id {} from restaurant {}", productId, restaurantId);
-
-		try {
-			productCrudService.delete(restaurantId, productId);
-			return ResponseEntity.noContent().build();
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		productCrudService.delete(restaurantId, productId);
+		return ResponseEntity.noContent().build();
 	}
 }

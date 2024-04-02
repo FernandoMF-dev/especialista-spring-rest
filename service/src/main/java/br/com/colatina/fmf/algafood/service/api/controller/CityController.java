@@ -1,6 +1,5 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import lombok.RequiredArgsConstructor;
@@ -28,64 +27,33 @@ public class CityController {
 
 	@GetMapping()
 	public ResponseEntity<List<CityDto>> findAll() {
-		log.debug("REST request to find all Citys");
-
-		try {
-			return new ResponseEntity<>(cityCrudService.findAll(), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find all cities");
+		return new ResponseEntity<>(cityCrudService.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<CityDto> findById(@PathVariable Long id) {
-		log.debug("REST request to find the City with ID: {}", id);
-
-		try {
-			CityDto city = cityCrudService.findDtoById(id);
-			return new ResponseEntity<>(city, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find the city with ID: {}", id);
+		CityDto city = cityCrudService.findDtoById(id);
+		return new ResponseEntity<>(city, HttpStatus.OK);
 	}
 
 	@PostMapping()
 	public ResponseEntity<CityDto> insert(@Valid @RequestBody CityDto dto) {
 		log.debug("REST request to insert a new city: {}", dto);
-
-		try {
-			return new ResponseEntity<>(cityCrudService.insert(dto), HttpStatus.CREATED);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(cityCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<CityDto> update(@Valid @RequestBody CityDto dto, @PathVariable Long id) {
 		log.debug("REST request to update city with id {}: {}", id, dto);
-
-		try {
-			dto = cityCrudService.update(dto, id);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(cityCrudService.update(dto, id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete city with id {}", id);
-
-		try {
-			cityCrudService.delete(id);
-			return ResponseEntity.noContent().build();
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		cityCrudService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

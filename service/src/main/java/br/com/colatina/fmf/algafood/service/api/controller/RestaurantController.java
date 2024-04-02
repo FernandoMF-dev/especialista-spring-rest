@@ -1,6 +1,5 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
@@ -34,14 +33,8 @@ public class RestaurantController {
 
 	@GetMapping()
 	public ResponseEntity<List<RestaurantListDto>> findAll() {
-		log.debug("REST request to find all Restaurants");
-
-		try {
-			return new ResponseEntity<>(restaurantCrudService.findAll(), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find all restaurants");
+		return new ResponseEntity<>(restaurantCrudService.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/freight-fee")
@@ -56,96 +49,48 @@ public class RestaurantController {
 
 	@GetMapping("/page")
 	public ResponseEntity<Page<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
-		try {
-			return new ResponseEntity<>(restaurantCrudService.page(filter, pageable), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to perform a paged search of restaurants with filters {} and with the page configuration {}", filter, pageable);
+		return new ResponseEntity<>(restaurantCrudService.page(filter, pageable), HttpStatus.OK);
 	}
 
 	@GetMapping("/first")
 	public ResponseEntity<RestaurantDto> findFirst() {
-		try {
-			return new ResponseEntity<>(restaurantCrudService.findFirst(), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find the first restaurant it can");
+		return new ResponseEntity<>(restaurantCrudService.findFirst(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<RestaurantDto> findById(@PathVariable Long id) {
-		log.debug("REST request to find the Restaurant with ID: {}", id);
-
-		try {
-			RestaurantDto restaurant = restaurantCrudService.findDtoById(id);
-			return new ResponseEntity<>(restaurant, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find the restaurant with ID: {}", id);
+		return new ResponseEntity<>(restaurantCrudService.findDtoById(id), HttpStatus.OK);
 	}
 
 	@PostMapping()
 	public ResponseEntity<RestaurantDto> insert(@Valid @RequestBody RestaurantDto dto) {
 		log.debug("REST request to insert a new restaurant: {}", dto);
-
-		try {
-			return new ResponseEntity<>(restaurantCrudService.insert(dto), HttpStatus.CREATED);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(restaurantCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<RestaurantDto> update(@Valid @RequestBody RestaurantDto dto, @PathVariable Long id) {
 		log.debug("REST request to update restaurant with id {}: {}", id, dto);
-
-		try {
-			dto = restaurantCrudService.update(dto, id);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(restaurantCrudService.update(dto, id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete restaurant with id {}", id);
-
-		try {
-			restaurantCrudService.delete(id);
-			return ResponseEntity.noContent().build();
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		restaurantCrudService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 
 	private ResponseEntity<List<RestaurantListDto>> _filterByFreightFee(Double min, Double max) {
-		log.debug("REST request to find all Restaurants with freight fee between {} and {}", min, max);
-
-		try {
-			List<RestaurantListDto> result = restaurantCrudService.filterByFreightFee(min, max);
-			return new ResponseEntity<>(result, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find all restaurants with freight fee between {} and {}", min, max);
+		return new ResponseEntity<>(restaurantCrudService.filterByFreightFee(min, max), HttpStatus.OK);
 	}
 
 	private ResponseEntity<List<RestaurantListDto>> _filterByFreightFee(String name, Double min, Double max) {
-		log.debug("REST request to find all Restaurants with name like \"{}\" and freight fee between {} and {}", name, min, max);
-
-		try {
-			List<RestaurantListDto> result = restaurantCrudService.filterByFreightFee(name, min, max);
-			return new ResponseEntity<>(result, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find all restaurants with name like \"{}\" and freight fee between {} and {}", name, min, max);
+		return new ResponseEntity<>(restaurantCrudService.filterByFreightFee(name, min, max), HttpStatus.OK);
 	}
 }

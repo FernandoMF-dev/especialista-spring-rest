@@ -1,7 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.model.KitchensXmlWrapper;
-import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
 import br.com.colatina.fmf.algafood.service.domain.service.KitchenCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.KitchenDto;
 import lombok.RequiredArgsConstructor;
@@ -30,87 +29,45 @@ public class KitchenController {
 
 	@GetMapping()
 	public ResponseEntity<List<KitchenDto>> findAll() {
-		log.debug("REST request to find all Kitchens");
-
-		try {
-			return new ResponseEntity<>(kitchenCrudService.findAll(), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find all kitchens");
+		return new ResponseEntity<>(kitchenCrudService.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<KitchensXmlWrapper> findAllXml() {
-		log.debug("REST request to find all Kitchens with the response on the XML format");
-
-		try {
-			return new ResponseEntity<>(kitchenCrudService.findAllXml(), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find all kitchens with the response on the XML format");
+		return new ResponseEntity<>(kitchenCrudService.findAllXml(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<KitchenDto> findById(@PathVariable Long id) {
-		log.debug("REST request to find the Kitchen with ID: {}", id);
-
-		try {
-			KitchenDto kitchen = kitchenCrudService.findDtoById(id);
-			return new ResponseEntity<>(kitchen, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find the kitchen with ID: {}", id);
+		return new ResponseEntity<>(kitchenCrudService.findDtoById(id), HttpStatus.OK);
 	}
 
 	@GetMapping("/first")
 	public ResponseEntity<KitchenDto> findFirst() {
-		try {
-			return new ResponseEntity<>(kitchenCrudService.findFirst(), HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		log.debug("REST request to find the first kitchen it can");
+		return new ResponseEntity<>(kitchenCrudService.findFirst(), HttpStatus.OK);
 	}
 
 	@PostMapping()
 	public ResponseEntity<KitchenDto> insert(@Valid @RequestBody KitchenDto dto) {
 		log.debug("REST request to insert a new kitchen: {}", dto);
-
-		try {
-			return new ResponseEntity<>(kitchenCrudService.insert(dto), HttpStatus.CREATED);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(kitchenCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<KitchenDto> update(@Valid @RequestBody KitchenDto dto, @PathVariable Long id) {
 		log.debug("REST request to update kitchen with id {}: {}", id, dto);
-
-		try {
-			dto = kitchenCrudService.update(dto, id);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		return new ResponseEntity<>(kitchenCrudService.update(dto, id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete kitchen with id {}", id);
-
-		try {
-			kitchenCrudService.delete(id);
-			return ResponseEntity.noContent().build();
-		} catch (BusinessRuleException e) {
-			log.error(e.getMessage(), e);
-			return new ResponseEntity<>(e.getResponseStatus());
-		}
+		kitchenCrudService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }
