@@ -1,14 +1,10 @@
 package br.com.colatina.fmf.algafood.service.domain.exceptions;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-@Getter
-public abstract class BusinessRuleException extends RuntimeException {
-	private final HttpStatus responseStatus;
-
-	protected BusinessRuleException(String message, HttpStatus responseStatus) {
-		super(message);
-		this.responseStatus = responseStatus;
+public abstract class BusinessRuleException extends ResponseStatusException {
+	protected BusinessRuleException(String reason, HttpStatus responseStatus) {
+		super(responseStatus, reason);
 	}
 }
