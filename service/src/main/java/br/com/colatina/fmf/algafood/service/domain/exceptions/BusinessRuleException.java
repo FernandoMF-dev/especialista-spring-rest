@@ -7,4 +7,8 @@ public abstract class BusinessRuleException extends ResponseStatusException {
 	protected BusinessRuleException(String reason, HttpStatus responseStatus) {
 		super(responseStatus, reason);
 	}
+
+	public abstract String getTitle();
+
+	public abstract String getPath();
 }

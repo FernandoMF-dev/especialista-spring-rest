@@ -11,29 +11,42 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+	private static final String ERROR_TYPE_URI = "https://fmf.algafood.com.br/";
+
 	@ExceptionHandler(BusinessRuleException.class)
 	public ResponseEntity<?> handleBusinessRuleException(BusinessRuleException ex, WebRequest request) {
-		return handleExceptionInternal(ex, ex.getReason(), new HttpHeaders(), ex.getStatus(), request);
+		final ApiErrorResponse body = ApiErrorResponse.builder()
+				.status(ex.getStatus().value())
+				.timestamp(Instant.now())
+				.type(ERROR_TYPE_URI + ex.getPath())
+				.title(ex.getTitle())
+				.detail(ex.getReason())
+				.build();
+
+		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		final Map<String, Object> errorBody = new LinkedHashMap<>();
-
-		errorBody.put("timestamp", Instant.now());
-		errorBody.put("status", status.value());
-		errorBody.put("message", status.getReasonPhrase());
-
-		if (body instanceof String) {
-			errorBody.put("message", body);
+		if (Objects.isNull(body)) {
+			body = ApiErrorResponse.builder()
+					.status(status.value())
+					.timestamp(Instant.now())
+					.title(status.getReasonPhrase())
+					.build();
+		} else if (body instanceof String) {
+			body = ApiErrorResponse.builder()
+					.status(status.value())
+					.timestamp(Instant.now())
+					.title((String) body)
+					.build();
 		}
 
-		return super.handleExceptionInternal(ex, errorBody, headers, status, request);
+		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 }
