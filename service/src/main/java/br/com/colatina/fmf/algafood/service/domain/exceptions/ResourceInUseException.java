@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.exceptions;
 
+import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorType;
 import org.springframework.http.HttpStatus;
 
 public class ResourceInUseException extends BusinessRuleException {
@@ -8,12 +9,7 @@ public class ResourceInUseException extends BusinessRuleException {
 	}
 
 	@Override
-	public String getTitle() {
-		return "Resource is in use";
-	}
-
-	@Override
-	public String getPath() {
-		return "resource-in-use";
+	public ApiErrorType getApiErrorType() {
+		return ApiErrorType.RESOURCE_IN_USE;
 	}
 }

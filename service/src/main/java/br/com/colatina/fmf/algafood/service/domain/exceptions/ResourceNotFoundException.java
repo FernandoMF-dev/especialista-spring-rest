@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.exceptions;
 
+import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorType;
 import org.springframework.http.HttpStatus;
 
 public class ResourceNotFoundException extends BusinessRuleException {
@@ -12,12 +13,7 @@ public class ResourceNotFoundException extends BusinessRuleException {
 	}
 
 	@Override
-	public String getTitle() {
-		return "Resource not found";
-	}
-
-	@Override
-	public String getPath() {
-		return "resource-not-found";
+	public ApiErrorType getApiErrorType() {
+		return ApiErrorType.RESOURCE_NOT_FOUND;
 	}
 }

@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.exceptions;
 
+import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorType;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -8,7 +9,5 @@ public abstract class BusinessRuleException extends ResponseStatusException {
 		super(responseStatus, reason);
 	}
 
-	public abstract String getTitle();
-
-	public abstract String getPath();
+	public abstract ApiErrorType getApiErrorType();
 }

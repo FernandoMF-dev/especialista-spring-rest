@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.exceptions;
 
+import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorType;
 import org.springframework.http.HttpStatus;
 
 public class ResourceNotAvailableException extends BusinessRuleException {
@@ -8,12 +9,7 @@ public class ResourceNotAvailableException extends BusinessRuleException {
 	}
 
 	@Override
-	public String getTitle() {
-		return "Resource exists but it's not available";
-	}
-
-	@Override
-	public String getPath() {
-		return "resource-not-available";
+	public ApiErrorType getApiErrorType() {
+		return ApiErrorType.RESOURCE_NOT_AVAILABLE;
 	}
 }
