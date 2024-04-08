@@ -1,9 +1,12 @@
 package br.com.colatina.fmf.algafood.service.api.handler;
 
 import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.micrometer.core.lang.Nullable;
-import liquibase.repackaged.org.apache.commons.lang3.ObjectUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.Instant;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @ControllerAdvice
@@ -31,6 +35,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		Throwable rootCause = ExceptionUtils.getRootCause(ex);
+
+		if (rootCause instanceof InvalidFormatException) {
+			return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
+		}
+
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
 		String detail = "The request body is invalid. Check for syntax errors.";
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
@@ -54,6 +64,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 
 		return super.handleExceptionInternal(ex, body, headers, status, request);
+	}
+
+	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
+		String propertyPath = ex.getPath().stream().map(JsonMappingException.Reference::getFieldName).collect(Collectors.joining("."));
+		String detail = String.format("Property '%s' has been assigned the value '%s', which is an invalid type. Correct and enter a value compatible with type '%s'",
+				propertyPath, ex.getValue(), ex.getTargetType().getSimpleName());
+		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
+		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 
 	private ApiErrorResponse.ApiErrorResponseBuilder createApiErrorResponseBuilder(HttpStatus status, ApiErrorType type, String detail) {
