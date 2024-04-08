@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import io.micrometer.core.lang.Nullable;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.Instant;
@@ -40,6 +42,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				(rootCause, headers, status, request) -> handlePropertyBindingException((IgnoredPropertyException) rootCause, headers, status, request));
 		this.rootExceptionsHandlers.put(UnrecognizedPropertyException.class,
 				(rootCause, headers, status, request) -> handlePropertyBindingException((UnrecognizedPropertyException) rootCause, headers, status, request));
+		this.rootExceptionsHandlers.put(MethodArgumentTypeMismatchException.class,
+				(rootCause, headers, status, request) -> handleMethodArgumentTypeMismatchException((MethodArgumentTypeMismatchException) rootCause, headers, status, request));
 	}
 
 	@ExceptionHandler(BusinessRuleException.class)
@@ -61,6 +65,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = "The request body is invalid. Check for syntax errors.";
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		if (this.rootExceptionsHandlers.containsKey(ex.getClass())) {
+			return this.rootExceptionsHandlers.get(ex.getClass()).handle(ex, headers, status, request);
+		}
+		return super.handleTypeMismatch(ex, headers, status, request);
 	}
 
 	@Override
@@ -91,6 +103,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.detail(detail);
 	}
 
+	private String formatPropertyPath(List<JsonMappingException.Reference> path) {
+		return path.stream()
+				.map(JsonMappingException.Reference::getFieldName)
+				.collect(Collectors.joining("."));
+	}
+
+	// <editor-fold defaultstate="collapsed" desc="Root or specific exceptions handlers">
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
 		String propertyPath = formatPropertyPath(ex.getPath());
@@ -108,11 +127,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 
-	private String formatPropertyPath(List<JsonMappingException.Reference> path) {
-		return path.stream()
-				.map(JsonMappingException.Reference::getFieldName)
-				.collect(Collectors.joining("."));
+	private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
+		String detail = String.format("The URL parameter '%s' has been assigned the value '%s', which is an invalid type. Correct and enter a value compatible with type '%s'",
+				ex.getPropertyName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName());
+		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
+		return handleExceptionInternal(ex, body, headers, status, request);
 	}
+	// </editor-fold>
 
 	private interface InvalidBodyFormatHandler {
 		ResponseEntity<Object> handle(Throwable rootCause, HttpHeaders headers, HttpStatus status, WebRequest request);

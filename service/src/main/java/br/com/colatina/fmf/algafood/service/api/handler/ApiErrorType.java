@@ -10,7 +10,7 @@ public enum ApiErrorType {
 	RESOURCE_NOT_AVAILABLE("Resource exists but it's not available for the operation", "resource-not-available"),
 	RESOURCE_NOT_FOUND("Resource not found", "resource-not-found"),
 	MESSAGE_BODY_NOT_READABLE("Incomprehensible message", "incomprehensible-message"),
-	;
+	INVALID_REQUEST_PARAM("Invalid parameter", "Invalid-param");
 
 	private final String title;
 	private final String path;
