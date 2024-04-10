@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import io.micrometer.core.lang.Nullable;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private static final String ERROR_TYPE_URI = "https://fmf.algafood.com.br/";
@@ -53,6 +55,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = ObjectUtils.defaultIfNull(ex.getReason(), ex.getStatus().getReasonPhrase());
 		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).build();
 		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleBusinessRuleException(Exception ex, WebRequest request) {
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		ApiErrorType type = ApiErrorType.INTERNAL_SERVER_ERROR;
+		String detail = "An unexpected internal error occurred on the server. Try again and if the problem persists, contact your system administrator.";
+		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
+
+		log.error(detail, ex);
+		return handleExceptionInternal(ex, body, new HttpHeaders(), status, request);
 	}
 
 	@Override
