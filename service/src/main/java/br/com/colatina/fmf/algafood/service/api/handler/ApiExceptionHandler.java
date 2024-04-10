@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.Instant;
@@ -52,6 +53,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = ObjectUtils.defaultIfNull(ex.getReason(), ex.getStatus().getReasonPhrase());
 		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).build();
 		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ApiErrorType type = ApiErrorType.RESOURCE_NOT_FOUND;
+		String detail = String.format("The resource '%s', which you tried to access, is non-existent", ex.getRequestURL());
+		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
+		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 
 	@Override
