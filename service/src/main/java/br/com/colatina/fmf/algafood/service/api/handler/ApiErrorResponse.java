@@ -15,4 +15,6 @@ public class ApiErrorResponse {
 	private String title;
 	private String detail;
 	private Instant timestamp;
+
+	private String userMessage;
 }

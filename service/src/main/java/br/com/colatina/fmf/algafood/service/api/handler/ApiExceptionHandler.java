@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private static final String ERROR_TYPE_URI = "https://fmf.algafood.com.br/";
+	public static final String GENERIC_ERROR_USER_MSG = "An unexpected internal error occurred on the server. Try again and if the problem persists, please contact the system administrator.";
 
 	private final Map<Class<? extends Throwable>, InvalidBodyFormatHandler> rootExceptionsHandlers;
 
@@ -53,7 +54,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleBusinessRuleException(BusinessRuleException ex, WebRequest request) {
 		ApiErrorType type = ex.getApiErrorType();
 		String detail = ObjectUtils.defaultIfNull(ex.getReason(), ex.getStatus().getReasonPhrase());
-		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).build();
+		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).userMessage(detail).build();
+
 		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);
 	}
 
@@ -61,7 +63,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleBusinessRuleException(Exception ex, WebRequest request) {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ApiErrorType type = ApiErrorType.INTERNAL_SERVER_ERROR;
-		String detail = "An unexpected internal error occurred on the server. Try again and if the problem persists, contact your system administrator.";
+		String detail = GENERIC_ERROR_USER_MSG;
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 
 		log.error(detail, ex);
@@ -104,12 +106,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 					.status(status.value())
 					.timestamp(Instant.now())
 					.title(status.getReasonPhrase())
+					.userMessage(GENERIC_ERROR_USER_MSG)
 					.build();
 		} else if (body instanceof String) {
 			body = ApiErrorResponse.builder()
 					.status(status.value())
 					.timestamp(Instant.now())
 					.title((String) body)
+					.userMessage(GENERIC_ERROR_USER_MSG)
 					.build();
 		}
 
@@ -122,7 +126,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.timestamp(Instant.now())
 				.type(ERROR_TYPE_URI + type.getPath())
 				.title(type.getTitle())
-				.detail(detail);
+				.detail(detail)
+				.userMessage(GENERIC_ERROR_USER_MSG);
 	}
 
 	private String formatPropertyPath(List<JsonMappingException.Reference> path) {
