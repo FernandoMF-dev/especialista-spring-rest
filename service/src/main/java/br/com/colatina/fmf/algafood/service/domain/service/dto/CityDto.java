@@ -17,12 +17,12 @@ import java.util.Objects;
 @NoArgsConstructor
 public class CityDto implements Serializable {
 	private Long id;
-	@NotNull
+	@NotNull(message = "The acronym can not be null")
 	@Size(max = 5)
 	private String acronym;
-	@NotBlank
+	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
 	private String name;
-	@NotNull
+	@NotNull(message = "The state can not be null")
 	private StateDto state;
 
 	public CityDto(Long id, String acronym, String name, Long stateId, String stateAcronym, String stateName) {

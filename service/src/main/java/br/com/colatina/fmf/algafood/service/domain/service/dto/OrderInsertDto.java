@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -19,18 +20,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderInsertDto implements Serializable {
-	@NotNull
+	@NotNull(message = "Must specify the id of the user issuing the order")
 	private Long userId;
-	@NotNull
+	@NotNull(message = "Must specify the id of the restaurant to which the order is being issued")
 	private Long restaurantId;
-	@NotNull
+	@NotNull(message = "Must specify the id of the payment method chosen for this order")
 	private Long paymentMethodId;
-	@NotNull
+	@NotNull(message = "Must specify how many installments the payment for this order is being divided into")
+	@Min(value = 1, message = "The number of installments cannot be less than 1")
 	private Integer installments;
-	@NotEmpty
+	@NotEmpty(message = "The order product list cannot be empty")
 	@Valid
 	private List<OrderProductInsertDto> orderProducts = new ArrayList<>();
-	@NotNull
+	@NotNull(message = "The address cannot be null")
 	@Valid
 	private AddressDto address;
 }

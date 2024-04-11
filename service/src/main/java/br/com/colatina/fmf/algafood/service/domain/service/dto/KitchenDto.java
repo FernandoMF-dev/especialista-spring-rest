@@ -19,7 +19,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class KitchenDto implements Serializable {
 	private Long id;
-	@NotBlank
+	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
 	private String name;
 
 	@Override

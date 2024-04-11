@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Getter
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class PaymentMethodDto implements Serializable {
 	private Long id;
+	@NotBlank(message = "Description can not be null and must contain at least one non-whitespace character")
 	private String description;
 
 	@Override

@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 
 @Getter
@@ -17,15 +18,16 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ProductDto implements Serializable {
 	private Long id;
-	@NotBlank
+	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
 	private String name;
-	@NotNull
+	@NotNull(message = "Description can not be null")
 	private String description;
-	@NotNull
+	@NotNull(message = "Price can not be null")
+	@PositiveOrZero(message = "Price can not be lower than zero")
 	private Double price;
-	@NotNull
+	@NotNull(message = "The active field can not be null")
 	private Boolean active;
-	@NotNull
+	@NotNull(message = "Must specify the id of the restaurant offering the product")
 	private Long restaurantId;
 	private String restaurantName;
 }

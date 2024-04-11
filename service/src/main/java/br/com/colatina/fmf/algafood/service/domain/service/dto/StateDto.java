@@ -18,10 +18,10 @@ import java.util.Objects;
 @AllArgsConstructor
 public class StateDto implements Serializable {
 	private Long id;
-	@NotBlank
+	@NotBlank(message = "Acronym can not be null and must contain at least one non-whitespace character")
 	@Size(max = 2)
 	private String acronym;
-	@NotBlank
+	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
 	private String name;
 
 	@Override
