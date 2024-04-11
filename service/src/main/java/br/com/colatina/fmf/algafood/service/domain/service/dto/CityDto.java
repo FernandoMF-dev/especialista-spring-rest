@@ -1,13 +1,16 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import br.com.colatina.fmf.algafood.service.core.validation.ValidationGroups;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,7 +25,9 @@ public class CityDto implements Serializable {
 	private String acronym;
 	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
 	private String name;
+	@ConvertGroup(to = ValidationGroups.RequiredState.class)
 	@NotNull(message = "The state can not be null")
+	@Valid
 	private StateDto state;
 
 	public CityDto(Long id, String acronym, String name, Long stateId, String stateAcronym, String stateName) {

@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import br.com.colatina.fmf.algafood.service.core.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +34,9 @@ public class RestaurantDto implements Serializable {
 	private LocalDateTime updateDate;
 	@NotNull(message = "The active field can not be null")
 	private Boolean active;
-	@NotNull(message = "Must specify the type of cuisine of the restaurant")
+	@NotNull(message = "Must specify the cuisine of the restaurant")
+	@ConvertGroup(to = ValidationGroups.RequiredCuisine.class)
+	@Valid
 	private CuisineDto cuisine;
 	private List<PaymentMethodDto> paymentMethods = new ArrayList<>();
 	private List<ProductDto> products = new ArrayList<>();
