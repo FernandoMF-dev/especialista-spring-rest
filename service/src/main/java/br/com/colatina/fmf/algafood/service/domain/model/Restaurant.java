@@ -56,8 +56,8 @@ public class Restaurant {
 	private Boolean excluded = Boolean.FALSE;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "kitchen_id", referencedColumnName = "id", nullable = false)
-	private Kitchen kitchen;
+	@JoinColumn(name = "cuisine_id", referencedColumnName = "id", nullable = false)
+	private Cuisine cuisine;
 
 	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
 	private List<Product> products = new ArrayList<>();

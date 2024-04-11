@@ -15,7 +15,7 @@ public interface RestaurantRepository extends CustomJpaRepository<Restaurant, Lo
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto" +
 			"(r.id, r.name, r.freightFee, r.active, k.id, k.name) " +
 			" FROM Restaurant r " +
-			" LEFT JOIN r.kitchen k " +
+			" LEFT JOIN r.cuisine k " +
 			" WHERE r.excluded = FALSE ")
 	List<RestaurantListDto> findAllDto();
 

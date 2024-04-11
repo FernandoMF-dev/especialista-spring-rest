@@ -18,6 +18,6 @@ public class RestaurantListDto implements Serializable {
 	private String name;
 	private Double freightFee;
 	private Boolean active;
-	private Long kitchenId;
-	private String kitchenName;
+	private Long cuisineId;
+	private String cuisineName;
 }

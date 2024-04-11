@@ -33,17 +33,17 @@ public class RestaurantDto implements Serializable {
 	@NotNull(message = "The active field can not be null")
 	private Boolean active;
 	@NotNull(message = "Must specify the type of cuisine of the restaurant")
-	private KitchenDto kitchen;
+	private CuisineDto cuisine;
 	private List<PaymentMethodDto> paymentMethods = new ArrayList<>();
 	private List<ProductDto> products = new ArrayList<>();
 	@Valid
 	private AddressDto address;
 
-	public Long getKitchenId() {
-		if (Objects.isNull(this.getKitchen())) {
+	public Long getCuisineId() {
+		if (Objects.isNull(this.getCuisine())) {
 			return null;
 		}
-		return this.getKitchen().getId();
+		return this.getCuisine().getId();
 	}
 
 	@Override

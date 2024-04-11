@@ -30,7 +30,7 @@ public class RestaurantCrudService {
 	private final RestaurantMapper restaurantMapper;
 	private final RestaurantSpecs restaurantSpecs;
 
-	private final KitchenCrudService kitchenCrudService;
+	private final CuisineCrudService cuisineCrudService;
 
 	public List<RestaurantListDto> findAll() {
 		return restaurantRepository.findAllDto();
@@ -61,7 +61,7 @@ public class RestaurantCrudService {
 				restaurantSpecs.byMinFreightFee(filter.getMinFreightFee()),
 				restaurantSpecs.byMaxFreightFee(filter.getMaxFreightFee()),
 				restaurantSpecs.byActive(filter.getActive()),
-				restaurantSpecs.byKitchenId(filter.getKitchenId()),
+				restaurantSpecs.byCuisineId(filter.getCuisineId()),
 				restaurantSpecs.byExcluded(Boolean.FALSE)
 		);
 
@@ -105,7 +105,7 @@ public class RestaurantCrudService {
 
 	private void validateSave(RestaurantDto dto) {
 		try {
-			kitchenCrudService.findEntityById(dto.getKitchenId());
+			cuisineCrudService.findEntityById(dto.getCuisineId());
 		} catch (ResourceNotFoundException e) {
 			throw new ResourceNotFoundException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

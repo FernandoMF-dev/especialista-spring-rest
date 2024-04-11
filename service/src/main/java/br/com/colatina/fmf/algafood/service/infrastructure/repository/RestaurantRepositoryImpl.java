@@ -28,7 +28,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 	public List<RestaurantListDto> filterDtoByFreightFee(Double minFreightFee, Double maxFreightFee) {
 		StringBuilder jpql = new StringBuilder("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto" +
 				"(r.id, r.name, r.freightFee, r.active, k.id, k.name) " +
-				" FROM Restaurant r LEFT JOIN r.kitchen k " +
+				" FROM Restaurant r LEFT JOIN r.cuisine k " +
 				" WHERE r.excluded = FALSE ");
 
 		HashMap<String, Object> parameters = new HashMap<>();

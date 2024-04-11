@@ -6,12 +6,12 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
 	<changeSet id="20230202141000-1" author="Fernando Martins Ferreira">
-		<createTable tableName="tb_kitchen">
+		<createTable tableName="tb_cuisine">
 			<column name="id" type="BIGINT" remarks="Unique identifier">
 				<constraints nullable="false"/>
 			</column>
 
-			<column name="name" type="VARCHAR" remarks="Name of the kitchen">
+			<column name="name" type="VARCHAR" remarks="Name of the cuisine">
 				<constraints nullable="false"/>
 			</column>
 
@@ -21,23 +21,23 @@
 		</createTable>
 
 		<rollback>
-			<dropTable tableName="tb_kitchen"/>
+			<dropTable tableName="tb_cuisine"/>
 		</rollback>
 	</changeSet>
 
 	<changeSet id="20230202141000-2" author="Fernando Martins Ferreira">
-		<addPrimaryKey tableName="tb_kitchen" columnNames="id" constraintName="pk_kitchen"/>
+		<addPrimaryKey tableName="tb_cuisine" columnNames="id" constraintName="pk_cuisine"/>
 
 		<rollback>
-			<dropPrimaryKey tableName="tb_kitchen" constraintName="pk_kitchen"/>
+			<dropPrimaryKey tableName="tb_cuisine" constraintName="pk_cuisine"/>
 		</rollback>
 	</changeSet>
 
 	<changeSet id="20230202141000-3" author="Fernando Martins Ferreira">
-		<createSequence sequenceName="seq_kitchen" incrementBy="1" startValue="1"/>
+		<createSequence sequenceName="seq_cuisine" incrementBy="1" startValue="1"/>
 
 		<rollback>
-			<dropSequence sequenceName="seq_kitchen"/>
+			<dropSequence sequenceName="seq_cuisine"/>
 		</rollback>
 	</changeSet>
 

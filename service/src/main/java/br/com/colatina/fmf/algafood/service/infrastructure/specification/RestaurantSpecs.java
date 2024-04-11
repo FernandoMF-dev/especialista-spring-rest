@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.infrastructure.specification;
 
-import br.com.colatina.fmf.algafood.service.domain.model.Kitchen;
+import br.com.colatina.fmf.algafood.service.domain.model.Cuisine;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant_;
 import org.springframework.data.jpa.domain.Specification;
@@ -50,11 +50,11 @@ public class RestaurantSpecs extends BaseSpecs<Restaurant> {
 	}
 
 	@NonNull
-	public Specification<Restaurant> byKitchenId(Long kitchenId) {
+	public Specification<Restaurant> byCuisineId(Long cuisineId) {
 		return (root, query, criteriaBuilder) -> {
-			if (Objects.nonNull(kitchenId)) {
-				Join<Restaurant, Kitchen> restaurantKitchenJoin = root.join(Restaurant_.kitchen);
-				return criteriaBuilder.equal(restaurantKitchenJoin.get("id"), kitchenId);
+			if (Objects.nonNull(cuisineId)) {
+				Join<Restaurant, Cuisine> restaurantCuisineJoin = root.join(Restaurant_.cuisine);
+				return criteriaBuilder.equal(restaurantCuisineJoin.get("id"), cuisineId);
 			}
 
 			return defaultReturn(criteriaBuilder);

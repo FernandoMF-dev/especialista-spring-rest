@@ -30,8 +30,8 @@
 				<constraints nullable="false"/>
 			</column>
 
-			<column name="kitchen_id" type="BIGINT"
-					remarks="Unique identifier of the kitchen that the restaurant operates with">
+			<column name="cuisine_id" type="BIGINT"
+					remarks="Unique identifier of the cuisine that the restaurant operates with">
 				<constraints nullable="false"/>
 			</column>
 
@@ -59,9 +59,9 @@
 	</changeSet>
 
 	<changeSet id="20230202143000-3" author="Fernando Martins Ferreira">
-		<addForeignKeyConstraint baseTableName="tb_restaurant" baseColumnNames="kitchen_id"
-								 referencedTableName="tb_kitchen" referencedColumnNames="id"
-								 constraintName="fk_restaurant_kitchen"/>
+		<addForeignKeyConstraint baseTableName="tb_restaurant" baseColumnNames="cuisine_id"
+								 referencedTableName="tb_cuisine" referencedColumnNames="id"
+								 constraintName="fk_restaurant_cuisine"/>
 
 		<rollback>
 			<dropAllForeignKeyConstraints baseTableName="tb_restaurant"/>

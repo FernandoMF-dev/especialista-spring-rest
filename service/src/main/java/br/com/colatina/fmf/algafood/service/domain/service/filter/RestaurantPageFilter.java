@@ -18,5 +18,5 @@ public class RestaurantPageFilter implements Serializable {
 	private Double minFreightFee;
 	private Double maxFreightFee;
 	private Boolean active;
-	private Long kitchenId;
+	private Long cuisineId;
 }

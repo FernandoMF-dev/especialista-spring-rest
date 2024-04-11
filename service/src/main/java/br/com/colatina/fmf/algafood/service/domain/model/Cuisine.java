@@ -15,12 +15,12 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@Table(name = "tb_kitchen")
+@Table(name = "tb_cuisine")
 @Entity
-public class Kitchen implements Serializable {
+public class Cuisine implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_kitchen")
-	@SequenceGenerator(name = "seq_kitchen", allocationSize = 1, sequenceName = "seq_kitchen")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cuisine")
+	@SequenceGenerator(name = "seq_cuisine", allocationSize = 1, sequenceName = "seq_cuisine")
 	@Column(name = "id", nullable = false)
 	private Long id;
 
@@ -35,11 +35,11 @@ public class Kitchen implements Serializable {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof Kitchen)) {
+		if (!(o instanceof Cuisine)) {
 			return false;
 		}
-		Kitchen kitchen = (Kitchen) o;
-		return getId().equals(kitchen.getId());
+		Cuisine cuisine = (Cuisine) o;
+		return getId().equals(cuisine.getId());
 	}
 
 	@Override

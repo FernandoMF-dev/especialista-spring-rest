@@ -14,10 +14,10 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@JsonRootName("kitchen")
+@JsonRootName("cuisine")
 @NoArgsConstructor
 @AllArgsConstructor
-public class KitchenDto implements Serializable {
+public class CuisineDto implements Serializable {
 	private Long id;
 	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
 	private String name;
@@ -27,10 +27,10 @@ public class KitchenDto implements Serializable {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof KitchenDto)) {
+		if (!(o instanceof CuisineDto)) {
 			return false;
 		}
-		KitchenDto that = (KitchenDto) o;
+		CuisineDto that = (CuisineDto) o;
 		return id.equals(that.id);
 	}
 
