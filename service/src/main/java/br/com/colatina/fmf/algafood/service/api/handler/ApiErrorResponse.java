@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Builder
@@ -17,4 +18,12 @@ public class ApiErrorResponse {
 	private Instant timestamp;
 
 	private String userMessage;
+	private List<FieldError> fields;
+
+	@Getter
+	@Builder
+	public static class FieldError {
+		private String field;
+		private String message;
+	}
 }

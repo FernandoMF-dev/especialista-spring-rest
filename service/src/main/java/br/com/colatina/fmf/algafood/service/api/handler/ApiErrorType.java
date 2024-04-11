@@ -11,7 +11,8 @@ public enum ApiErrorType {
 	RESOURCE_NOT_FOUND("Resource not found", "resource-not-found"),
 	MESSAGE_BODY_NOT_READABLE("Incomprehensible message", "incomprehensible-message"),
 	INVALID_REQUEST_PARAM("Invalid parameter", "invalid-param"),
-	INTERNAL_SERVER_ERROR("Internal server error", "internal-server-error");
+	INTERNAL_SERVER_ERROR("Internal server error", "internal-server-error"),
+	CONSTRAINT_VIOLATION("Constraint violation", "Constraint violation");
 
 	private final String title;
 	private final String path;

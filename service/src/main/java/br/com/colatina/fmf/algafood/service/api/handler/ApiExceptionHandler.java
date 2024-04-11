@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -68,6 +69,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		log.error(detail, ex);
 		return handleExceptionInternal(ex, body, new HttpHeaders(), status, request);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ApiErrorType type = ApiErrorType.CONSTRAINT_VIOLATION;
+		String detail = "One or more fields do not comply with their constraint rules. Please fill in the fields correctly and try again.";
+		List<ApiErrorResponse.FieldError> fieldErrors = ex.getFieldErrors().stream()
+				.map(fieldError -> new ApiErrorResponse.FieldError(fieldError.getField(), fieldError.getDefaultMessage()))
+				.collect(Collectors.toList());
+
+		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).userMessage(detail).fields(fieldErrors).build();
+		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 
 	@Override
