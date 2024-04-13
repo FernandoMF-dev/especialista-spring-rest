@@ -20,9 +20,9 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CuisineDto implements Serializable {
-	@NotNull(message = "Must specify the id of the cuisine", groups = ValidationGroups.RequiredCuisine.class)
+	@NotNull(message = "cuisine.id.not_null", groups = ValidationGroups.RequiredCuisine.class)
 	private Long id;
-	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
+	@NotBlank(message = "cuisine.name.not_blank")
 	private String name;
 
 	@Override

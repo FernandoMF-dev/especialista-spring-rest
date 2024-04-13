@@ -17,11 +17,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class UserDto implements Serializable {
 	private Long id;
-	@NotBlank
+	@NotBlank(message = "user.name.not_blank")
 	private String name;
-	@Email
-	@NotBlank
+	@Email(message = "user.email.invalid")
+	@NotBlank(message = "user.email.not_blank")
 	private String email;
-	@NotBlank
+	@NotBlank(message = "user.password.not_blank")
 	private String password;
 }

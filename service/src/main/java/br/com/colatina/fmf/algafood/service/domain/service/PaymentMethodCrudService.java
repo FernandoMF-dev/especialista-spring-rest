@@ -17,6 +17,6 @@ public class PaymentMethodCrudService {
 
 	public PaymentMethod findEntityById(Long id) {
 		return paymentMethodRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("Payment method %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException("payment_method.not_found"));
 	}
 }

@@ -30,13 +30,13 @@ public class ProductCrudService {
 	public ProductDto findDtoById(Long restaurantId, Long productId) {
 		validateRestaurant(restaurantId);
 		return productRepository.findDtoByIdAndRestaurant(restaurantId, productId)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("Product %d not found in restaurant %d", productId, restaurantId)));
+				.orElseThrow(() -> new ResourceNotFoundException("product.not_found.restaurant"));
 	}
 
 	public Product findEntityById(Long restaurantId, Long productId) {
 		validateRestaurant(restaurantId);
 		return productRepository.findEntityByIdAndRestaurant(restaurantId, productId)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("Product %d not found in restaurant %d", productId, restaurantId)));
+				.orElseThrow(() -> new ResourceNotFoundException("product.not_found.restaurant"));
 	}
 
 	public ProductDto insert(Long restaurantId, ProductDto dto) {

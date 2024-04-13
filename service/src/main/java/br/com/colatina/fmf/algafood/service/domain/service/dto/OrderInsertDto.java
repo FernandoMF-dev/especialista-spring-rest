@@ -20,19 +20,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderInsertDto implements Serializable {
-	@NotNull
+	@NotNull(message = "order_insert.user_id.not_null")
 	private Long userId;
-	@NotNull
+	@NotNull(message = "order_insert.restaurant_id.not_null")
 	private Long restaurantId;
-	@NotNull
+	@NotNull(message = "order_insert.payment_method_id.not_null")
 	private Long paymentMethodId;
-	@NotNull
-	@Min(value = 1)
+	@NotNull(message = "order_insert.installments.not_null")
+	@Min(value = 1, message = "order_insert.installments.min")
 	private Integer installments;
-	@NotEmpty
+	@NotEmpty(message = "order_insert.order_products.not_empty")
 	@Valid
 	private List<OrderProductInsertDto> orderProducts = new ArrayList<>();
-	@NotNull
+	@NotNull(message = "order_insert.address.not_null")
 	@Valid
 	private AddressDto address;
 }

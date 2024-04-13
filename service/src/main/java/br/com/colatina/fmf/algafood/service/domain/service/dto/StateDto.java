@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import br.com.colatina.fmf.algafood.service.core.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +19,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StateDto implements Serializable {
-	@NotNull
+	@NotNull(message = "state.id.not_null", groups = ValidationGroups.RequiredState.class)
 	private Long id;
-	@NotBlank
-	@Size(max = 2)
+	@NotBlank(message = "state.acronym.not_null")
+	@Size(max = 2, message = "state.acronym.max_size")
 	private String acronym;
-	@NotBlank
+	@NotBlank(message = "state.name.not_blank")
 	private String name;
 
 	@Override

@@ -18,16 +18,16 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ProductDto implements Serializable {
 	private Long id;
-	@NotBlank
+	@NotBlank(message = "product.name.not_blank")
 	private String name;
-	@NotNull
+	@NotNull(message = "product.description.not_null")
 	private String description;
-	@NotNull
-	@PositiveOrZero
+	@NotNull(message = "product.price.not_null")
+	@PositiveOrZero(message = "product.price.positive_or_zero")
 	private Double price;
-	@NotNull
+	@NotNull(message = "product.active.not_null")
 	private Boolean active;
-	@NotNull
+	@NotNull(message = "product.restaurant_id.not_null")
 	private Long restaurantId;
 	private String restaurantName;
 }

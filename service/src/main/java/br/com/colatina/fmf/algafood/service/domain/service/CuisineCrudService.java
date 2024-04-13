@@ -33,19 +33,19 @@ public class CuisineCrudService {
 
 	public CuisineDto findDtoById(Long id) {
 		return cuisineRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("Cuisine %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException("cuisine.not_found"));
 	}
 
 	public Cuisine findEntityById(Long id) {
 		return cuisineRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("Cuisine %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException("cuisine.not_found"));
 	}
 
 	public CuisineDto findFirst() {
 		Optional<Cuisine> entity = cuisineRepository.findFirst();
 
 		if (entity.isEmpty()) {
-			throw new ResourceNotFoundException("No cuisine found");
+			throw new ResourceNotFoundException("cuisine.none_found");
 		}
 		return cuisineMapper.toDto(entity.get());
 	}
@@ -77,7 +77,7 @@ public class CuisineCrudService {
 
 	private void validateDelete(Long id) {
 		if (cuisineRepository.isCuisineInUse(id)) {
-			throw new ResourceInUseException(String.format("Cuisine %d is currently being used by another resource and cannot be deleted", id));
+			throw new ResourceInUseException("cuisine.in_use");
 		}
 	}
 }

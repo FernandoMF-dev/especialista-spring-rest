@@ -26,12 +26,12 @@ public class UserCrudService {
 
 	public UserDto findDtoById(Long id) {
 		return userRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("User %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException("user.not_found"));
 	}
 
 	public User findEntityById(Long id) {
 		return userRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("User %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException("user.not_found"));
 	}
 
 	public UserDto insert(UserDto dto) {

@@ -42,7 +42,7 @@ public class RestaurantCrudService {
 
 	public Restaurant findEntityById(Long id) {
 		return restaurantRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format("Restaurant %d not found", id)));
+				.orElseThrow(() -> new ResourceNotFoundException("restaurant.not_found"));
 	}
 
 	public List<RestaurantListDto> filterByFreightFee(Double min, Double max) {
@@ -72,7 +72,7 @@ public class RestaurantCrudService {
 		Optional<Restaurant> entity = restaurantRepository.findFirst();
 
 		if (entity.isEmpty()) {
-			throw new ResourceNotFoundException("No restaurant found");
+			throw new ResourceNotFoundException("restaurant.none_found");
 		}
 		return restaurantMapper.toDto(entity.get());
 	}

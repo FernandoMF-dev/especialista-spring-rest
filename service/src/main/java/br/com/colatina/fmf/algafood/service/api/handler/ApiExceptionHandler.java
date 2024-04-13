@@ -14,6 +14,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +64,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleBusinessRuleException(BusinessRuleException ex, WebRequest request) {
 		ApiErrorType type = ex.getApiErrorType();
 		String detail = ObjectUtils.defaultIfNull(ex.getReason(), ex.getStatus().getReasonPhrase());
-		detail = getMessageSourceIfAvailable(detail);
+		detail = getMessageSourceIfAvailable(detail, null);
 
 		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).userMessage(detail).build();
 		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);
@@ -85,7 +87,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = "One or more fields do not comply with their constraint rules. Please fill in the fields correctly and try again.";
 		List<ApiErrorResponse.FieldError> fieldErrors = ex.getFieldErrors().stream()
 				.map(fieldError -> {
-					String message = getMessageSourceIfAvailable(fieldError);
+					String message = getFieldErrorMessage(fieldError);
 					return new ApiErrorResponse.FieldError(fieldError.getField(), message);
 				})
 				.collect(Collectors.toList());
@@ -160,17 +162,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.collect(Collectors.joining("."));
 	}
 
-	private String getMessageSourceIfAvailable(FieldError fieldError) {
-		try {
-			return messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-		} catch (NoSuchMessageException e) {
-			return getMessageSourceIfAvailable("default.error.constraint.violation");
+	private String getFieldErrorMessage(FieldError fieldError) {
+		var message = ObjectUtils.defaultIfNull(fieldError.getDefaultMessage(), "default.error.constraint_violation");
+		var arguments = fieldError.getArguments();
+		if (Objects.nonNull(arguments)) {
+			arguments = Arrays.stream(arguments).filter(value -> !(value instanceof DefaultMessageSourceResolvable)).toArray();
 		}
+		return getMessageSourceIfAvailable(message, arguments);
 	}
 
-	private String getMessageSourceIfAvailable(String message) {
+	private String getMessageSourceIfAvailable(String message, @Nullable Object[] args) {
 		try {
-			return messageSource.getMessage(message, null, LocaleContextHolder.getLocale());
+			return messageSource.getMessage(message, args, LocaleContextHolder.getLocale());
 		} catch (NoSuchMessageException e) {
 			return message;
 		}

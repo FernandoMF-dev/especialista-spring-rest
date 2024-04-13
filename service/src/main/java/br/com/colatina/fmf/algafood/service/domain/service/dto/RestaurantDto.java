@@ -25,19 +25,21 @@ import java.util.Objects;
 @AllArgsConstructor
 public class RestaurantDto implements Serializable {
 	private Long id;
-	@NotBlank
+	@NotBlank(message = "restaurant.name.not_blank")
 	private String name;
-	@NotNull
-	@PositiveOrZero
+	@NotNull(message = "restaurant.freight_fee.not_null")
+	@PositiveOrZero(message = "restaurant.freight_fee.positive_or_zero")
 	private Double freightFee;
 	private LocalDateTime registrationDate;
 	private LocalDateTime updateDate;
-	@NotNull
+	@NotNull(message = "restaurant.active.not_null")
 	private Boolean active;
-	@NotNull
+	@NotNull(message = "restaurant.cuisine.not_null")
 	@ConvertGroup(to = ValidationGroups.RequiredCuisine.class)
 	@Valid
 	private CuisineDto cuisine;
+	@ConvertGroup(to = ValidationGroups.RequiredPaymentMethod.class)
+	@Valid
 	private List<PaymentMethodDto> paymentMethods = new ArrayList<>();
 	private List<ProductDto> products = new ArrayList<>();
 	@Valid

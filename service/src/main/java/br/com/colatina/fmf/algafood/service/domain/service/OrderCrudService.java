@@ -13,6 +13,8 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderProductDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderInsertMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,12 +36,14 @@ public class OrderCrudService {
 	private final CityCrudService cityCrudService;
 	private final OrderProductCrudService orderProductCrudService;
 
+	private final MessageSource messageSource;
+
 	public OrderDto insert(OrderInsertDto insertDto) {
 		Order entity = orderInsertMapper.toEntity(insertDto);
 		List<OrderProduct> orderProducts = entity.getOrderProducts();
 
 		validateInsertEntities(insertDto, entity);
-		validateInsertPaymentMethod(insertDto, entity);
+		validateInsertPaymentMethod(entity);
 		validateInsertProducts(insertDto, orderProducts, entity);
 
 		entity.setStatus(OrderStatusEnum.CREATED);
@@ -64,9 +68,9 @@ public class OrderCrudService {
 		}
 	}
 
-	private void validateInsertPaymentMethod(OrderInsertDto insertDto, Order entity) {
+	private void validateInsertPaymentMethod(Order entity) {
 		if (entity.getRestaurant().getPaymentMethods().stream().noneMatch(paymentMethod -> Objects.equals(paymentMethod, entity.getPaymentMethod()))) {
-			throw new ResourceNotAvailableException(String.format("The payment method %d is not offered by the restaurant %d", insertDto.getPaymentMethodId(), insertDto.getRestaurantId()));
+			throw new ResourceNotAvailableException("payment_method.not_available.restaurant");
 		}
 	}
 
@@ -78,7 +82,7 @@ public class OrderCrudService {
 			Product product = entity.getRestaurant().getProducts().stream()
 					.filter(element -> doesRestaurantOffersProduct(orderProduct.getProduct(), element))
 					.findFirst()
-					.orElseThrow(() -> new ResourceNotAvailableException(String.format("Product %d not found or unavailable in restaurant %d", orderProduct.getProduct().getId(), entity.getRestaurant().getId())));
+					.orElseThrow(() -> new ResourceNotAvailableException(messageSource.getMessage("product.not_available.restaurant", new String[]{orderProduct.getProduct().getId().toString()}, LocaleContextHolder.getLocale())));
 
 			mapOrderProductInsertPrice(orderProduct, product);
 			entity.setTotalValue(entity.getTotalValue() + orderProduct.getTotalPrice());

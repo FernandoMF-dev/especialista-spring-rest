@@ -19,14 +19,15 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 public class CityDto implements Serializable {
+	@NotNull(message = "city.id.not_null", groups = ValidationGroups.RequiredCity.class)
 	private Long id;
-	@NotNull
-	@Size(max = 5)
+	@NotNull(message = "city.acronym.not_null")
+	@Size(max = 5, message = "city.acronym.max_size")
 	private String acronym;
-	@NotBlank
+	@NotBlank(message = "city.name.not_blank")
 	private String name;
+	@NotNull(message = "city.state.not_null")
 	@ConvertGroup(to = ValidationGroups.RequiredState.class)
-	@NotNull
 	@Valid
 	private StateDto state;
 

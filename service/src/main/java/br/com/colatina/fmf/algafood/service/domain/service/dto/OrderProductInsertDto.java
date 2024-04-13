@@ -16,10 +16,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderProductInsertDto implements Serializable {
-	@Min(value = 1)
-	@NotNull
+	@Min(value = 1, message = "order_product_insert.quantity.min")
+	@NotNull(message = "order_product_insert.quantity.not_null")
 	private Integer quantity = 1;
-	@NotNull
+	@NotNull(message = "order_product_insert.product_id.not_null")
 	private Long productId;
 	private String observation;
 }
