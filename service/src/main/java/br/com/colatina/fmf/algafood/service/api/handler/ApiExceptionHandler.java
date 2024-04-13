@@ -11,10 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,9 +40,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private static final String ERROR_TYPE_URI = "https://fmf.algafood.com.br/";
 	public static final String GENERIC_ERROR_USER_MSG = "An unexpected internal error occurred on the server. Try again and if the problem persists, please contact the system administrator.";
 
+	private final MessageSource messageSource;
+
 	private final Map<Class<? extends Throwable>, InvalidBodyFormatHandler> rootExceptionsHandlers;
 
-	public ApiExceptionHandler() {
+	public ApiExceptionHandler(MessageSource messageSource) {
+		this.messageSource = messageSource;
 		this.rootExceptionsHandlers = new HashMap<>();
 
 		this.rootExceptionsHandlers.put(InvalidFormatException.class,
@@ -55,8 +62,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleBusinessRuleException(BusinessRuleException ex, WebRequest request) {
 		ApiErrorType type = ex.getApiErrorType();
 		String detail = ObjectUtils.defaultIfNull(ex.getReason(), ex.getStatus().getReasonPhrase());
-		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).userMessage(detail).build();
+		detail = getMessageSourceIfAvailable(detail);
 
+		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).userMessage(detail).build();
 		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);
 	}
 
@@ -76,7 +84,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorType type = ApiErrorType.CONSTRAINT_VIOLATION;
 		String detail = "One or more fields do not comply with their constraint rules. Please fill in the fields correctly and try again.";
 		List<ApiErrorResponse.FieldError> fieldErrors = ex.getFieldErrors().stream()
-				.map(fieldError -> new ApiErrorResponse.FieldError(fieldError.getField(), fieldError.getDefaultMessage()))
+				.map(fieldError -> {
+					String message = getMessageSourceIfAvailable(fieldError);
+					return new ApiErrorResponse.FieldError(fieldError.getField(), message);
+				})
 				.collect(Collectors.toList());
 
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).userMessage(detail).fields(fieldErrors).build();
@@ -147,6 +158,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return path.stream()
 				.map(JsonMappingException.Reference::getFieldName)
 				.collect(Collectors.joining("."));
+	}
+
+	private String getMessageSourceIfAvailable(FieldError fieldError) {
+		try {
+			return messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+		} catch (NoSuchMessageException e) {
+			return getMessageSourceIfAvailable("default.error.constraint.violation");
+		}
+	}
+
+	private String getMessageSourceIfAvailable(String message) {
+		try {
+			return messageSource.getMessage(message, null, LocaleContextHolder.getLocale());
+		} catch (NoSuchMessageException e) {
+			return message;
+		}
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Root or specific exceptions handlers">

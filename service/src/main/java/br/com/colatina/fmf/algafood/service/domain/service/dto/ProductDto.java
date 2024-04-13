@@ -18,16 +18,16 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ProductDto implements Serializable {
 	private Long id;
-	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
+	@NotBlank
 	private String name;
-	@NotNull(message = "Description can not be null")
+	@NotNull
 	private String description;
-	@NotNull(message = "Price can not be null")
-	@PositiveOrZero(message = "Price can not be lower than zero")
+	@NotNull
+	@PositiveOrZero
 	private Double price;
-	@NotNull(message = "The active field can not be null")
+	@NotNull
 	private Boolean active;
-	@NotNull(message = "Must specify the id of the restaurant offering the product")
+	@NotNull
 	private Long restaurantId;
 	private String restaurantName;
 }

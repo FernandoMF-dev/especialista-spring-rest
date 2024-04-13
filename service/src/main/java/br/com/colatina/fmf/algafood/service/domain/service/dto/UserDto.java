@@ -17,11 +17,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class UserDto implements Serializable {
 	private Long id;
-	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
+	@NotBlank
 	private String name;
-	@Email(message = "Invalid email format")
-	@NotBlank(message = "Email can not be null and must contain at least one non-whitespace character")
+	@Email
+	@NotBlank
 	private String email;
-	@NotBlank(message = "Password can not be null and must contain at least one non-whitespace character")
+	@NotBlank
 	private String password;
 }

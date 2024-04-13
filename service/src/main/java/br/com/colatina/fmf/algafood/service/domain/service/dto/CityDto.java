@@ -20,13 +20,13 @@ import java.util.Objects;
 @NoArgsConstructor
 public class CityDto implements Serializable {
 	private Long id;
-	@NotNull(message = "The acronym can not be null")
+	@NotNull
 	@Size(max = 5)
 	private String acronym;
-	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
+	@NotBlank
 	private String name;
 	@ConvertGroup(to = ValidationGroups.RequiredState.class)
-	@NotNull(message = "The state can not be null")
+	@NotNull
 	@Valid
 	private StateDto state;
 

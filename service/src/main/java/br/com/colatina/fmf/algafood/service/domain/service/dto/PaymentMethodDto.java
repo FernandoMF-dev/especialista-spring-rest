@@ -16,7 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class PaymentMethodDto implements Serializable {
 	private Long id;
-	@NotBlank(message = "Description can not be null and must contain at least one non-whitespace character")
+	@NotBlank
 	private String description;
 
 	@Override

@@ -25,16 +25,16 @@ import java.util.Objects;
 @AllArgsConstructor
 public class RestaurantDto implements Serializable {
 	private Long id;
-	@NotBlank(message = "Name can not be null and must contain at least one non-whitespace character")
+	@NotBlank
 	private String name;
-	@NotNull(message = "Freight fee can not be null")
-	@PositiveOrZero(message = "Freight fee can not be lower than zero")
+	@NotNull
+	@PositiveOrZero
 	private Double freightFee;
 	private LocalDateTime registrationDate;
 	private LocalDateTime updateDate;
-	@NotNull(message = "The active field can not be null")
+	@NotNull
 	private Boolean active;
-	@NotNull(message = "Must specify the cuisine of the restaurant")
+	@NotNull
 	@ConvertGroup(to = ValidationGroups.RequiredCuisine.class)
 	@Valid
 	private CuisineDto cuisine;
