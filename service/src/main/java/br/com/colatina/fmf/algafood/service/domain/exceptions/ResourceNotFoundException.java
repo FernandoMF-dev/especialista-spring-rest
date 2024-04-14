@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatus;
 
 public class ResourceNotFoundException extends BusinessRuleException {
 	public ResourceNotFoundException(String reason) {
-		super(reason, HttpStatus.NOT_FOUND);
+		super(reason, null, HttpStatus.NOT_FOUND);
 	}
 
-	public ResourceNotFoundException(String reason, HttpStatus httpStatus) {
-		super(reason, httpStatus);
+	public ResourceNotFoundException(ResourceNotFoundException ex, HttpStatus httpStatus) {
+		super(ex.getMessage(), ex.getMessageArgs(), httpStatus);
 	}
 
 	@Override

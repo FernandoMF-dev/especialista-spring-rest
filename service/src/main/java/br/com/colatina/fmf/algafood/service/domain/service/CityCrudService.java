@@ -66,7 +66,7 @@ public class CityCrudService {
 		try {
 			stateCrudService.findEntityById(dto.getState().getId());
 		} catch (ResourceNotFoundException e) {
-			throw new ResourceNotFoundException(e.getMessage(), HttpStatus.BAD_REQUEST);
+			throw new ResourceNotFoundException(e, HttpStatus.BAD_REQUEST);
 		}
 	}
 }

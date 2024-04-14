@@ -107,7 +107,7 @@ public class RestaurantCrudService {
 		try {
 			cuisineCrudService.findEntityById(dto.getCuisineId());
 		} catch (ResourceNotFoundException e) {
-			throw new ResourceNotFoundException(e.getMessage(), HttpStatus.BAD_REQUEST);
+			throw new ResourceNotFoundException(e, HttpStatus.BAD_REQUEST);
 		}
 	}
 }

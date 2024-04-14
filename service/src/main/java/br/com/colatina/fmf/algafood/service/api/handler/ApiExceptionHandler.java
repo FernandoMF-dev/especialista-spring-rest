@@ -64,7 +64,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleBusinessRuleException(BusinessRuleException ex, WebRequest request) {
 		ApiErrorType type = ex.getApiErrorType();
 		String detail = ObjectUtils.defaultIfNull(ex.getReason(), ex.getStatus().getReasonPhrase());
-		detail = getMessageSourceIfAvailable(detail, null);
+		detail = getMessageSourceIfAvailable(detail, ex.getMessageArgs());
 
 		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).userMessage(detail).build();
 		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);

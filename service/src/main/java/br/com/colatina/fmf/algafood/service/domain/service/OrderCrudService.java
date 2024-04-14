@@ -14,7 +14,6 @@ import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderInsertMap
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +63,7 @@ public class OrderCrudService {
 			entity.setPaymentMethod(paymentMethodCrudService.findEntityById(insertDto.getPaymentMethodId()));
 			entity.getAddress().setCity(cityCrudService.findEntityById(insertDto.getAddress().getCity().getId()));
 		} catch (ResourceNotFoundException e) {
-			throw new ResourceNotFoundException(e.getMessage(), HttpStatus.BAD_REQUEST);
+			throw new ResourceNotFoundException(e, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -82,7 +81,7 @@ public class OrderCrudService {
 			Product product = entity.getRestaurant().getProducts().stream()
 					.filter(element -> doesRestaurantOffersProduct(orderProduct.getProduct(), element))
 					.findFirst()
-					.orElseThrow(() -> new ResourceNotAvailableException(messageSource.getMessage("product.not_available.restaurant", new String[]{orderProduct.getProduct().getId().toString()}, LocaleContextHolder.getLocale())));
+					.orElseThrow(() -> new ResourceNotAvailableException("product.not_available.restaurant", orderProduct.getProduct().getId()));
 
 			mapOrderProductInsertPrice(orderProduct, product);
 			entity.setTotalValue(entity.getTotalValue() + orderProduct.getTotalPrice());
