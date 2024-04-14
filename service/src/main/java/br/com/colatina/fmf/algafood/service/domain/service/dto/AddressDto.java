@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
 import br.com.colatina.fmf.algafood.service.core.validation.ValidationGroups;
+import br.com.colatina.fmf.algafood.service.core.validation.constraints.Cep;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,6 @@ import lombok.ToString;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
 
@@ -21,7 +21,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class AddressDto implements Serializable {
 	@NotBlank(message = "address.cep.not_blank")
-	@Pattern(regexp = "^\\d{5}-\\d{3}$", message = "address.cep.invalid")
+	@Cep(message = "address.cep.invalid")
 	private String cep;
 	@NotBlank(message = "address.public_space.not_blank")
 	private String publicSpace;
