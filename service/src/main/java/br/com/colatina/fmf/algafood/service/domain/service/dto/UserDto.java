@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import br.com.colatina.fmf.algafood.service.core.validation.constraints.Password;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,6 @@ public class UserDto implements Serializable {
 	@NotBlank(message = "user.email.not_blank")
 	private String email;
 	@NotBlank(message = "user.password.not_blank")
+	@Password(message = "user.password.invalid", lowerCase = 3, upperCase = 3, numerical = 3, special = 3)
 	private String password;
 }
