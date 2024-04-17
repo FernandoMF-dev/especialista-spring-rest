@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.service;
 
 import br.com.colatina.fmf.algafood.service.api.model.CuisinesXmlWrapper;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.Cuisine;
 import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
@@ -18,6 +19,8 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CuisineCrudServiceIntTest {
+	private static final Long NON_EXISTING_ID = 0L;
+
 	@Autowired
 	private CuisineCrudService cuisineCrudService;
 	@Autowired
@@ -55,12 +58,28 @@ public class CuisineCrudServiceIntTest {
 	}
 
 	@Test
+	public void findDtoById_fail_nonExistentEntity() {
+		Assert.assertThrows(
+				ResourceNotFoundException.class,
+				() -> cuisineCrudService.findDtoById(NON_EXISTING_ID)
+		);
+	}
+
+	@Test
 	public void findEntityById_success() {
 		Cuisine cuisine = cuisineFactory.createAndPersist();
 		Cuisine entity = cuisineCrudService.findEntityById(cuisine.getId());
 
 		Assert.assertNotNull(entity);
 		Assert.assertEquals(entity, cuisine);
+	}
+
+	@Test
+	public void findEntityById_fail_nonExistentEntity() {
+		Assert.assertThrows(
+				ResourceNotFoundException.class,
+				() -> cuisineCrudService.findEntityById(NON_EXISTING_ID)
+		);
 	}
 
 	@Test
@@ -104,4 +123,14 @@ public class CuisineCrudServiceIntTest {
 
 		Assert.assertTrue(deleted.getExcluded());
 	}
+
+	@Test
+	public void delete_fail_nonExistentEntity() {
+		Assert.assertThrows(
+				ResourceNotFoundException.class,
+				() -> cuisineCrudService.delete(NON_EXISTING_ID)
+		);
+	}
+
+	// TODO Implement a test for when trying to delete a cuisine in use
 }
