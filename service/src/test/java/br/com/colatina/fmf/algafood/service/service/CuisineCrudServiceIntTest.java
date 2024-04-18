@@ -7,6 +7,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.CuisineMapper;
 import br.com.colatina.fmf.algafood.service.factory.CuisineFactory;
+import br.com.colatina.fmf.algafood.service.utils.BaseCommonIntTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +19,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CuisineCrudServiceIntTest {
-	private static final Long NON_EXISTING_ID = 0L;
-
+public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 	@Autowired
 	private CuisineCrudService cuisineCrudService;
 	@Autowired
