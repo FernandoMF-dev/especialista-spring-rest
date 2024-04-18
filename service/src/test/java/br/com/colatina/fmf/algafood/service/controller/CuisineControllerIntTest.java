@@ -45,7 +45,7 @@ public class CuisineControllerIntTest extends BaseCommonIntTest {
 	public void findAll_success() {
 		Cuisine cuisine = cuisineFactory.createAndPersist();
 
-		given().basePath(API_CUISINE).accept(ContentType.JSON)
+		given().accept(ContentType.JSON)
 				.when().get()
 				.then().statusCode(HttpStatus.OK.value())
 				.body(Matchers.not(Matchers.emptyIterable()))
@@ -57,7 +57,7 @@ public class CuisineControllerIntTest extends BaseCommonIntTest {
 	public void findAllXml_success() {
 		cuisineFactory.createAndPersist();
 
-		given().basePath(API_CUISINE).accept(ContentType.XML)
+		given().accept(ContentType.XML)
 				.when().get()
 				.then().statusCode(HttpStatus.OK.value())
 				.body(Matchers.not(Matchers.emptyIterable()));
