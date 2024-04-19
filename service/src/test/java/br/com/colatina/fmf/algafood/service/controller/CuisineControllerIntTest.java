@@ -62,4 +62,16 @@ public class CuisineControllerIntTest extends BaseCommonIntTest {
 				.then().statusCode(HttpStatus.OK.value())
 				.body(Matchers.not(Matchers.emptyIterable()));
 	}
+
+	@Test
+	public void findById_success() {
+		Cuisine cuisine = cuisineFactory.createAndPersist();
+
+		given().accept(ContentType.JSON)
+				.pathParam("id", cuisine.getId())
+				.get("/{id}")
+				.then().statusCode(HttpStatus.OK.value())
+				.body(Cuisine_.ID, Matchers.equalTo(cuisine.getId().intValue()))
+				.body(Cuisine_.NAME, Matchers.equalTo(cuisine.getName()));
+	}
 }
