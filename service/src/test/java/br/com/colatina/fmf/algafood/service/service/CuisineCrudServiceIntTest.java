@@ -118,8 +118,8 @@ public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 	public void delete_success() {
 		Cuisine cuisine = cuisineFactory.createAndPersist();
 		cuisineCrudService.delete(cuisine.getId());
-		Cuisine deleted = cuisineFactory.getById(cuisine.getId());
 
+		Cuisine deleted = cuisineFactory.getById(cuisine.getId());
 		Assert.assertTrue(deleted.getExcluded());
 	}
 
