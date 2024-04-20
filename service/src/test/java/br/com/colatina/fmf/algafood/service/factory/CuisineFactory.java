@@ -10,16 +10,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CuisineFactory extends BaseEntityFactory<Cuisine> {
-
 	@Autowired
 	CuisineMapper cuisineMapper;
-
 	@Autowired
 	CuisineCrudService cuisineCrudService;
-
 	@Autowired
 	CuisineRepository cuisineRepository;
-
 
 	@Override
 	public Cuisine createEntity() {
