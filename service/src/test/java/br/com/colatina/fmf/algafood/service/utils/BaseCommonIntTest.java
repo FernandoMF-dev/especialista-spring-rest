@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(initializers = {BaseCommonIntTest.Initializer.class})
 public abstract class BaseCommonIntTest {
 	protected static final Long NON_EXISTING_ID = 0L;
+	protected static final String BLANK_STRING = "";
 
 	static {
 		ContainersFactory.startContainers();
