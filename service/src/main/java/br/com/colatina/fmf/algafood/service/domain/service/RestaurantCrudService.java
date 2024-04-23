@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.domain.service;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.repository.RestaurantRepository;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
@@ -31,6 +32,7 @@ public class RestaurantCrudService {
 	private final RestaurantSpecs restaurantSpecs;
 
 	private final CuisineCrudService cuisineCrudService;
+	private final PaymentMethodCrudService paymentMethodCrudService;
 
 	public List<RestaurantListDto> findAll() {
 		return restaurantRepository.findAllDto();
@@ -105,6 +107,7 @@ public class RestaurantCrudService {
 	private void validateSave(RestaurantDto dto) {
 		try {
 			cuisineCrudService.findEntityById(dto.getCuisineId());
+			paymentMethodCrudService.verifyExistence(dto.getPaymentMethods().stream().map(PaymentMethodDto::getId).collect(Collectors.toList()));
 		} catch (ResourceNotFoundException e) {
 			throw new ResourceNotFoundException(e, HttpStatus.BAD_REQUEST);
 		}

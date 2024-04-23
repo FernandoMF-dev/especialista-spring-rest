@@ -85,12 +85,12 @@ public class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 
 	@Test
 	public void findById_fail_deletedEntity() {
-		Cuisine cuisine = cuisineFactory.createAndPersist();
+		Cuisine entity = cuisineFactory.createAndPersist();
 
-		cuisineCrudService.delete(cuisine.getId());
+		cuisineCrudService.delete(entity.getId());
 
 		given().accept(ContentType.JSON)
-				.pathParam("id", cuisine.getId())
+				.pathParam("id", entity.getId())
 				.when().get("/{id}")
 				.then().statusCode(HttpStatus.NOT_FOUND.value());
 	}
@@ -185,7 +185,7 @@ public class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
-				.pathParam("id", NON_EXISTING_ID)
+				.pathParam("id", dto.getId())
 				.body(dto)
 				.when().put("/{id}")
 				.then().statusCode(HttpStatus.NOT_FOUND.value());
@@ -243,12 +243,12 @@ public class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 
 	@Test
 	public void delete_fail_deletedEntity() {
-		Cuisine cuisine = cuisineFactory.createAndPersist();
+		Cuisine entity = cuisineFactory.createAndPersist();
 
-		cuisineCrudService.delete(cuisine.getId());
+		cuisineCrudService.delete(entity.getId());
 
 		given().accept(ContentType.JSON)
-				.pathParam("id", cuisine.getId())
+				.pathParam("id", entity.getId())
 				.when().delete("/{id}")
 				.then().statusCode(HttpStatus.NOT_FOUND.value());
 	}

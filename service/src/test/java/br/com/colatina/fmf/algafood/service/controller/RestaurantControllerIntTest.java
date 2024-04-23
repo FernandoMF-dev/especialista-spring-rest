@@ -160,6 +160,26 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	public void findById_fail_nonExistentEntity() {
+		given().accept(ContentType.JSON)
+				.pathParam("id", NON_EXISTING_ID)
+				.when().get("/{id}")
+				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	}
+
+	@Test
+	public void findById_fail_deletedEntity() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		restaurantCrudService.delete(entity.getId());
+
+		given().accept(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.when().get("/{id}")
+				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	}
+
+	@Test
 	public void insert_success() {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantDto dto = restaurantMapper.toDto(entity);
@@ -171,6 +191,123 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 				.then().statusCode(HttpStatus.CREATED.value())
 				.body(Restaurant_.ID, Matchers.notNullValue())
 				.body(Restaurant_.NAME, Matchers.equalTo(entity.getName()));
+	}
+
+	@Test
+	public void insert_fail_blankName() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(BLANK_STRING);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void insert_fail_nullFreightFee() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setFreightFee(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void insert_fail_negativeFreightFee() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setFreightFee(-dto.getFreightFee());
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void insert_fail_nullActive() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setActive(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void insert_fail_nullCuisine() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setCuisine(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void insert_fail_nullCuisineId() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.getCuisine().setId(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void insert_fail_nonExistentCuisine() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.getCuisine().setId(NON_EXISTING_ID);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void insert_fail_nullPaymentMethod() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.getPaymentMethods().get(0).setId(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void insert_fail_nonExistentPaymentMethod() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.getPaymentMethods().get(0).setId(NON_EXISTING_ID);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.body(dto)
+				.when().post()
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 
 	@Test
@@ -190,6 +327,171 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	public void update_fail_nonExistentEntity() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", NON_EXISTING_ID)
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	}
+
+	@Test
+	public void update_fail_deletedEntity() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+
+		restaurantCrudService.delete(entity.getId());
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", dto.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	}
+
+	@Test
+	public void update_fail_blankName() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.setName(BLANK_STRING);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void update_fail_nullFreightFee() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.setFreightFee(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void update_fail_negativeFreightFee() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.setFreightFee(-dto.getFreightFee());
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void update_fail_nullActive() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.setActive(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void update_fail_nullCuisine() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.setCuisine(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void update_fail_nullCuisineId() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.getCuisine().setId(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void update_fail_nonExistentCuisine() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.getCuisine().setId(NON_EXISTING_ID);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void update_fail_nullPaymentMethod() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.getPaymentMethods().get(0).setId(null);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void update_fail_nonExistentPaymentMethod() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantDto dto = restaurantMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+		dto.getPaymentMethods().get(0).setId(NON_EXISTING_ID);
+
+		given().accept(ContentType.JSON)
+				.contentType(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.body(dto)
+				.when().put("/{id}")
+				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
 	public void delete_success() {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
@@ -203,4 +505,23 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 		Assert.assertTrue(deleted.getExcluded());
 	}
 
+	@Test
+	public void delete_fail_nonExistentEntity() {
+		given().accept(ContentType.JSON)
+				.pathParam("id", NON_EXISTING_ID)
+				.when().delete("/{id}")
+				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	}
+
+	@Test
+	public void delete_fail_deletedEntity() {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		restaurantCrudService.delete(entity.getId());
+
+		given().accept(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.when().delete("/{id}")
+				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	}
 }

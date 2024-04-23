@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -18,5 +20,11 @@ public class PaymentMethodCrudService {
 	public PaymentMethod findEntityById(Long id) {
 		return paymentMethodRepository.findByIdAndExcludedIsFalse(id)
 				.orElseThrow(() -> new ResourceNotFoundException("payment_method.not_found"));
+	}
+
+	public void verifyExistence(List<Long> ids) {
+		if (paymentMethodRepository.findAllById(ids).size() < ids.size()) {
+			throw new ResourceNotFoundException("payment_method.not_found");
+		}
 	}
 }
