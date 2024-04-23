@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
 import br.com.colatina.fmf.algafood.service.core.validation.ValidationGroups;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,7 @@ public class RestaurantDto implements Serializable {
 	@Valid
 	private AddressDto address;
 
+	@JsonIgnore
 	public Long getCuisineId() {
 		if (Objects.isNull(this.getCuisine())) {
 			return null;

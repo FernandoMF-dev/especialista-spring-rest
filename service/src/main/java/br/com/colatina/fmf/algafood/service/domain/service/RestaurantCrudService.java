@@ -79,7 +79,6 @@ public class RestaurantCrudService {
 
 	public RestaurantDto insert(RestaurantDto dto) {
 		dto.setId(null);
-		dto.setActive(Boolean.TRUE);
 		return save(dto);
 	}
 
