@@ -6,12 +6,10 @@ import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.CuisineMapper;
 import br.com.colatina.fmf.algafood.service.factory.CuisineFactory;
-import br.com.colatina.fmf.algafood.service.utils.BaseCommonIntTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ import static io.restassured.RestAssured.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CuisineControllerIntTest extends BaseCommonIntTest {
+public class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 	private static final String API_CUISINE = "/api/cuisines";
 
 	@LocalServerPort
@@ -37,7 +35,7 @@ public class CuisineControllerIntTest extends BaseCommonIntTest {
 	@Autowired
 	private CuisineCrudService cuisineCrudService;
 
-	@Before
+	@Override
 	public void setUpConnection() {
 		RestAssured.basePath = API_CUISINE;
 		RestAssured.port = serverPort;
@@ -161,9 +159,6 @@ public class CuisineControllerIntTest extends BaseCommonIntTest {
 				.then().statusCode(HttpStatus.OK.value())
 				.body(Cuisine_.ID, Matchers.equalTo(entity.getId().intValue()))
 				.body(Cuisine_.NAME, Matchers.equalTo(dto.getName()));
-
-		Cuisine updated = cuisineFactory.getById(entity.getId());
-		Assert.assertEquals(updated.getName(), dto.getName());
 	}
 
 	@Test

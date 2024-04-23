@@ -2,8 +2,6 @@ package br.com.colatina.fmf.algafood.service.utils;
 
 import br.com.colatina.fmf.algafood.service.container.ContainersFactory;
 import br.com.colatina.fmf.algafood.service.container.PostgreSqlContainerFactory;
-import io.restassured.RestAssured;
-import org.junit.Before;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -18,11 +16,6 @@ public abstract class BaseCommonIntTest {
 
 	static {
 		ContainersFactory.startContainers();
-	}
-
-	@Before
-	public void setUp() {
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 	}
 
 	public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
