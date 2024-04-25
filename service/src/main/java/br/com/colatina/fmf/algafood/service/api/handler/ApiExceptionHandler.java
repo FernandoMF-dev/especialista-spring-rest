@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private static final String ERROR_TYPE_URI = "https://fmf.algafood.com.br/";
-	public static final String GENERIC_ERROR_USER_MSG = "An unexpected internal error occurred on the server. Try again and if the problem persists, please contact the system administrator.";
+	public static final String GENERIC_ERROR_USER_MSG = "error.default.user_msg";
 
 	private final MessageSource messageSource;
 
@@ -71,20 +71,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> handleBusinessRuleException(Exception ex, WebRequest request) {
+	public ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ApiErrorType type = ApiErrorType.INTERNAL_SERVER_ERROR;
 		String detail = GENERIC_ERROR_USER_MSG;
-		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
+		detail = getMessageSourceIfAvailable(detail);
 
 		log.error(detail, ex);
+		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, new HttpHeaders(), status, request);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.CONSTRAINT_VIOLATION;
-		String detail = "One or more fields do not comply with their constraint rules. Please fill in the fields correctly and try again.";
+		String detail = getMessageSourceIfAvailable("error.http_request.body_property.constraint_violation");
 		List<ApiErrorResponse.FieldError> fieldErrors = ex.getFieldErrors().stream()
 				.map(fieldError -> {
 					String message = getFieldErrorMessage(fieldError);
@@ -99,7 +100,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.RESOURCE_NOT_FOUND;
-		String detail = String.format("The resource '%s', which you tried to access, is non-existent", ex.getRequestURL());
+		String detail = getMessageSourceIfAvailable("error.default.not_found", new String[]{ex.getRequestURL()});
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
@@ -112,7 +113,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
-		String detail = "The request body is invalid. Check for syntax errors.";
+		String detail = getMessageSourceIfAvailable("error.http_request.default.not_readable");
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
@@ -132,14 +133,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 					.status(status.value())
 					.timestamp(Instant.now())
 					.title(status.getReasonPhrase())
-					.userMessage(GENERIC_ERROR_USER_MSG)
+					.userMessage(getMessageSourceIfAvailable(GENERIC_ERROR_USER_MSG))
 					.build();
 		} else if (body instanceof String) {
 			body = ApiErrorResponse.builder()
 					.status(status.value())
 					.timestamp(Instant.now())
-					.title((String) body)
-					.userMessage(GENERIC_ERROR_USER_MSG)
+					.title(getMessageSourceIfAvailable((String) body))
+					.userMessage(getMessageSourceIfAvailable(GENERIC_ERROR_USER_MSG))
 					.build();
 		}
 
@@ -153,7 +154,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.type(ERROR_TYPE_URI + type.getPath())
 				.title(type.getTitle())
 				.detail(detail)
-				.userMessage(GENERIC_ERROR_USER_MSG);
+				.userMessage(getMessageSourceIfAvailable(GENERIC_ERROR_USER_MSG));
 	}
 
 	private String formatPropertyPath(List<JsonMappingException.Reference> path) {
@@ -163,12 +164,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private String getFieldErrorMessage(FieldError fieldError) {
-		var message = ObjectUtils.defaultIfNull(fieldError.getDefaultMessage(), "default.error.constraint_violation");
+		var message = ObjectUtils.defaultIfNull(fieldError.getDefaultMessage(), "error.property.constraint_violation");
 		var arguments = fieldError.getArguments();
 		if (Objects.nonNull(arguments)) {
 			arguments = Arrays.stream(arguments).filter(value -> !(value instanceof DefaultMessageSourceResolvable)).toArray();
 		}
 		return getMessageSourceIfAvailable(message, arguments);
+	}
+
+	private String getMessageSourceIfAvailable(String message) {
+		return getMessageSourceIfAvailable(message, null);
 	}
 
 	private String getMessageSourceIfAvailable(String message, @Nullable Object[] args) {
@@ -183,8 +188,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
 		String propertyPath = formatPropertyPath(ex.getPath());
-		String detail = String.format("Property '%s' has been assigned the value '%s', which is an invalid type. Correct and enter a value compatible with type '%s'",
-				propertyPath, ex.getValue(), ex.getTargetType().getSimpleName());
+		String detail = getMessageSourceIfAvailable("error.http_request.body_property.type_mismatch", new Object[]{propertyPath, ex.getValue(), ex.getTargetType().getSimpleName()});
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
@@ -192,15 +196,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
 		String propertyPath = formatPropertyPath(ex.getPath());
-		String detail = String.format("Property '%s' does not exist. Check for possible error or remove it entirely, and then try again.", propertyPath);
+		String detail = getMessageSourceIfAvailable("error.http_request.body_property.not_found", new Object[]{propertyPath});
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
-		String detail = String.format("The URL parameter '%s' has been assigned the value '%s', which is an invalid type. Correct and enter a value compatible with type '%s'",
-				ex.getPropertyName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName());
+		String detail = getMessageSourceIfAvailable("error.http_request.url_param.type_mismatch", new Object[]{ex.getPropertyName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()});
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
