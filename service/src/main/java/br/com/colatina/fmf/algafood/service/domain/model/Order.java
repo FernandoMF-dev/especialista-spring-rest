@@ -20,7 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,16 +48,16 @@ public class Order {
 
 	@CreationTimestamp
 	@Column(name = "registration_date", nullable = false)
-	private LocalDateTime registrationDate;
+	private OffsetDateTime registrationDate;
 
 	@Column(name = "confirmation_date")
-	private LocalDateTime confirmationDate;
+	private OffsetDateTime confirmationDate;
 
 	@Column(name = "delivery_date")
-	private LocalDateTime deliveryDate;
+	private OffsetDateTime deliveryDate;
 
 	@Column(name = "cancellation_date")
-	private LocalDateTime cancellationDate;
+	private OffsetDateTime cancellationDate;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false, length = 10)

@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,8 +31,8 @@ public class RestaurantDto implements Serializable {
 	@NotNull(message = "restaurant.freight_fee.not_null")
 	@PositiveOrZero(message = "restaurant.freight_fee.positive_or_zero")
 	private Double freightFee;
-	private LocalDateTime registrationDate;
-	private LocalDateTime updateDate;
+	private OffsetDateTime registrationDate;
+	private OffsetDateTime updateDate;
 	@NotNull(message = "restaurant.active.not_null")
 	private Boolean active;
 	@NotNull(message = "restaurant.cuisine.not_null")

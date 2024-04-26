@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +22,10 @@ public class OrderDto implements Serializable {
 	private Double totalValue;
 	private Double subtotal;
 	private Double freightFee = 0.0;
-	private LocalDateTime registrationDate;
-	private LocalDateTime confirmationDate;
-	private LocalDateTime deliveryDate;
-	private LocalDateTime cancellationDate;
+	private OffsetDateTime registrationDate;
+	private OffsetDateTime confirmationDate;
+	private OffsetDateTime deliveryDate;
+	private OffsetDateTime cancellationDate;
 	private OrderStatusEnum status;
 	private UserDto user;
 	private RestaurantDto restaurant;

@@ -19,7 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,11 +43,11 @@ public class Restaurant {
 
 	@CreationTimestamp
 	@Column(name = "registration_date", nullable = false)
-	private LocalDateTime registrationDate;
+	private OffsetDateTime registrationDate;
 
 	@UpdateTimestamp
 	@Column(name = "update_date", nullable = false)
-	private LocalDateTime updateDate;
+	private OffsetDateTime updateDate;
 
 	@Column(name = "active", nullable = false)
 	private Boolean active = Boolean.TRUE;
