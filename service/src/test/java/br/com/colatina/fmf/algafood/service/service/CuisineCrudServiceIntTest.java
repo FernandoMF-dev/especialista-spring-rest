@@ -1,13 +1,16 @@
 package br.com.colatina.fmf.algafood.service.service;
 
 import br.com.colatina.fmf.algafood.service.api.model.CuisinesXmlWrapper;
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceInUseException;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.Cuisine;
+import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.repository.CuisineRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.CuisineMapper;
 import br.com.colatina.fmf.algafood.service.factory.CuisineFactory;
+import br.com.colatina.fmf.algafood.service.factory.RestaurantFactory;
 import br.com.colatina.fmf.algafood.service.utils.BaseCommonIntTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,6 +32,9 @@ public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 	private CuisineMapper cuisineMapper;
 	@Autowired
 	private CuisineRepository cuisineRepository;
+
+	@Autowired
+	private RestaurantFactory restaurantFactory;
 
 	@Test
 	public void findAll_success() {
@@ -172,6 +178,7 @@ public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.delete(NON_EXISTING_ID));
 	}
 
+	@Test
 	public void delete_fail_deletedEntity() {
 		Cuisine cuisine = cuisineFactory.createAndPersist();
 		Long cuisineId = cuisine.getId();
@@ -182,5 +189,12 @@ public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.delete(cuisineId));
 	}
 
-	// TODO Implement a test for when trying to delete a cuisine in use
+	@Test
+	public void delete_fail_inUse() {
+		Restaurant restaurant = restaurantFactory.createAndPersist();
+		Cuisine cuisine = restaurant.getCuisine();
+		Long cuisineId = cuisine.getId();
+
+		Assert.assertThrows(ResourceInUseException.class, () -> cuisineCrudService.delete(cuisineId));
+	}
 }

@@ -2,10 +2,12 @@ package br.com.colatina.fmf.algafood.service.controller;
 
 import br.com.colatina.fmf.algafood.service.domain.model.Cuisine;
 import br.com.colatina.fmf.algafood.service.domain.model.Cuisine_;
+import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.CuisineMapper;
 import br.com.colatina.fmf.algafood.service.factory.CuisineFactory;
+import br.com.colatina.fmf.algafood.service.factory.RestaurantFactory;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
@@ -34,6 +36,9 @@ public class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 	private CuisineMapper cuisineMapper;
 	@Autowired
 	private CuisineCrudService cuisineCrudService;
+
+	@Autowired
+	private RestaurantFactory restaurantFactory;
 
 	@Override
 	public void setUpConnection() {
@@ -251,5 +256,16 @@ public class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 				.pathParam("id", entity.getId())
 				.when().delete("/{id}")
 				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	}
+
+	@Test
+	public void delete_fail_inUse() {
+		Restaurant restaurant = restaurantFactory.createAndPersist();
+		Cuisine entity = restaurant.getCuisine();
+
+		given().accept(ContentType.JSON)
+				.pathParam("id", entity.getId())
+				.when().delete("/{id}")
+				.then().statusCode(HttpStatus.CONFLICT.value());
 	}
 }
