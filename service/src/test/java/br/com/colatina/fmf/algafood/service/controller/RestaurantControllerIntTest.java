@@ -4,8 +4,9 @@ import br.com.colatina.fmf.algafood.service.domain.model.Cuisine_;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant_;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
+import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantFormMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
 import br.com.colatina.fmf.algafood.service.factory.RestaurantFactory;
 import io.restassured.RestAssured;
@@ -23,6 +24,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+
 import static io.restassured.RestAssured.given;
 
 @RunWith(SpringRunner.class)
@@ -37,6 +40,8 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	private RestaurantFactory restaurantFactory;
 	@Autowired
 	private RestaurantMapper restaurantMapper;
+	@Autowired
+	private RestaurantFormMapper restaurantFormMapper;
 	@Autowired
 	private RestaurantCrudService restaurantCrudService;
 
@@ -182,7 +187,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void insert_success() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -196,7 +201,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void insert_fail_blankName() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(BLANK_STRING);
 
 		given().accept(ContentType.JSON)
@@ -209,7 +214,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void insert_fail_nullFreightFee() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setFreightFee(null);
 
 		given().accept(ContentType.JSON)
@@ -222,34 +227,8 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void insert_fail_negativeFreightFee() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setFreightFee(-dto.getFreightFee());
-
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
-	}
-
-	@Test
-	public void insert_fail_nullActive() {
-		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setActive(null);
-
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
-	}
-
-	@Test
-	public void insert_fail_nullCuisine() {
-		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setCuisine(null);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -261,8 +240,8 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void insert_fail_nullCuisineId() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.getCuisine().setId(null);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.setCuisineId(null);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -272,10 +251,10 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
-	public void insert_fail_nonExistentCuisine() {
+	public void insert_fail_nonExistentCuisineId() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.getCuisine().setId(NON_EXISTING_ID);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.setCuisineId(NON_EXISTING_ID);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -285,10 +264,10 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
-	public void insert_fail_nullPaymentMethod() {
+	public void insert_fail_emptyPaymentMethod() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.getPaymentMethods().get(0).setId(null);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.setPaymentMethods(new ArrayList<>());
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -300,8 +279,8 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void insert_fail_nonExistentPaymentMethod() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.getPaymentMethods().get(0).setId(NON_EXISTING_ID);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.getPaymentMethods().add(NON_EXISTING_ID);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -313,7 +292,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void update_success() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(dto.getName() + " update");
 
 		given().accept(ContentType.JSON)
@@ -329,7 +308,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void update_fail_nonExistentEntity() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(dto.getName() + " update");
 
 		given().accept(ContentType.JSON)
@@ -343,7 +322,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void update_fail_deletedEntity() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(dto.getName() + " update");
 
 		restaurantCrudService.delete(entity.getId());
@@ -359,8 +338,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void update_fail_blankName() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(BLANK_STRING);
 
 		given().accept(ContentType.JSON)
@@ -374,8 +352,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void update_fail_nullFreightFee() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setFreightFee(null);
 
 		given().accept(ContentType.JSON)
@@ -389,39 +366,8 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void update_fail_negativeFreightFee() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setFreightFee(-dto.getFreightFee());
-
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
-	}
-
-	@Test
-	public void update_fail_nullActive() {
-		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
-		dto.setActive(null);
-
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
-	}
-
-	@Test
-	public void update_fail_nullCuisine() {
-		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
-		dto.setCuisine(null);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -434,9 +380,8 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void update_fail_nullCuisineId() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
-		dto.getCuisine().setId(null);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.setCuisineId(null);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -447,26 +392,10 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
-	public void update_fail_nonExistentCuisine() {
+	public void update_fail_nonExistentCuisineId() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
-		dto.getCuisine().setId(NON_EXISTING_ID);
-
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
-	}
-
-	@Test
-	public void update_fail_nullPaymentMethod() {
-		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
-		dto.getPaymentMethods().get(0).setId(null);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.setCuisineId(NON_EXISTING_ID);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
@@ -479,9 +408,8 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Test
 	public void update_fail_nonExistentPaymentMethod() {
 		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
-		dto.getPaymentMethods().get(0).setId(NON_EXISTING_ID);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.getPaymentMethods().add(NON_EXISTING_ID);
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)

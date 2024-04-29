@@ -4,6 +4,8 @@ import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.repository.RestaurantRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
+import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantFormMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import java.util.List;
 public class RestaurantFactory extends BaseEntityFactory<Restaurant> {
 	@Autowired
 	RestaurantMapper restaurantMapper;
+	@Autowired
+	RestaurantFormMapper restaurantFormMapper;
 	@Autowired
 	RestaurantCrudService restaurantCrudService;
 	@Autowired
@@ -41,9 +45,9 @@ public class RestaurantFactory extends BaseEntityFactory<Restaurant> {
 
 	@Override
 	protected Restaurant persist(Restaurant entity) {
-		RestaurantDto dto = restaurantMapper.toDto(entity);
-		dto = restaurantCrudService.insert(dto);
-		return restaurantMapper.toEntity(dto);
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		RestaurantDto saved = restaurantCrudService.insert(dto);
+		return restaurantMapper.toEntity(saved);
 	}
 
 	@Override
