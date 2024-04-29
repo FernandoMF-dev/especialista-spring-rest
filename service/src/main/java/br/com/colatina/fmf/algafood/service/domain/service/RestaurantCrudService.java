@@ -1,12 +1,14 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
+import br.com.colatina.fmf.algafood.service.domain.model.PaymentMethod;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.repository.RestaurantRepository;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
+import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantFormMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
 import br.com.colatina.fmf.algafood.service.infrastructure.specification.RestaurantSpecs;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class RestaurantCrudService {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantMapper restaurantMapper;
+	private final RestaurantFormMapper restaurantFormMapper;
 	private final RestaurantSpecs restaurantSpecs;
 
 	private final CuisineCrudService cuisineCrudService;
@@ -79,14 +82,21 @@ public class RestaurantCrudService {
 		return restaurantMapper.toDto(entity.get());
 	}
 
-	public RestaurantDto insert(RestaurantDto dto) {
+	public RestaurantDto insert(RestaurantFormDto dto) {
 		dto.setId(null);
-		return save(dto);
+
+		Restaurant entity = restaurantFormMapper.toEntity(dto);
+
+		return save(entity);
 	}
 
-	public RestaurantDto update(RestaurantDto dto, @PathVariable Long id) {
-		RestaurantDto saved = findDtoById(id);
-		BeanUtils.copyProperties(dto, saved, "id", "registrationDate", "updateDate", "products");
+	public RestaurantDto update(RestaurantFormDto dto, @PathVariable Long id) {
+		dto.setId(id);
+
+		Restaurant saved = findEntityById(id);
+		Restaurant entity = restaurantFormMapper.toEntity(dto);
+		BeanUtils.copyProperties(entity, saved, "id", "registrationDate", "updateDate", "active", "products");
+
 		return save(saved);
 	}
 
@@ -106,18 +116,16 @@ public class RestaurantCrudService {
 		restaurantRepository.save(saved);
 	}
 
-	private RestaurantDto save(RestaurantDto dto) {
-		validateSave(dto);
-
-		Restaurant entity = restaurantMapper.toEntity(dto);
+	private RestaurantDto save(Restaurant entity) {
+		validateSave(entity);
 		entity = restaurantRepository.save(entity);
 		return restaurantMapper.toDto(entity);
 	}
 
-	private void validateSave(RestaurantDto dto) {
+	private void validateSave(Restaurant entity) {
 		try {
-			cuisineCrudService.findEntityById(dto.getCuisineId());
-			paymentMethodCrudService.verifyExistence(dto.getPaymentMethods().stream().map(PaymentMethodDto::getId).collect(Collectors.toList()));
+			cuisineCrudService.findEntityById(entity.getCuisine().getId());
+			paymentMethodCrudService.verifyExistence(entity.getPaymentMethods().stream().map(PaymentMethod::getId).collect(Collectors.toList()));
 		} catch (ResourceNotFoundException e) {
 			throw new ResourceNotFoundException(e, HttpStatus.BAD_REQUEST);
 		}

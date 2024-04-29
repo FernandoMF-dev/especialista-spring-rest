@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import lombok.RequiredArgsConstructor;
@@ -67,13 +68,13 @@ public class RestaurantController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<RestaurantDto> insert(@Valid @RequestBody RestaurantDto dto) {
+	public ResponseEntity<RestaurantDto> insert(@Valid @RequestBody RestaurantFormDto dto) {
 		log.debug("REST request to insert a new restaurant: {}", dto);
 		return new ResponseEntity<>(restaurantCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<RestaurantDto> update(@Valid @RequestBody RestaurantDto dto, @PathVariable Long id) {
+	public ResponseEntity<RestaurantDto> update(@Valid @RequestBody RestaurantFormDto dto, @PathVariable Long id) {
 		log.debug("REST request to update restaurant with id {}: {}", id, dto);
 		return new ResponseEntity<>(restaurantCrudService.update(dto, id), HttpStatus.OK);
 	}

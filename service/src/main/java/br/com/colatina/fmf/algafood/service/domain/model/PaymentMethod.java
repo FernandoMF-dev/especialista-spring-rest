@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.domain.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @Setter
 @Table(name = "tb_payment_method")
 @Entity
+@NoArgsConstructor
 public class PaymentMethod implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_payment_method")
@@ -29,6 +31,10 @@ public class PaymentMethod implements Serializable {
 
 	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
+
+	public PaymentMethod(Long id) {
+		this.id = id;
+	}
 
 	@Override
 	public boolean equals(Object o) {
