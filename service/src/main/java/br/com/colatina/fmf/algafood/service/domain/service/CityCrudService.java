@@ -44,7 +44,7 @@ public class CityCrudService {
 
 	public CityDto update(CityDto dto, @PathVariable Long id) {
 		CityDto saved = findDtoById(id);
-		BeanUtils.copyProperties(dto, saved, "id", "registrationDate", "updateDate");
+		BeanUtils.copyProperties(dto, saved, "id");
 		return save(saved);
 	}
 
