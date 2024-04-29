@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,6 +76,13 @@ public class RestaurantController {
 	public ResponseEntity<RestaurantDto> update(@Valid @RequestBody RestaurantDto dto, @PathVariable Long id) {
 		log.debug("REST request to update restaurant with id {}: {}", id, dto);
 		return new ResponseEntity<>(restaurantCrudService.update(dto, id), HttpStatus.OK);
+	}
+
+	@PatchMapping("/{id}/active")
+	public ResponseEntity<Void> toggleActive(@PathVariable Long id, @RequestParam(value = "value") Boolean active) {
+		log.debug("REST request to toggle the active status of restaurant {} with the value: {}", id, active);
+		restaurantCrudService.toggleActive(id, active);
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{id}")

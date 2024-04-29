@@ -90,6 +90,16 @@ public class RestaurantCrudService {
 		return save(saved);
 	}
 
+	public void toggleActive(Long restaurantId, Boolean active) {
+		Restaurant restaurant = findEntityById(restaurantId);
+		restaurant.setActive(active);
+		/*
+		 It is not necessary to persist the 'restaurant' object with the 'save()' method.
+		 The JPA persistence context is still managing this instance of 'Restaurant' and
+		 will synchronize the changes with the database at the end of the transaction
+		*/
+	}
+
 	public void delete(Long id) {
 		Restaurant saved = findEntityById(id);
 		saved.setExcluded(true);
