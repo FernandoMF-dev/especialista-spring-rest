@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import javax.persistence.EntityManager;
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
 
 public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements CustomJpaRepository<T, ID> {
@@ -19,11 +21,19 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
 	public Optional<T> findFirst() {
 		var jpql = "FROM " + getDomainClass().getName();
 
-		T entity = entityManager.createQuery(jpql, getDomainClass())
-				.setMaxResults(1)
-				.getSingleResult();
+		try {
+			Field excludedField = getDomainClass().getDeclaredField("excluded");
+			jpql += " WHERE " + excludedField.getName() + " = FALSE";
+		} catch (NoSuchFieldException ignored) { /* Ignored exception */}
 
-		return Optional.ofNullable(entity);
+		List<T> entityList = entityManager.createQuery(jpql, getDomainClass())
+				.setMaxResults(1)
+				.getResultList();
+
+		if (entityList.isEmpty()) {
+			return Optional.empty();
+		}
+		return Optional.ofNullable(entityList.get(0));
 	}
 
 	@Override
