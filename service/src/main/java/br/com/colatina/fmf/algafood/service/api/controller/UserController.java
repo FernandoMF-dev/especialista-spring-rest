@@ -1,13 +1,16 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.PasswordChangeDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.UserInsertDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,7 +41,7 @@ public class UserController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<UserDto> insert(@Valid @RequestBody UserDto dto) {
+	public ResponseEntity<UserDto> insert(@Valid @RequestBody UserInsertDto dto) {
 		log.debug("REST request to insert a new user: {}", dto);
 		return new ResponseEntity<>(userCrudService.insert(dto), HttpStatus.CREATED);
 	}
@@ -47,6 +50,13 @@ public class UserController {
 	public ResponseEntity<UserDto> update(@Valid @RequestBody UserDto dto, @PathVariable Long id) {
 		log.debug("REST request to update user with id {}: {}", id, dto);
 		return new ResponseEntity<>(userCrudService.update(dto, id), HttpStatus.OK);
+	}
+
+	@PatchMapping("/{id}/password")
+	public ResponseEntity<Void> changePassword(@Valid @RequestBody PasswordChangeDto dto, @PathVariable Long id) {
+		log.debug("REST request to change the password of user with id {}: {}", id, dto);
+		userCrudService.changePassword(dto, id);
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{id}")

@@ -67,8 +67,14 @@ VALUES (nextval('seq_product'), 'Porco com molho agridoce', 78.90, TRUE, 1, 'Del
 		'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese'),
 	   (nextval('seq_product'), 'Espetinho de Cupim', 8, TRUE, 6, 'Acompanha farinha, mandioca e vinagrete');
 
-insert into tb_profile (id, name)
-values (nextval('seq_profile'), 'Gerente'),
+INSERT INTO tb_profile (id, name)
+VALUES (nextval('seq_profile'), 'Gerente'),
 	   (nextval('seq_profile'), 'Vendedor'),
 	   (nextval('seq_profile'), 'Secretária'),
 	   (nextval('seq_profile'), 'Cadastrador');
+
+INSERT INTO tb_user (id, name, email, password)
+VALUES (nextval('seq_user'), 'João da Silva', 'joao.ger@algafood.com', 'nMNSF%17C69:'),
+	   (nextval('seq_user'), 'Maria Joaquina', 'maria.vnd@algafood.com', 'p_44:8Yk£kl&'),
+	   (nextval('seq_user'), 'José Souza', 'jose.aux@algafood.com', '?8j}8JBG!1/<'),
+	   (nextval('seq_user'), 'Sebastião Martins', 'sebastiao.cad@algafood.com', 'ED/if5=2l#~2');

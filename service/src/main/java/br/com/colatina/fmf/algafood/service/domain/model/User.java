@@ -23,8 +23,8 @@ import java.util.List;
 @Entity
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_profile")
-	@SequenceGenerator(name = "seq_profile", allocationSize = 1, sequenceName = "seq_profile")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
+	@SequenceGenerator(name = "seq_user", allocationSize = 1, sequenceName = "seq_user")
 	@Column(name = "id", nullable = false)
 	private Long id;
 

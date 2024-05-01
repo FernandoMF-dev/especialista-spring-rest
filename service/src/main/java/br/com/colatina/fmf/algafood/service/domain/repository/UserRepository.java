@@ -12,13 +12,13 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto" +
-			"(u.id, u.name, u.email, u.password) " +
+			"(u.id, u.name, u.email) " +
 			" FROM User u " +
 			" WHERE u.excluded = FALSE ")
 	List<UserDto> findAllDto();
 
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto" +
-			"(u.id, u.name, u.email, u.password) " +
+			"(u.id, u.name, u.email) " +
 			" FROM User u " +
 			" WHERE u.id = :id " +
 			" AND u.excluded = FALSE")
