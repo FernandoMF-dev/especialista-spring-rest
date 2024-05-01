@@ -66,3 +66,9 @@ VALUES (nextval('seq_product'), 'Porco com molho agridoce', 78.90, TRUE, 1, 'Del
 	   (nextval('seq_product'), 'Sanduíche X-Tudo', 19, TRUE, 5,
 		'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese'),
 	   (nextval('seq_product'), 'Espetinho de Cupim', 8, TRUE, 6, 'Acompanha farinha, mandioca e vinagrete');
+
+insert into tb_profile (id, name)
+values (nextval('seq_profile'), 'Gerente'),
+	   (nextval('seq_profile'), 'Vendedor'),
+	   (nextval('seq_profile'), 'Secretária'),
+	   (nextval('seq_profile'), 'Cadastrador');
