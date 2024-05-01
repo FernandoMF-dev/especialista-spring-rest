@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
+import br.com.colatina.fmf.algafood.service.domain.exceptions.DuplicateResourceException;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.PasswordMismatchException;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.User;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -66,7 +68,16 @@ public class UserCrudService {
 	}
 
 	private UserDto save(User entity) {
+		userRepository.detach(entity);
+		validateSave(entity);
 		entity = userRepository.save(entity);
 		return userMapper.toDto(entity);
+	}
+
+	private void validateSave(User entity) {
+		Optional<User> existingUser = userRepository.findByEmailAndExcludedIsFalse(entity.getEmail());
+		if (existingUser.isPresent() && !existingUser.get().equals(entity)) {
+			throw new DuplicateResourceException("user.email.duplicate", entity.getEmail());
+		}
 	}
 }

@@ -24,4 +24,6 @@ public interface UserRepository extends CustomJpaRepository<User, Long> {
 	Optional<UserDto> findDtoById(Long id);
 
 	Optional<User> findByIdAndExcludedIsFalse(Long id);
+
+	Optional<User> findByEmailAndExcludedIsFalse(String email);
 }

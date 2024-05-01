@@ -16,6 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -46,4 +47,20 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "id"))
 	private List<Profile> profiles = new ArrayList<>();
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof User)) {
+			return false;
+		}
+		User that = (User) o;
+		return id.equals(that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }
