@@ -27,7 +27,6 @@ public class ProductDto implements Serializable {
 	private Double price;
 	@NotNull(message = "product.active.not_null")
 	private Boolean active;
-	@NotNull(message = "product.restaurant_id.not_null")
 	private Long restaurantId;
 	private String restaurantName;
 }

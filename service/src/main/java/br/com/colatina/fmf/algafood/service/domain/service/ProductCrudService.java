@@ -41,14 +41,13 @@ public class ProductCrudService {
 
 	public ProductDto insert(Long restaurantId, ProductDto dto) {
 		dto.setId(null);
-		dto.setRestaurantId(restaurantId);
-		return save(dto);
+		return save(dto, restaurantId);
 	}
 
 	public ProductDto update(Long restaurantId, ProductDto dto, @PathVariable Long productId) {
 		ProductDto saved = findDtoById(restaurantId, productId);
 		BeanUtils.copyProperties(dto, saved, "id");
-		return save(saved);
+		return save(saved, restaurantId);
 	}
 
 	public void delete(Long restaurantId, Long productId) {
@@ -57,8 +56,10 @@ public class ProductCrudService {
 		productRepository.save(saved);
 	}
 
-	private ProductDto save(ProductDto dto) {
+	private ProductDto save(ProductDto dto, Long restaurantId) {
+		dto.setRestaurantId(restaurantId);
 		validateRestaurant(dto.getRestaurantId());
+
 		Product entity = productMapper.toEntity(dto);
 		entity = productRepository.save(entity);
 		return productMapper.toDto(entity);
