@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = {AddressMapper.class})
@@ -25,18 +25,18 @@ public interface RestaurantFormMapper extends EntityMapper<RestaurantFormDto, Re
 
 	@AfterMapping
 	default void mapPaymentMethodsToEntity(RestaurantFormDto dto, @MappingTarget Restaurant entity) {
-		List<PaymentMethod> paymentMethods = dto.getPaymentMethods().stream()
+		Set<PaymentMethod> paymentMethods = dto.getPaymentMethods().stream()
 				.map(PaymentMethod::new)
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 
 		entity.setPaymentMethods(paymentMethods);
 	}
 
 	@AfterMapping
 	default void mapPaymentMethodsToDto(@MappingTarget RestaurantFormDto dto, Restaurant entity) {
-		List<Long> paymentMethodIds = entity.getPaymentMethods().stream()
+		Set<Long> paymentMethodIds = entity.getPaymentMethods().stream()
 				.map(PaymentMethod::getId)
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 
 		dto.setPaymentMethods(paymentMethodIds);
 	}

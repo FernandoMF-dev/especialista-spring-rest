@@ -21,8 +21,10 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -66,7 +68,7 @@ public class Restaurant {
 	@JoinTable(name = "rel_restaurant_payment_method",
 			joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id", referencedColumnName = "id"))
-	private List<PaymentMethod> paymentMethods = new ArrayList<>();
+	private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
 	@Embedded
 	private Address address;

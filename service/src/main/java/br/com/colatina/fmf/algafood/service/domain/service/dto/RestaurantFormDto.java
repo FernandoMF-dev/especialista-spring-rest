@@ -10,8 +10,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,7 +26,7 @@ public class RestaurantFormDto implements Serializable {
 	@NotNull(message = "restaurant.cuisine.not_null")
 	private Long cuisineId;
 	@NotEmpty(message = "restaurant.payment_methods.not_empty")
-	private List<Long> paymentMethods = new ArrayList<>();
+	private Set<Long> paymentMethods = new HashSet<>();
 	@Valid
 	private AddressDto address;
 }

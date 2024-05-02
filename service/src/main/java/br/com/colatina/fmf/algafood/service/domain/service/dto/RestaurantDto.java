@@ -9,8 +9,10 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +27,7 @@ public class RestaurantDto implements Serializable {
 	private OffsetDateTime updateDate;
 	private Boolean active;
 	private CuisineDto cuisine;
-	private List<PaymentMethodDto> paymentMethods = new ArrayList<>();
+	private Set<PaymentMethodDto> paymentMethods = new HashSet<>();
 	private List<ProductDto> products = new ArrayList<>();
 	private AddressDto address;
 

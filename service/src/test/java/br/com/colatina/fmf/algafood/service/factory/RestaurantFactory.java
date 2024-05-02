@@ -7,11 +7,10 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantFormMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
+import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class RestaurantFactory extends BaseEntityFactory<Restaurant> {
@@ -39,7 +38,7 @@ public class RestaurantFactory extends BaseEntityFactory<Restaurant> {
 		restaurant.setActive(Boolean.TRUE);
 		restaurant.setCuisine(cuisineFactory.createAndPersist());
 		restaurant.setAddress(addressFactory.createEntity());
-		restaurant.setPaymentMethods(List.of(paymentMethodFactory.createAndPersist()));
+		restaurant.setPaymentMethods(Sets.newHashSet(paymentMethodFactory.createAndPersist()));
 		return restaurant;
 	}
 

@@ -7,7 +7,6 @@ import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantFormMapper;
-import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
 import br.com.colatina.fmf.algafood.service.factory.RestaurantFactory;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -24,7 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import static io.restassured.RestAssured.given;
 
@@ -38,8 +37,6 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 
 	@Autowired
 	private RestaurantFactory restaurantFactory;
-	@Autowired
-	private RestaurantMapper restaurantMapper;
 	@Autowired
 	private RestaurantFormMapper restaurantFormMapper;
 	@Autowired
@@ -267,7 +264,7 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	public void insert_fail_emptyPaymentMethod() {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
-		dto.setPaymentMethods(new ArrayList<>());
+		dto.setPaymentMethods(new HashSet<>());
 
 		given().accept(ContentType.JSON)
 				.contentType(ContentType.JSON)
