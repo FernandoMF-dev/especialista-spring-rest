@@ -92,4 +92,8 @@ public class Restaurant {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	public boolean isOpenToOrder() {
+		return this.getActive() && this.getOpen();
+	}
 }

@@ -13,7 +13,6 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderProductDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderInsertMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,13 +34,12 @@ public class OrderCrudService {
 	private final CityCrudService cityCrudService;
 	private final OrderProductCrudService orderProductCrudService;
 
-	private final MessageSource messageSource;
-
 	public OrderDto insert(OrderInsertDto insertDto) {
 		Order entity = orderInsertMapper.toEntity(insertDto);
 		List<OrderProduct> orderProducts = entity.getOrderProducts();
 
 		validateInsertEntities(insertDto, entity);
+		validateInsertRestaurant(entity);
 		validateInsertPaymentMethod(entity);
 		validateInsertProducts(insertDto, orderProducts, entity);
 
@@ -67,8 +65,14 @@ public class OrderCrudService {
 		}
 	}
 
+	private void validateInsertRestaurant(Order entity) {
+		if (!entity.getRestaurant().isOpenToOrder()) {
+			throw new ResourceNotAvailableException("order_insert.restaurant.not_open");
+		}
+	}
+
 	private void validateInsertPaymentMethod(Order entity) {
-		if (entity.getRestaurant().getPaymentMethods().stream().noneMatch(paymentMethod -> Objects.equals(paymentMethod, entity.getPaymentMethod()))) {
+		if (!entity.getRestaurant().getPaymentMethods().contains(entity.getPaymentMethod())) {
 			throw new ResourceNotAvailableException("payment_method.not_available.restaurant");
 		}
 	}
