@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240502170000-1" author="Fernando Martins Ferreira">
+		<addColumn tableName="tb_restaurant">
+			<column name="open" type="BOOLEAN" defaultValueBoolean="false"
+					remarks="Determines whether or not the restaurant is currently open to receive orders">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="tb_restaurant" columnName="open"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

@@ -1,8 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -17,8 +15,6 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 public class RestaurantDto implements Serializable {
 	private Long id;
 	private String name;
@@ -26,6 +22,7 @@ public class RestaurantDto implements Serializable {
 	private OffsetDateTime registrationDate;
 	private OffsetDateTime updateDate;
 	private Boolean active;
+	private Boolean open;
 	private CuisineDto cuisine;
 	private Set<PaymentMethodDto> paymentMethods = new HashSet<>();
 	private List<ProductDto> products = new ArrayList<>();
