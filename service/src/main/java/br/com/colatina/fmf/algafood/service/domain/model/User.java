@@ -16,9 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -51,7 +51,7 @@ public class User {
 	@JoinTable(name = "rel_user_profile",
 			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "id"))
-	private List<Profile> profiles = new ArrayList<>();
+	private Set<Profile> profiles = new HashSet<>();
 
 	@Override
 	public boolean equals(Object o) {

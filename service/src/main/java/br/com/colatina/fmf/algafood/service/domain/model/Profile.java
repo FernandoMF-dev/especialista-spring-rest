@@ -14,9 +14,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -39,7 +39,7 @@ public class Profile {
 	@JoinTable(name = "rel_profile_permission",
 			joinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
-	private List<Permission> permissions = new ArrayList<>();
+	private Set<Permission> permissions = new HashSet<>();
 
 	@Override
 	public boolean equals(Object o) {
