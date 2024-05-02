@@ -86,6 +86,13 @@ public class RestaurantController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PatchMapping("/{id}/open")
+	public ResponseEntity<Void> toggleOpen(@PathVariable Long id, @RequestParam(value = "value") Boolean open) {
+		log.debug("REST request to toggle the open status of restaurant {} with the value: {}", id, open);
+		restaurantCrudService.toggleOpen(id, open);
+		return ResponseEntity.noContent().build();
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete restaurant with id {}", id);

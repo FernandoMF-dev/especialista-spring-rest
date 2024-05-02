@@ -113,6 +113,19 @@ public class RestaurantCrudService {
 		*/
 	}
 
+	public void toggleOpen(Long restaurantId, Boolean open) {
+		Restaurant restaurant = findEntityById(restaurantId);
+		restaurant.setOpen(open);
+		/*
+		 It is not necessary to persist the 'restaurant' object with the 'save()' method.
+		 The JPA persistence context is still managing this instance of 'Restaurant' and
+		 will synchronize the changes with the database at the end of the transaction.
+
+		 PS: I will continue to use the save method for other operations,
+		 because I believe it makes the interaction more obvious.
+		*/
+	}
+
 	public void delete(Long id) {
 		Restaurant saved = findEntityById(id);
 		saved.setExcluded(true);
