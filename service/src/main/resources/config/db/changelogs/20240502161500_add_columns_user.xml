@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240502161500-1" author="Fernando Martins Ferreira">
+		<addColumn tableName="tb_user">
+			<column name="registration_date" type="DATETIME"
+					remarks="Date and time of when the user was first registered into the system">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="tb_user" columnName="registration_date"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

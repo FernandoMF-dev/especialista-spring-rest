@@ -21,4 +21,5 @@
 	<include file="/config/db/changelogs/20240317142000_create_table_user_profile.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240330131200_create_table_order.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240330140500_create_table_order_product.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240502161500_add_columns_user.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

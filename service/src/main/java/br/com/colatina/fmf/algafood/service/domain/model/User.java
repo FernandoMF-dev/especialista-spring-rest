@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,6 +39,10 @@ public class User {
 
 	@Column(name = "password", nullable = false)
 	private String password;
+
+	@CreationTimestamp
+	@Column(name = "registration_date", nullable = false)
+	private OffsetDateTime registrationDate;
 
 	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
