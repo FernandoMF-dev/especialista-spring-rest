@@ -16,19 +16,19 @@ VALUES (nextval('seq_city'), 'UBE', 'Uberlândia', 1),
 	   (nextval('seq_city'), 'CP', 'Campinas', 2),
 	   (nextval('seq_city'), 'FTZ', 'Fortaleza', 3);
 
-INSERT INTO tb_restaurant (id, name, freight_fee, registration_date, update_date, cuisine_id, address_city_id,
+INSERT INTO tb_restaurant (id, name, open, freight_fee, registration_date, update_date, cuisine_id, address_city_id,
 						   address_cep, address_public_space, address_street_number, address_district,
 						   address_complement)
-VALUES (nextval('seq_restaurant'), 'Thai Gourmet', 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1, '38400-999',
+VALUES (nextval('seq_restaurant'), 'Thai Gourmet', TRUE, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1, '38400-999',
 		'Rua João Pinheiro', '1000', 'Centro', ''),
 	   (nextval('seq_restaurant'), 'Thai Delivery', 9.50, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, '40567-387',
 		'Av. Carvalho Pedro', '154', 'Centro', '4ª Andar');
 
-INSERT INTO tb_restaurant (id, name, freight_fee, registration_date, update_date, cuisine_id)
-VALUES (nextval('seq_restaurant'), 'Tuk Tuk Comida Indiana', 15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2),
-	   (nextval('seq_restaurant'), 'Java Steakhouse', 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3),
-	   (nextval('seq_restaurant'), 'Lanchonete do Tio Sam', 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4),
-	   (nextval('seq_restaurant'), 'Bar da Maria', 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4);
+INSERT INTO tb_restaurant (id, name, open, freight_fee, registration_date, update_date, cuisine_id)
+VALUES (nextval('seq_restaurant'), 'Tuk Tuk Comida Indiana', TRUE, 15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2),
+	   (nextval('seq_restaurant'), 'Java Steakhouse', TRUE, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3),
+	   (nextval('seq_restaurant'), 'Lanchonete do Tio Sam', TRUE, 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4),
+	   (nextval('seq_restaurant'), 'Bar da Maria', TRUE, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4);
 
 INSERT INTO tb_payment_method (id, description)
 VALUES (nextval('seq_payment_method'), 'Cartão de crédito'),
@@ -73,8 +73,8 @@ VALUES (nextval('seq_profile'), 'Gerente'),
 	   (nextval('seq_profile'), 'Secretária'),
 	   (nextval('seq_profile'), 'Cadastrador');
 
-INSERT INTO tb_user (id, name, email, password)
-VALUES (nextval('seq_user'), 'João da Silva', 'joao.ger@algafood.com', 'nMNSF%17C69:'),
-	   (nextval('seq_user'), 'Maria Joaquina', 'maria.vnd@algafood.com', 'p_44:8Yk£kl&'),
-	   (nextval('seq_user'), 'José Souza', 'jose.aux@algafood.com', '?8j}8JBG!1/<'),
-	   (nextval('seq_user'), 'Sebastião Martins', 'sebastiao.cad@algafood.com', 'ED/if5=2l#~2');
+INSERT INTO tb_user (id, name, email, password, registration_date)
+VALUES (nextval('seq_user'), 'João da Silva', 'joao.ger@algafood.com', 'nMNSF%17C69:', CURRENT_TIMESTAMP),
+	   (nextval('seq_user'), 'Maria Joaquina', 'maria.vnd@algafood.com', 'p_44:8Yk£kl&', CURRENT_TIMESTAMP),
+	   (nextval('seq_user'), 'José Souza', 'jose.aux@algafood.com', '?8j}8JBG!1/<', CURRENT_TIMESTAMP),
+	   (nextval('seq_user'), 'Sebastião Martins', 'sebastiao.cad@algafood.com', 'ED/if5=2l#~2', CURRENT_TIMESTAMP);
