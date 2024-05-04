@@ -102,4 +102,12 @@ public class Restaurant {
 	public boolean isOpenToOrder() {
 		return this.getActive() && this.getOpen();
 	}
+
+	public void addResponsible(User user) {
+		this.getResponsible().add(user);
+	}
+
+	public void removeResponsible(User user) {
+		this.getResponsible().remove(user);
+	}
 }
