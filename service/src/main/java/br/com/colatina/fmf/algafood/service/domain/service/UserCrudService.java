@@ -3,9 +3,11 @@ package br.com.colatina.fmf.algafood.service.domain.service;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.DuplicateResourceException;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.PasswordMismatchException;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
+import br.com.colatina.fmf.algafood.service.domain.model.Profile;
 import br.com.colatina.fmf.algafood.service.domain.model.User;
 import br.com.colatina.fmf.algafood.service.domain.repository.UserRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PasswordChangeDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserInsertDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.UserMapper;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -25,6 +28,8 @@ import java.util.Optional;
 public class UserCrudService {
 	private final UserRepository userRepository;
 	private final UserMapper userMapper;
+
+	private final ProfileCrudService profileCrudService;
 
 	public List<UserDto> findAll() {
 		return userRepository.findAllDto();
@@ -65,6 +70,25 @@ public class UserCrudService {
 		User saved = findEntityById(id);
 		saved.setExcluded(true);
 		userRepository.save(saved);
+	}
+
+	public Set<ProfileDto> findAllPermissionsByProfileId(Long userId) {
+		findEntityById(userId);
+		return profileCrudService.findAllDtoByUser(userId);
+	}
+
+	public void addPermissionToProfile(Long userId, Long profileId) {
+		User user = findEntityById(userId);
+		Profile profile = profileCrudService.findEntityById(profileId);
+		user.addProfile(profile);
+		userRepository.save(user);
+	}
+
+	public void removePermissionFromProfile(Long userId, Long profileId) {
+		User user = findEntityById(userId);
+		Profile profile = profileCrudService.findEntityById(profileId);
+		user.removeProfile(profile);
+		userRepository.save(user);
 	}
 
 	private UserDto save(User entity) {

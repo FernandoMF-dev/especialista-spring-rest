@@ -69,4 +69,12 @@ public class User {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	public void addProfile(Profile profile) {
+		this.getProfiles().add(profile);
+	}
+
+	public void removeProfile(Profile profile) {
+		this.getProfiles().remove(profile);
+	}
 }

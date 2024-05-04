@@ -57,6 +57,10 @@ public class ProfileCrudService {
 		profileRepository.save(saved);
 	}
 
+	public Set<ProfileDto> findAllDtoByUser(Long userId) {
+		return profileRepository.findAllDtoByUser(userId);
+	}
+
 	public Set<PermissionDto> findAllPermissionsByProfileId(Long profileId) {
 		findEntityById(profileId);
 		return permissionCrudService.findAllDtoByProfile(profileId);
