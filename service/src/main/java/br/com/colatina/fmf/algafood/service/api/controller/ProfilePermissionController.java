@@ -25,7 +25,7 @@ public class ProfilePermissionController {
 	@GetMapping()
 	public ResponseEntity<Set<PermissionDto>> findAll(@PathVariable Long profileId) {
 		log.debug("REST request to find all permissions associated with the profile {}", profileId);
-		Set<PermissionDto> permissions = profileCrudService.findAllPermissionsByProfileId(profileId);
+		Set<PermissionDto> permissions = profileCrudService.findAllPermissionsByProfile(profileId);
 		return new ResponseEntity<>(permissions, HttpStatus.OK);
 	}
 

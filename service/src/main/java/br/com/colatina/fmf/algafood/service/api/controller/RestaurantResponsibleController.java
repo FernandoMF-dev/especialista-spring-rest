@@ -25,7 +25,7 @@ public class RestaurantResponsibleController {
 	@GetMapping()
 	public ResponseEntity<Set<UserDto>> findAll(@PathVariable Long restaurantId) {
 		log.debug("REST request to find all user responsible for the restaurant {}", restaurantId);
-		Set<UserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurantId(restaurantId);
+		Set<UserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurant(restaurantId);
 		return new ResponseEntity<>(responsibles, HttpStatus.OK);
 	}
 

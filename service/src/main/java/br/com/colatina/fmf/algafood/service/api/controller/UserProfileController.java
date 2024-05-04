@@ -25,21 +25,21 @@ public class UserProfileController {
 	@GetMapping()
 	public ResponseEntity<Set<ProfileDto>> findAll(@PathVariable Long userId) {
 		log.debug("REST request to find all profiles associated with the user {}", userId);
-		Set<ProfileDto> permissions = userCrudService.findAllPermissionsByProfileId(userId);
+		Set<ProfileDto> permissions = userCrudService.findAllProfilesByUser(userId);
 		return new ResponseEntity<>(permissions, HttpStatus.OK);
 	}
 
 	@PutMapping("/{profileId}")
 	public ResponseEntity<Void> associate(@PathVariable Long userId, @PathVariable Long profileId) {
 		log.debug("REST request to associate the profile {} with the user {}", profileId, userId);
-		userCrudService.addPermissionToProfile(userId, profileId);
+		userCrudService.addProfileToUser(userId, profileId);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{profileId}")
 	public ResponseEntity<Void> disassociate(@PathVariable Long userId, @PathVariable Long profileId) {
 		log.debug("REST request to disassociate the profile {} from the user {}", profileId, userId);
-		userCrudService.removePermissionFromProfile(userId, profileId);
+		userCrudService.removeProfileFromUser(userId, profileId);
 		return ResponseEntity.noContent().build();
 	}
 }

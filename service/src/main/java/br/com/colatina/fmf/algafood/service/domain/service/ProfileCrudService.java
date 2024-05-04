@@ -61,7 +61,7 @@ public class ProfileCrudService {
 		return profileRepository.findAllDtoByUser(userId);
 	}
 
-	public Set<PermissionDto> findAllPermissionsByProfileId(Long profileId) {
+	public Set<PermissionDto> findAllPermissionsByProfile(Long profileId) {
 		findEntityById(profileId);
 		return permissionCrudService.findAllDtoByProfile(profileId);
 	}

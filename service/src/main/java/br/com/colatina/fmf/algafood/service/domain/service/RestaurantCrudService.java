@@ -136,7 +136,7 @@ public class RestaurantCrudService {
 		restaurantRepository.save(saved);
 	}
 
-	public Set<UserDto> findAllResponsiblesByRestaurantId(Long restaurantId) {
+	public Set<UserDto> findAllResponsiblesByRestaurant(Long restaurantId) {
 		RestaurantDto dto = findDtoById(restaurantId);
 		return dto.getResponsible();
 	}

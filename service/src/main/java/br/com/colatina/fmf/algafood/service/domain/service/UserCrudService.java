@@ -72,19 +72,19 @@ public class UserCrudService {
 		userRepository.save(saved);
 	}
 
-	public Set<ProfileDto> findAllPermissionsByProfileId(Long userId) {
+	public Set<ProfileDto> findAllProfilesByUser(Long userId) {
 		findEntityById(userId);
 		return profileCrudService.findAllDtoByUser(userId);
 	}
 
-	public void addPermissionToProfile(Long userId, Long profileId) {
+	public void addProfileToUser(Long userId, Long profileId) {
 		User user = findEntityById(userId);
 		Profile profile = profileCrudService.findEntityById(profileId);
 		user.addProfile(profile);
 		userRepository.save(user);
 	}
 
-	public void removePermissionFromProfile(Long userId, Long profileId) {
+	public void removeProfileFromUser(Long userId, Long profileId) {
 		User user = findEntityById(userId);
 		Profile profile = profileCrudService.findEntityById(profileId);
 		user.removeProfile(profile);
