@@ -57,4 +57,12 @@ public class Profile {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	public void addPermission(Permission permission) {
+		this.getPermissions().add(permission);
+	}
+
+	public void removePermission(Permission permission) {
+		this.getPermissions().remove(permission);
+	}
 }

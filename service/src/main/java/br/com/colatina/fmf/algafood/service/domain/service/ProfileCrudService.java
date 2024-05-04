@@ -1,8 +1,10 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
+import br.com.colatina.fmf.algafood.service.domain.model.Permission;
 import br.com.colatina.fmf.algafood.service.domain.model.Profile;
 import br.com.colatina.fmf.algafood.service.domain.repository.ProfileRepository;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.PermissionDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -20,6 +23,7 @@ public class ProfileCrudService {
 	private final ProfileRepository profileRepository;
 	private final ProfileMapper profileMapper;
 
+	private final PermissionCrudService permissionCrudService;
 
 	public List<ProfileDto> findAll() {
 		return profileRepository.findAllDto();
@@ -37,11 +41,12 @@ public class ProfileCrudService {
 
 	public ProfileDto insert(ProfileDto dto) {
 		dto.setId(null);
-		return save(dto);
+		Profile entity = profileMapper.toEntity(dto);
+		return save(entity);
 	}
 
 	public ProfileDto update(ProfileDto dto, @PathVariable Long id) {
-		ProfileDto saved = findDtoById(id);
+		Profile saved = findEntityById(id);
 		BeanUtils.copyProperties(dto, saved, "id");
 		return save(saved);
 	}
@@ -52,8 +57,26 @@ public class ProfileCrudService {
 		profileRepository.save(saved);
 	}
 
-	private ProfileDto save(ProfileDto dto) {
-		Profile entity = profileMapper.toEntity(dto);
+	public Set<PermissionDto> findAllPermissionsByProfileId(Long profileId) {
+		findEntityById(profileId);
+		return permissionCrudService.findAllDtoByProfile(profileId);
+	}
+
+	public void addPermissionToProfile(Long profileId, Long permissionId) {
+		Profile profile = findEntityById(profileId);
+		Permission permission = permissionCrudService.findEntityById(permissionId);
+		profile.addPermission(permission);
+		profileRepository.save(profile);
+	}
+
+	public void removePermissionFromProfile(Long profileId, Long permissionId) {
+		Profile profile = findEntityById(profileId);
+		Permission permission = permissionCrudService.findEntityById(permissionId);
+		profile.removePermission(permission);
+		profileRepository.save(profile);
+	}
+
+	private ProfileDto save(Profile entity) {
 		entity = profileRepository.save(entity);
 		return profileMapper.toDto(entity);
 	}
