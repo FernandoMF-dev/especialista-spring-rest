@@ -24,8 +24,9 @@ public class RestaurantDto implements Serializable {
 	private Boolean active;
 	private Boolean open;
 	private CuisineDto cuisine;
-	private Set<PaymentMethodDto> paymentMethods = new HashSet<>();
 	private List<ProductDto> products = new ArrayList<>();
+	private Set<PaymentMethodDto> paymentMethods = new HashSet<>();
+	private Set<UserDto> responsible = new HashSet<>();
 	private AddressDto address;
 
 	@Override

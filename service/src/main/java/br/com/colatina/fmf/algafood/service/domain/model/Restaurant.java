@@ -73,6 +73,12 @@ public class Restaurant {
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id", referencedColumnName = "id"))
 	private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "rel_restaurant_responsible",
+			joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	private Set<User> responsible = new HashSet<>();
+
 	@Embedded
 	private Address address;
 
