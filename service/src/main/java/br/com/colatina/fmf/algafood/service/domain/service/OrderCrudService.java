@@ -9,7 +9,9 @@ import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import br.com.colatina.fmf.algafood.service.domain.repository.OrderRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderProductDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderProductListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderInsertMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,6 +37,16 @@ public class OrderCrudService {
 	private final PaymentMethodCrudService paymentMethodCrudService;
 	private final CityCrudService cityCrudService;
 	private final OrderProductCrudService orderProductCrudService;
+
+	public List<OrderListDto> findAll() {
+		List<OrderListDto> orders = orderRepository.findAllListDto();
+		List<Long> orderIds = orders.stream().map(OrderListDto::getId).collect(Collectors.toList());
+		Map<Long, List<OrderProductListDto>> products = orderProductCrudService.findAllByOrders(orderIds);
+
+		orders.forEach(order -> order.setProducts(products.get(order.getId())));
+
+		return orders;
+	}
 
 	public OrderDto insert(OrderInsertDto insertDto) {
 		Order entity = orderInsertMapper.toEntity(insertDto);
