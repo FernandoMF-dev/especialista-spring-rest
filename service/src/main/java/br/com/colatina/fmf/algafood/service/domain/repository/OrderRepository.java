@@ -10,7 +10,9 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends CustomJpaRepository<Order, Long> {
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto" +
-			"(o.id, o.totalValue, o.status, o.user, o.restaurant, o.paymentMethod) " +
-			" FROM Order o ")
+			"(o.id, o.totalValue, o.status, o.registrationDate, u.id, u.name, r.id, r.name) " +
+			" FROM Order o " +
+			" INNER JOIN o.user u " +
+			" INNER JOIN o.restaurant r")
 	List<OrderListDto> findAllListDto();
 }

@@ -1,15 +1,11 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
-import br.com.colatina.fmf.algafood.service.domain.model.PaymentMethod;
-import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
-import br.com.colatina.fmf.algafood.service.domain.model.User;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -17,17 +13,17 @@ public class OrderListDto implements Serializable {
 	private Long id;
 	private Double totalValue;
 	private OrderStatusEnum status;
+	private OffsetDateTime registrationDate;
 	private GenericObjectDto user;
 	private GenericObjectDto restaurant;
-	private GenericObjectDto paymentMethod;
-	private List<OrderProductListDto> products = new ArrayList<>();
 
-	public OrderListDto(Long id, Double totalValue, OrderStatusEnum status, User user, Restaurant restaurant, PaymentMethod paymentMethod) {
+	public OrderListDto(Long id, Double totalValue, OrderStatusEnum status, OffsetDateTime registrationDate,
+						Long userId, String userName, Long restaurantId, String restaurantName) {
 		this.id = id;
 		this.totalValue = totalValue;
 		this.status = status;
-		this.user = new GenericObjectDto(user.getId(), user.getName());
-		this.restaurant = new GenericObjectDto(restaurant.getId(), restaurant.getName());
-		this.paymentMethod = new GenericObjectDto(paymentMethod.getId(), paymentMethod.getDescription());
+		this.registrationDate = registrationDate;
+		this.user = new GenericObjectDto(userId, userName);
+		this.restaurant = new GenericObjectDto(restaurantId, restaurantName);
 	}
 }
