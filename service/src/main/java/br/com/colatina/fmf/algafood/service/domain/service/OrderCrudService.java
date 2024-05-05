@@ -48,6 +48,15 @@ public class OrderCrudService {
 		return orders;
 	}
 
+	public OrderDto findDtoById(Long id) {
+		return orderMapper.toDto(findEntityById(id));
+	}
+
+	public Order findEntityById(Long id) {
+		return orderRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("order.not_found", id));
+	}
+
 	public OrderDto insert(OrderInsertDto insertDto) {
 		Order entity = orderInsertMapper.toEntity(insertDto);
 		List<OrderProduct> orderProducts = entity.getOrderProducts();

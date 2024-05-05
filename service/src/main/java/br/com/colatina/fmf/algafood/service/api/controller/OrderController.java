@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,13 @@ public class OrderController {
 		log.debug("REST request to find all orders");
 		List<OrderListDto> orders = orderCrudService.findAll();
 		return new ResponseEntity<>(orders, HttpStatus.OK);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<OrderDto> findById(@PathVariable Long id) {
+		log.debug("REST request to find the order with ID {}", id);
+		OrderDto order = orderCrudService.findDtoById(id);
+		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
 	@PostMapping()

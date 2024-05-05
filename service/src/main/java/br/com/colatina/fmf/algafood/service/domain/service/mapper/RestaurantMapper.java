@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.domain.service.mapper;
 
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.GenericObjectDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import org.mapstruct.Mapper;
@@ -12,5 +13,7 @@ public interface RestaurantMapper extends EntityMapper<RestaurantDto, Restaurant
 	@Mapping(source = "cuisine.id", target = "cuisineId")
 	@Mapping(source = "cuisine.name", target = "cuisineName")
 	RestaurantListDto toListDto(Restaurant entity);
+
+	GenericObjectDto toGenericDto(Restaurant entity);
 
 }

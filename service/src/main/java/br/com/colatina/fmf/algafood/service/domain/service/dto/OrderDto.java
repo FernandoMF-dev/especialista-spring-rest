@@ -27,9 +27,9 @@ public class OrderDto implements Serializable {
 	private OffsetDateTime deliveryDate;
 	private OffsetDateTime cancellationDate;
 	private OrderStatusEnum status;
-	private UserDto user;
-	private RestaurantDto restaurant;
-	private PaymentMethodDto paymentMethod;
+	private GenericObjectDto user;
+	private GenericObjectDto restaurant;
+	private GenericObjectDto paymentMethod;
 	private List<OrderProductDto> orderProducts = new ArrayList<>();
 	private AddressDto address;
 }
