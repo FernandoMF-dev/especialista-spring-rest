@@ -41,10 +41,9 @@ public class OrderCrudService {
 		validateInsertEntities(insertDto, entity);
 		validateInsertRestaurant(entity);
 		validateInsertPaymentMethod(entity);
-		validateInsertProducts(insertDto, orderProducts, entity);
+		validateInsertProductsAndPrice(orderProducts, entity);
 
 		entity.setStatus(OrderStatusEnum.CREATED);
-		entity.setFreightFee(entity.getRestaurant().getFreightFee());
 		entity = orderRepository.save(entity);
 
 		OrderDto dto = orderMapper.toDto(entity);
@@ -72,13 +71,13 @@ public class OrderCrudService {
 	}
 
 	private void validateInsertPaymentMethod(Order entity) {
-		if (!entity.getRestaurant().getPaymentMethods().contains(entity.getPaymentMethod())) {
+		if (!entity.getRestaurant().acceptsPaymentMethod(entity.getPaymentMethod())) {
 			throw new ResourceNotAvailableException("payment_method.not_available.restaurant");
 		}
 	}
 
-	private void validateInsertProducts(OrderInsertDto insertDto, List<OrderProduct> orderProducts, Order entity) {
-		entity.setTotalValue(0.0);
+	private void validateInsertProductsAndPrice(List<OrderProduct> orderProducts, Order entity) {
+		entity.setFreightFee(entity.getRestaurant().getFreightFee());
 		entity.setSubtotal(0.0);
 
 		orderProducts.forEach(orderProduct -> {
@@ -88,10 +87,10 @@ public class OrderCrudService {
 					.orElseThrow(() -> new ResourceNotAvailableException("product.not_available.restaurant", orderProduct.getProduct().getId()));
 
 			mapOrderProductInsertPrice(orderProduct, product);
-			entity.setTotalValue(entity.getTotalValue() + orderProduct.getTotalPrice());
+			entity.addSubTotal(orderProduct.getTotalPrice());
 		});
 
-		entity.setSubtotal(entity.getTotalValue() / insertDto.getInstallments());
+		entity.setTotalValue(entity.getSubtotal() + entity.getFreightFee());
 	}
 
 	private void mapOrderProductInsertPrice(OrderProduct orderProduct, Product product) {

@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -26,9 +25,6 @@ public class OrderInsertDto implements Serializable {
 	private Long restaurantId;
 	@NotNull(message = "order_insert.payment_method_id.not_null")
 	private Long paymentMethodId;
-	@NotNull(message = "order_insert.installments.not_null")
-	@Min(value = 1, message = "order_insert.installments.min")
-	private Integer installments;
 	@NotEmpty(message = "order_insert.order_products.not_empty")
 	@Valid
 	private List<OrderProductInsertDto> orderProducts = new ArrayList<>();

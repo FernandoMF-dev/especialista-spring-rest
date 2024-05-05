@@ -101,4 +101,8 @@ public class Order {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	public void addSubTotal(Double value) {
+		this.subtotal += value;
+	}
 }

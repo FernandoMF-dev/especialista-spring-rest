@@ -103,6 +103,10 @@ public class Restaurant {
 		return this.getActive() && this.getOpen();
 	}
 
+	public boolean acceptsPaymentMethod(PaymentMethod paymentMethod) {
+		return this.getPaymentMethods().contains(paymentMethod);
+	}
+
 	public void addResponsible(User user) {
 		this.getResponsible().add(user);
 	}
