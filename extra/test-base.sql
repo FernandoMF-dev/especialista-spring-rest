@@ -1,3 +1,6 @@
+-- The following SQL commands only work if they are executed on a newly generated database that has never undergone any modification
+-- (except the creation of tables and sequences, of course)
+
 INSERT INTO tb_cuisine (id, name)
 VALUES (nextval('seq_cuisine'), 'Tailandesa'),
 	   (nextval('seq_cuisine'), 'Indiana'),
@@ -21,7 +24,8 @@ INSERT INTO tb_restaurant (id, name, open, freight_fee, registration_date, updat
 						   address_complement)
 VALUES (nextval('seq_restaurant'), 'Thai Gourmet', TRUE, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1, '38400-999',
 		'Rua João Pinheiro', '1000', 'Centro', ''),
-	   (nextval('seq_restaurant'), 'Thai Delivery', 9.50, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, '40567-387',
+	   (nextval('seq_restaurant'), 'Thai Delivery', FALSE, 9.50, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2,
+		'40567-387',
 		'Av. Carvalho Pedro', '154', 'Centro', '4ª Andar');
 
 INSERT INTO tb_restaurant (id, name, open, freight_fee, registration_date, update_date, cuisine_id)
@@ -35,12 +39,8 @@ VALUES (nextval('seq_payment_method'), 'Cartão de crédito'),
 	   (nextval('seq_payment_method'), 'Cartão de débito'),
 	   (nextval('seq_payment_method'), 'Dinheiro');
 
-INSERT INTO tb_permission (id, name, description)
-VALUES (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas'),
-	   (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas');
-
 INSERT INTO rel_restaurant_payment_method (restaurant_id, payment_method_id)
-values (1, 1),
+VALUES (1, 1),
 	   (1, 2),
 	   (1, 3),
 	   (2, 3),
@@ -73,8 +73,50 @@ VALUES (nextval('seq_profile'), 'Gerente'),
 	   (nextval('seq_profile'), 'Secretária'),
 	   (nextval('seq_profile'), 'Cadastrador');
 
+INSERT INTO tb_permission (id, name, description)
+VALUES (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas'),
+	   (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas');
+
+INSERT INTO rel_profile_permission (profile_id, permission_id)
+VALUES (1, 1),
+	   (1, 2),
+	   (2, 1),
+	   (2, 2),
+	   (3, 1);
+
 INSERT INTO tb_user (id, name, email, password, registration_date)
 VALUES (nextval('seq_user'), 'João da Silva', 'joao.ger@algafood.com', 'nMNSF%17C69:', CURRENT_TIMESTAMP),
 	   (nextval('seq_user'), 'Maria Joaquina', 'maria.vnd@algafood.com', 'p_44:8Yk£kl&', CURRENT_TIMESTAMP),
 	   (nextval('seq_user'), 'José Souza', 'jose.aux@algafood.com', '?8j}8JBG!1/<', CURRENT_TIMESTAMP),
-	   (nextval('seq_user'), 'Sebastião Martins', 'sebastiao.cad@algafood.com', 'ED/if5=2l#~2', CURRENT_TIMESTAMP);
+	   (nextval('seq_user'), 'Sebastião Martins', 'sebastiao.cad@algafood.com', 'ED/if5=2l#~2', CURRENT_TIMESTAMP),
+	   (nextval('seq_user'), 'Manoel Lima', 'manoel.loja@gmail.com', '7*2N}fdIO17h', CURRENT_TIMESTAMP);
+
+INSERT INTO rel_user_profile (user_id, profile_id)
+VALUES (1, 1),
+	   (1, 2),
+	   (2, 2);
+
+INSERT INTO rel_restaurant_responsible (restaurant_id, user_id)
+VALUES (1, 5),
+	   (3, 5);
+
+INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+					  address_street_number, address_complement, address_district, status, registration_date, subtotal,
+					  freight_fee, total_value)
+VALUES (nextval('seq_order'), 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil', 'CREATED',
+		CURRENT_TIMESTAMP, 298.90, 10, 308.90);
+
+INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
+VALUES (nextval('seq_order_product'), 1, 1, 1, 78.9, 78.9, null);
+
+INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
+VALUES (nextval('seq_order_product'), 1, 2, 2, 110, 220, 'Menos picante, por favor');
+
+INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+					  address_street_number, address_complement, address_district, status, registration_date, subtotal,
+					  freight_fee, total_value)
+VALUES (nextval('seq_order'), 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro', 'CREATED',
+		CURRENT_TIMESTAMP, 79, 0, 79);
+
+INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
+VALUES (nextval('seq_order_product'), 2, 6, 1, 79, 79, 'Ao ponto');
