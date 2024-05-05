@@ -86,6 +86,13 @@ public class RestaurantController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PatchMapping("/active")
+	public ResponseEntity<Void> toggleAllActive(@RequestParam(value = "value") Boolean active, @RequestBody List<Long> restaurantIds) {
+		log.debug("REST request to toggle the active status of all restaurants {} with the value: {}", restaurantIds, active);
+		restaurantCrudService.toggleActive(restaurantIds, active);
+		return ResponseEntity.noContent().build();
+	}
+
 	@PatchMapping("/{id}/open")
 	public ResponseEntity<Void> toggleOpen(@PathVariable Long id, @RequestParam(value = "value") Boolean open) {
 		log.debug("REST request to toggle the open status of restaurant {} with the value: {}", id, open);

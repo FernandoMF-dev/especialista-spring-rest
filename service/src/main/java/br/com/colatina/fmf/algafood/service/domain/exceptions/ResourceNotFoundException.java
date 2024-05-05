@@ -9,7 +9,7 @@ public class ResourceNotFoundException extends BusinessRuleException {
 	}
 
 	public ResourceNotFoundException(ResourceNotFoundException ex, HttpStatus httpStatus) {
-		super(ex.getMessage(), ex.getMessageArgs(), httpStatus);
+		super(ex.getReason(), ex.getMessageArgs(), httpStatus);
 	}
 
 	@Override

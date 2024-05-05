@@ -117,6 +117,14 @@ public class RestaurantCrudService {
 		*/
 	}
 
+	public void toggleActive(List<Long> restaurantIds, Boolean active) {
+		try {
+			restaurantIds.forEach(id -> toggleActive(id, active));
+		} catch (ResourceNotFoundException e) {
+			throw new ResourceNotFoundException(e, HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	public void toggleOpen(Long restaurantId, Boolean open) {
 		Restaurant restaurant = findEntityById(restaurantId);
 		restaurant.setOpen(open);
