@@ -20,7 +20,7 @@ public class PermissionCrudService {
 
 	public Permission findEntityById(Long id) {
 		return permissionRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException("permission.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("permission.not_found", id));
 	}
 
 	public Set<PermissionDto> findAllDtoByProfile(Long profileId) {

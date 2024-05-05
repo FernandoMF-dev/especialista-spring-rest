@@ -29,12 +29,12 @@ public class CityCrudService {
 
 	public CityDto findDtoById(Long id) {
 		return cityRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("city.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("city.not_found", id));
 	}
 
 	public City findEntityById(Long id) {
 		return cityRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException("city.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("city.not_found", id));
 	}
 
 	public CityDto insert(CityDto dto) {

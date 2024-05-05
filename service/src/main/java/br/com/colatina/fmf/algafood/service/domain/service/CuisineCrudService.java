@@ -33,12 +33,12 @@ public class CuisineCrudService {
 
 	public CuisineDto findDtoById(Long id) {
 		return cuisineRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("cuisine.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("cuisine.not_found", id));
 	}
 
 	public Cuisine findEntityById(Long id) {
 		return cuisineRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException("cuisine.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("cuisine.not_found", id));
 	}
 
 	public CuisineDto findFirst() {

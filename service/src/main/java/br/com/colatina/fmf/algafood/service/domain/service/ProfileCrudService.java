@@ -31,12 +31,12 @@ public class ProfileCrudService {
 
 	public ProfileDto findDtoById(Long id) {
 		return profileRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("profile.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("profile.not_found", id));
 	}
 
 	public Profile findEntityById(Long id) {
 		return profileRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException("profile.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("profile.not_found", id));
 	}
 
 	public ProfileDto insert(ProfileDto dto) {

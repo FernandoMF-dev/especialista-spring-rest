@@ -51,7 +51,7 @@ public class RestaurantCrudService {
 
 	public Restaurant findEntityById(Long id) {
 		return restaurantRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException("restaurant.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("restaurant.not_found", id));
 	}
 
 	public List<RestaurantListDto> filterByFreightFee(Double min, Double max) {

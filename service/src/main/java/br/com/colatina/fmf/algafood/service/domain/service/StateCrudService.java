@@ -26,12 +26,12 @@ public class StateCrudService {
 
 	public StateDto findDtoById(Long id) {
 		return stateRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("state.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("state.not_found", id));
 	}
 
 	public State findEntityById(Long id) {
 		return stateRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException("state.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("state.not_found", id));
 	}
 
 	public StateDto insert(StateDto dto) {

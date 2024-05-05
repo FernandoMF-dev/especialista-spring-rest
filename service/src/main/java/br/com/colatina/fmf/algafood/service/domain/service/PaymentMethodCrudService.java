@@ -10,7 +10,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,17 +29,23 @@ public class PaymentMethodCrudService {
 
 	public PaymentMethodDto findDtoById(Long id) {
 		return paymentMethodRepository.findDtoById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(ERROR_MSG_NOT_FOUND));
+				.orElseThrow(() -> new ResourceNotFoundException(ERROR_MSG_NOT_FOUND, id));
 	}
 
 	public PaymentMethod findEntityById(Long id) {
 		return paymentMethodRepository.findByIdAndExcludedIsFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException(ERROR_MSG_NOT_FOUND));
+				.orElseThrow(() -> new ResourceNotFoundException(ERROR_MSG_NOT_FOUND, id));
 	}
 
-	public void verifyExistence(List<Long> ids) {
-		if (paymentMethodRepository.findAllById(ids).size() < ids.size()) {
-			throw new ResourceNotFoundException(ERROR_MSG_NOT_FOUND);
+	public void verifyExistence(Collection<Long> ids) {
+		List<PaymentMethod> paymentMethods = paymentMethodRepository.findAllById(ids);
+		if (paymentMethods.size() < ids.size()) {
+			String notFound = ids.stream()
+					.filter(id -> paymentMethods.stream().noneMatch(pm -> Objects.equals(pm.getId(), id)))
+					.map(Object::toString)
+					.collect(Collectors.joining(", "));
+
+			throw new ResourceNotFoundException(ERROR_MSG_NOT_FOUND, notFound);
 		}
 	}
 
