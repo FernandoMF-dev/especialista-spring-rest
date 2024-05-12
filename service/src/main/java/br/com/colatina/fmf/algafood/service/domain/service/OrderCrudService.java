@@ -10,7 +10,6 @@ import br.com.colatina.fmf.algafood.service.domain.repository.OrderRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderProductDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderInsertMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,6 @@ public class OrderCrudService {
 	private final RestaurantCrudService restaurantCrudService;
 	private final PaymentMethodCrudService paymentMethodCrudService;
 	private final CityCrudService cityCrudService;
-	private final OrderProductCrudService orderProductCrudService;
 
 	public List<OrderListDto> findAll() {
 		return orderRepository.findAllListDto();
@@ -50,21 +48,15 @@ public class OrderCrudService {
 
 	public OrderDto insert(OrderInsertDto insertDto) {
 		Order entity = orderInsertMapper.toEntity(insertDto);
-		List<OrderProduct> orderProducts = entity.getOrderProducts();
 
 		validateInsertEntities(insertDto, entity);
 		validateInsertRestaurant(entity);
 		validateInsertPaymentMethod(entity);
-		validateInsertProductsAndPrice(orderProducts, entity);
+		validateInsertProductsAndPrice(entity);
 
 		entity.setStatus(OrderStatusEnum.CREATED);
 		entity = orderRepository.save(entity);
-
-		OrderDto dto = orderMapper.toDto(entity);
-		List<OrderProductDto> productsDto = orderProductCrudService.insertItensOnOrder(orderProducts, entity.getId());
-		dto.setOrderProducts(productsDto);
-
-		return dto;
+		return orderMapper.toDto(entity);
 	}
 
 	private void validateInsertEntities(OrderInsertDto insertDto, Order entity) {
@@ -90,13 +82,15 @@ public class OrderCrudService {
 		}
 	}
 
-	private void validateInsertProductsAndPrice(List<OrderProduct> orderProducts, Order entity) {
+	private void validateInsertProductsAndPrice(Order entity) {
 		entity.setFreightFee(entity.getRestaurant().getFreightFee());
 		entity.setSubtotal(0.0);
 
-		orderProducts.forEach(orderProduct -> {
+		entity.getOrderProducts().forEach(orderProduct -> {
+			orderProduct.setOrder(entity);
+
 			Product product = entity.getRestaurant().getProducts().stream()
-					.filter(element -> doesRestaurantOffersProduct(orderProduct.getProduct(), element))
+					.filter(restaurantProduct -> doesRestaurantOffersProduct(orderProduct.getProduct(), restaurantProduct))
 					.findFirst()
 					.orElseThrow(() -> new ResourceNotAvailableException("product.not_available.restaurant", orderProduct.getProduct().getId()));
 
@@ -113,8 +107,8 @@ public class OrderCrudService {
 		orderProduct.setTotalPrice(orderProduct.getUnitPrice() * orderProduct.getQuantity());
 	}
 
-	private boolean doesRestaurantOffersProduct(Product orderProduct, Product targetProduct) {
-		return Objects.equals(targetProduct, orderProduct) && !targetProduct.getExcluded() && targetProduct.getActive();
+	private boolean doesRestaurantOffersProduct(Product orderProduct, Product restaurantProduct) {
+		return Objects.equals(restaurantProduct, orderProduct) && restaurantProduct.getActive() && !restaurantProduct.getExcluded();
 	}
 
 }
