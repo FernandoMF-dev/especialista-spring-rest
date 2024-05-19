@@ -103,25 +103,24 @@ public class Order {
 	}
 
 	public void confirm() {
-		patchStatus(OrderStatusEnum.CONFIRMED);
+		setStatus(OrderStatusEnum.CONFIRMED);
 		this.setConfirmationDate(OffsetDateTime.now());
 	}
 
 	public void deliver() {
-		patchStatus(OrderStatusEnum.DELIVERED);
+		setStatus(OrderStatusEnum.DELIVERED);
 		this.setDeliveryDate(OffsetDateTime.now());
 	}
 
 	public void cancel() {
-		patchStatus(OrderStatusEnum.CANCELED);
+		setStatus(OrderStatusEnum.CANCELED);
 		this.setCancellationDate(OffsetDateTime.now());
 	}
 
-	private void patchStatus(OrderStatusEnum newStatus) {
-		if (!this.getStatus().canStatusChangeTo(newStatus)) {
-			throw new ConflictualResourceStatusException("order.status.conflictual_status", this.getId(), this.getStatus().getDescription(), newStatus.getDescription());
+	private void setStatus(OrderStatusEnum status) {
+		if (!this.getStatus().canStatusChangeTo(status)) {
+			throw new ConflictualResourceStatusException("order.status.conflictual_status", this.getId(), this.getStatus().getDescription(), status.getDescription());
 		}
-
-		this.setStatus(newStatus);
+		this.status = status;
 	}
 }
