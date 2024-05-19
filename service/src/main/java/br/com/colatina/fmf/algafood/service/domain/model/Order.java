@@ -1,8 +1,8 @@
 package br.com.colatina.fmf.algafood.service.domain.model;
 
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ConflictualResourceStatusException;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -30,7 +30,6 @@ import java.util.Objects;
 @Setter
 @Table(name = "tb_order")
 @Entity
-@NoArgsConstructor
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_order")
@@ -62,7 +61,7 @@ public class Order {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false, length = 10)
-	private OrderStatusEnum status;
+	private OrderStatusEnum status = OrderStatusEnum.CREATED;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -81,10 +80,6 @@ public class Order {
 
 	@Embedded
 	private Address address;
-
-	public Order(Long id) {
-		this.id = id;
-	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -105,5 +100,28 @@ public class Order {
 
 	public void addSubTotal(Double value) {
 		this.subtotal += value;
+	}
+
+	public void confirm() {
+		patchStatus(OrderStatusEnum.CONFIRMED);
+		this.setConfirmationDate(OffsetDateTime.now());
+	}
+
+	public void deliver() {
+		patchStatus(OrderStatusEnum.DELIVERED);
+		this.setDeliveryDate(OffsetDateTime.now());
+	}
+
+	public void cancel() {
+		patchStatus(OrderStatusEnum.CANCELED);
+		this.setCancellationDate(OffsetDateTime.now());
+	}
+
+	private void patchStatus(OrderStatusEnum newStatus) {
+		if (!this.getStatus().canStatusChangeTo(newStatus)) {
+			throw new ConflictualResourceStatusException("order.status.conflictual_status", this.getId(), this.getStatus().getDescription(), newStatus.getDescription());
+		}
+
+		this.setStatus(newStatus);
 	}
 }

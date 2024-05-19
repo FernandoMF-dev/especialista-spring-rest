@@ -5,7 +5,6 @@ import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundEx
 import br.com.colatina.fmf.algafood.service.domain.model.Order;
 import br.com.colatina.fmf.algafood.service.domain.model.OrderProduct;
 import br.com.colatina.fmf.algafood.service.domain.model.Product;
-import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import br.com.colatina.fmf.algafood.service.domain.repository.OrderRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
@@ -54,7 +53,6 @@ public class OrderCrudService {
 		validateInsertPaymentMethod(entity);
 		validateInsertProductsAndPrice(entity);
 
-		entity.setStatus(OrderStatusEnum.CREATED);
 		entity = orderRepository.save(entity);
 		return orderMapper.toDto(entity);
 	}
