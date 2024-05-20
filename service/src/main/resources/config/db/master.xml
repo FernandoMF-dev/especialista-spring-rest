@@ -5,6 +5,7 @@
 		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
+	<include file="/config/db/changelogs/00000000000000_define_liquibase_properties.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20230202141000_create_table_cuisine.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20230202143000_create_table_restaurant.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20230203200000_create_table_payment_method.xml" relativeToChangelogFile="false"/>
@@ -24,4 +25,5 @@
 	<include file="/config/db/changelogs/20240502161500_add_columns_user.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240502170000_add_columns_restaurant.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240504171000_create_table_restaurant_responsible.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240519153000_add_columns_order.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

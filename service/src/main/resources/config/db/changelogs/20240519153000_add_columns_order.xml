@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240519153000-1" author="Fernando Martins Ferreira">
+		<addColumn tableName="tb_order">
+			<column name="uuid_code" afterColumn="id" type="${uuid_type}" defaultValueComputed="${uuid_function}"
+					remarks="UUID to uniquely identify orders in requests">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="tb_order" columnName="uuid_code"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240519153000-2" author="Fernando Martins Ferreira">
+		<addUniqueConstraint tableName="tb_order" columnNames="uuid_code" constraintName="uk_order_uuid_code"/>
+
+		<rollback>
+			<dropUniqueConstraint tableName="tb_order" constraintName="uk_order_uuid_code"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

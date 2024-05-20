@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<!-- uuid_type === Column type to persist UUID value -->
+	<property name="uuid_type" value="VARCHAR" dbms="postgresql"/>
+	<property name="uuid_type" value="uniqueidentifier" dbms="mssql"/>
+	<property name="uuid_type" value="RAW(16)" dbms="oracle"/>
+
+	<!-- uuid_function === Function to generate a new UUID value -->
+	<property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
+	<property name="uuid_function" value="NEWID()" dbms="mssql"/>
+	<property name="uuid_function" value="sys_guid()" dbms="oracle"/>
+</databaseChangeLog>

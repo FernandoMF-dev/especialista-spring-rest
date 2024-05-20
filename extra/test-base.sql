@@ -102,9 +102,9 @@ VALUES (1, 5),
 
 INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date, subtotal,
-					  freight_fee, total_value)
+					  freight_fee, total_value, uuid_code)
 VALUES (nextval('seq_order'), 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil', 'CREATED',
-		CURRENT_TIMESTAMP, 298.90, 10, 308.90);
+		CURRENT_TIMESTAMP, 298.90, 10, 308.90, gen_random_uuid());
 
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 1, 1, 1, 78.9, 78.9, null);
@@ -114,9 +114,9 @@ VALUES (nextval('seq_order_product'), 1, 2, 2, 110, 220, 'Menos picante, por fav
 
 INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date, subtotal,
-					  freight_fee, total_value)
+					  freight_fee, total_value, uuid_code)
 VALUES (nextval('seq_order'), 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro', 'CREATED',
-		CURRENT_TIMESTAMP, 79, 0, 79);
+		CURRENT_TIMESTAMP, 79, 0, 79, gen_random_uuid());
 
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 2, 6, 1, 79, 79, 'Ao ponto');
