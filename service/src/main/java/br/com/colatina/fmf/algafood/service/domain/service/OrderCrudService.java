@@ -36,13 +36,13 @@ public class OrderCrudService {
 		return orderRepository.findAllListDto();
 	}
 
-	public OrderDto findDtoById(Long id) {
-		return orderMapper.toDto(findEntityById(id));
+	public OrderDto findDtoByUuid(String uuid) {
+		return orderMapper.toDto(findEntityByUuid(uuid));
 	}
 
-	public Order findEntityById(Long id) {
-		return orderRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("order.not_found", id));
+	public Order findEntityByUuid(String uuid) {
+		return orderRepository.findByUuid(uuid)
+				.orElseThrow(() -> new ResourceNotFoundException("order.not_found", uuid));
 	}
 
 	public OrderDto insert(OrderInsertDto insertDto) {

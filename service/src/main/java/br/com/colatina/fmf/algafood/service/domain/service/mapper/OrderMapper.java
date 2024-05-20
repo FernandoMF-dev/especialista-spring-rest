@@ -9,5 +9,10 @@ import org.mapstruct.Mapping;
 public interface OrderMapper extends EntityMapper<OrderDto, Order> {
 	@Override
 	@Mapping(target = "status", ignore = true)
+	@Mapping(source = "code", target = "uuidCode")
 	Order toEntity(OrderDto dto);
+
+	@Override
+	@Mapping(source = "uuidCode", target = "code")
+	OrderDto toDto(Order entity);
 }

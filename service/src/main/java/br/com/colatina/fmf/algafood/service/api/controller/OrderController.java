@@ -32,10 +32,10 @@ public class OrderController {
 		return new ResponseEntity<>(orders, HttpStatus.OK);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<OrderDto> findById(@PathVariable Long id) {
-		log.debug("REST request to find the order with ID {}", id);
-		OrderDto order = orderCrudService.findDtoById(id);
+	@GetMapping("/{uuid}")
+	public ResponseEntity<OrderDto> findById(@PathVariable String uuid) {
+		log.debug("REST request to find the order with UUID code {}", uuid);
+		OrderDto order = orderCrudService.findDtoByUuid(uuid);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 

@@ -19,12 +19,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -36,6 +38,9 @@ public class Order {
 	@SequenceGenerator(name = "seq_order", allocationSize = 1, sequenceName = "seq_order")
 	@Column(name = "id", nullable = false)
 	private Long id;
+
+	@Column(name = "uuid_code", nullable = false, unique = true)
+	private String uuidCode;
 
 	@Column(name = "total_value", nullable = false)
 	private Double totalValue;
@@ -122,5 +127,10 @@ public class Order {
 			throw new ConflictualResourceStatusException("order.status.conflictual_status", this.getId(), this.getStatus().getDescription(), status.getDescription());
 		}
 		this.status = status;
+	}
+
+	@PrePersist
+	private void generateUuidCode() {
+		this.uuidCode = UUID.randomUUID().toString();
 	}
 }

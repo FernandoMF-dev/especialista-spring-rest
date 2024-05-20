@@ -12,28 +12,28 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/orders/{orderId}")
+@RequestMapping("/api/orders/{orderUuid}")
 public class OrderFlowController {
 	private final OrderFlowService orderFlowService;
 
 	@PutMapping("/confirm")
-	public ResponseEntity<Void> confirm(@PathVariable Long orderId) {
-		log.debug("REST request to set order {} as confirmed", orderId);
-		orderFlowService.confirm(orderId);
+	public ResponseEntity<Void> confirm(@PathVariable String orderUuid) {
+		log.debug("REST request to set order {} as confirmed", orderUuid);
+		orderFlowService.confirm(orderUuid);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/deliver")
-	public ResponseEntity<Void> deliver(@PathVariable Long orderId) {
-		log.debug("REST request to set order {} as delivered", orderId);
-		orderFlowService.deliver(orderId);
+	public ResponseEntity<Void> deliver(@PathVariable String orderUuid) {
+		log.debug("REST request to set order {} as delivered", orderUuid);
+		orderFlowService.deliver(orderUuid);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/cancel")
-	public ResponseEntity<Void> cancel(@PathVariable Long orderId) {
-		log.debug("REST request to set order {} as cancelled", orderId);
-		orderFlowService.cancel(orderId);
+	public ResponseEntity<Void> cancel(@PathVariable String orderUuid) {
+		log.debug("REST request to set order {} as cancelled", orderUuid);
+		orderFlowService.cancel(orderUuid);
 		return ResponseEntity.noContent().build();
 	}
 }

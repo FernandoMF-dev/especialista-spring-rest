@@ -11,18 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderFlowService {
 	private final OrderCrudService orderCrudService;
 
-	public void confirm(Long orderId) {
-		Order order = orderCrudService.findEntityById(orderId);
+	public void confirm(String orderUuid) {
+		Order order = orderCrudService.findEntityByUuid(orderUuid);
 		order.confirm();
 	}
 
-	public void deliver(Long orderId) {
-		Order order = orderCrudService.findEntityById(orderId);
+	public void deliver(String orderUuid) {
+		Order order = orderCrudService.findEntityByUuid(orderUuid);
 		order.deliver();
 	}
 
-	public void cancel(Long orderId) {
-		Order order = orderCrudService.findEntityById(orderId);
+	public void cancel(String orderUuid) {
+		Order order = orderCrudService.findEntityByUuid(orderUuid);
 		order.cancel();
 	}
 }

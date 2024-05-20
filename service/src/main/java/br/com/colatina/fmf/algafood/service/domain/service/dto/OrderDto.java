@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDto implements Serializable {
 	private Long id;
+	private String code;
 	private Double totalValue;
 	private Double subtotal;
 	private Double freightFee = 0.0;

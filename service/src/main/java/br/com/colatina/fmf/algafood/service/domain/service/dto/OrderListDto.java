@@ -10,17 +10,17 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 public class OrderListDto implements Serializable {
-	private Long id;
-	private Double totalValue;
+	private String code;
+	private Double value;
 	private OrderStatusEnum status;
 	private OffsetDateTime registrationDate;
 	private GenericObjectDto user;
 	private GenericObjectDto restaurant;
 
-	public OrderListDto(Long id, Double totalValue, OrderStatusEnum status, OffsetDateTime registrationDate,
+	public OrderListDto(String code, Double value, OrderStatusEnum status, OffsetDateTime registrationDate,
 						Long userId, String userName, Long restaurantId, String restaurantName) {
-		this.id = id;
-		this.totalValue = totalValue;
+		this.code = code;
+		this.value = value;
 		this.status = status;
 		this.registrationDate = registrationDate;
 		this.user = new GenericObjectDto(userId, userName);
