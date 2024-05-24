@@ -1,10 +1,12 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.model.view.RestaurantView;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -37,6 +39,18 @@ public class RestaurantController {
 	public ResponseEntity<List<RestaurantListDto>> findAll() {
 		log.debug("REST request to find all restaurants");
 		return new ResponseEntity<>(restaurantCrudService.findAll(), HttpStatus.OK);
+	}
+
+	@JsonView(RestaurantView.Summary.class)
+	@GetMapping(params = {"projection=summary"})
+	public ResponseEntity<List<RestaurantListDto>> findAllSummary() {
+		return this.findAll();
+	}
+
+	@JsonView(RestaurantView.NameOnly.class)
+	@GetMapping(params = {"projection=name-only"})
+	public ResponseEntity<List<RestaurantListDto>> findAllNameOnly() {
+		return this.findAll();
 	}
 
 	@GetMapping("/freight-fee")
