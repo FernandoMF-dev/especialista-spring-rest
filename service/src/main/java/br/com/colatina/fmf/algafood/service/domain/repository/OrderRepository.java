@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.domain.repository;
 
 import br.com.colatina.fmf.algafood.service.domain.model.Order;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends CustomJpaRepository<Order, Long> {
+public interface OrderRepository extends CustomJpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto" +
 			"(o.uuidCode, o.totalValue, o.status, o.registrationDate, u.id, u.name, r.id, r.name) " +
 			" FROM Order o " +

@@ -4,8 +4,11 @@ import br.com.colatina.fmf.algafood.service.domain.service.OrderCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
+import br.com.colatina.fmf.algafood.service.domain.service.filter.OrderPageFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +40,12 @@ public class OrderController {
 		log.debug("REST request to find the order with UUID code {}", uuid);
 		OrderDto order = orderCrudService.findDtoByUuid(uuid);
 		return new ResponseEntity<>(order, HttpStatus.OK);
+	}
+
+	@GetMapping("/page")
+	public ResponseEntity<Page<OrderListDto>> page(OrderPageFilter filter, Pageable pageable) {
+		log.debug("REST request to perform a paged search of orders with filters {} and with the page configuration {}", filter, pageable);
+		return new ResponseEntity<>(orderCrudService.page(filter, pageable), HttpStatus.OK);
 	}
 
 	@PostMapping()

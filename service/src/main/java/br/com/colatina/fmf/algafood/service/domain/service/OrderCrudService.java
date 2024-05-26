@@ -9,9 +9,14 @@ import br.com.colatina.fmf.algafood.service.domain.repository.OrderRepository;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
+import br.com.colatina.fmf.algafood.service.domain.service.filter.OrderPageFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderInsertMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.OrderMapper;
+import br.com.colatina.fmf.algafood.service.infrastructure.specification.OrderSpecs;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +31,7 @@ public class OrderCrudService {
 	private final OrderRepository orderRepository;
 	private final OrderMapper orderMapper;
 	private final OrderInsertMapper orderInsertMapper;
+	private final OrderSpecs orderSpecs;
 
 	private final UserCrudService userCrudService;
 	private final RestaurantCrudService restaurantCrudService;
@@ -43,6 +49,18 @@ public class OrderCrudService {
 	public Order findEntityByUuid(String uuid) {
 		return orderRepository.findByUuid(uuid)
 				.orElseThrow(() -> new ResourceNotFoundException("order.not_found", uuid));
+	}
+
+	public Page<OrderListDto> page(OrderPageFilter filter, Pageable pageable) {
+		Specification<Order> spec = orderSpecs.composedAnd(
+				orderSpecs.byStatus(filter.getStatus()),
+				orderSpecs.byRestaurantId(filter.getRestaurantId()),
+				orderSpecs.byClientId(filter.getClientId()),
+				orderSpecs.byMinRegistrationDate(filter.getMinRegistrationDate()),
+				orderSpecs.byMaxRegistrationDate(filter.getMaxRegistrationDate())
+		);
+
+		return orderRepository.findAll(spec, pageable).map(orderMapper::toListDto);
 	}
 
 	public OrderDto insert(OrderInsertDto insertDto) {

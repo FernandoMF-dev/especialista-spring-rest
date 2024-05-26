@@ -120,3 +120,32 @@ VALUES (nextval('seq_order'), 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 
 
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 2, 6, 1, 79, 79, 'Ao ponto');
+
+INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+					  address_street_number, address_complement, address_district, status, registration_date,
+					  confirmation_date, delivery_date, subtotal, freight_fee, total_value, uuid_code)
+VALUES (nextval('seq_order'), 1, 1, 1, 1, '38400-222', 'Rua Natal', '200', null, 'Brasil', 'DELIVERED',
+		'2019-10-30 21:10:00', '2019-10-30 21:10:45', '2019-10-30 21:55:44', 110, 10, 120, gen_random_uuid());
+
+INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
+VALUES (nextval('seq_order_product'), 3, 2, 1, 110, 110, null);
+
+
+INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+					  address_street_number, address_complement, address_district, status, registration_date,
+					  confirmation_date, delivery_date, subtotal, freight_fee, total_value, uuid_code)
+VALUES (nextval('seq_order'), 1, 2, 1, 1, '38400-800', 'Rua Fortaleza', '900', 'Apto 504', 'Centro', 'DELIVERED',
+		'2019-11-02 20:34:04', '2019-11-02 20:35:10', '2019-11-02 21:10:32', 174.4, 5, 179.4, gen_random_uuid());
+
+INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
+VALUES (nextval('seq_order_product'), 4, 3, 2, 87.2, 174.4, null);
+
+
+INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+					  address_street_number, address_complement, address_district, status, registration_date,
+					  confirmation_date, delivery_date, subtotal, freight_fee, total_value, uuid_code)
+VALUES (nextval('seq_order'), 1, 3, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20', 'Martins', 'DELIVERED',
+		'2019-11-02 21:00:30', '2019-11-02 21:01:21', '2019-11-02 21:20:10', 87.2, 10, 97.2, gen_random_uuid());
+
+INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
+VALUES (nextval('seq_order_product'), 5, 3, 1, 87.2, 87.2, null);

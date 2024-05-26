@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.time.OffsetDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class OrderListDto implements Serializable {
 	private String code;
 	private Double value;
