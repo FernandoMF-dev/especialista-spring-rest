@@ -13,11 +13,12 @@
 	<artifactId>service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>FMF Algafood - Service</name>
-	<description>Servico responsável pelo tratamento da regra de negócio</description>
+	<description>Serviço responsável pelo tratamento da regra de negócio</description>
 
 	<properties>
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 		<org.project.lombok.lombok.version>1.18.22</org.project.lombok.lombok.version>
+		<bohnman.squiggly.version>1.3.18</bohnman.squiggly.version>
 	</properties>
 
 	<dependencies>
@@ -32,7 +33,6 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.mapstruct</groupId>
@@ -72,6 +72,12 @@
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.bohnman</groupId>
+			<artifactId>squiggly-filter-jackson</artifactId>
+			<version>${bohnman.squiggly.version}</version>
 		</dependency>
 	</dependencies>
 
