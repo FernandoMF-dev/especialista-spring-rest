@@ -5,12 +5,21 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.SingularAttribute;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class BaseSpecs<E> {
+	protected Class<E> entityClass;
+
+	protected BaseSpecs(Class<E> entityClass) {
+		this.entityClass = entityClass;
+	}
+
 	@NonNull
 	@SafeVarargs
 	public final Specification<E> composedAnd(Specification<E>... specifications) {
@@ -23,6 +32,12 @@ public abstract class BaseSpecs<E> {
 
 			return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 		};
+	}
+
+	protected void fetch(Root<E> root, CriteriaQuery<?> query, SingularAttribute<E, ?> attribute) {
+		if (entityClass.equals(query.getResultType())) {
+			root.fetch(attribute);
+		}
 	}
 
 	protected Predicate defaultReturn(CriteriaBuilder criteriaBuilder) {

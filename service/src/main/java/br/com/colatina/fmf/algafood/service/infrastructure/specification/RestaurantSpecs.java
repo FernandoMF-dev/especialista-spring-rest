@@ -12,6 +12,11 @@ import java.util.Objects;
 
 @Component
 public class RestaurantSpecs extends BaseSpecs<Restaurant> {
+
+	public RestaurantSpecs() {
+		super(Restaurant.class);
+	}
+
 	@NonNull
 	public Specification<Restaurant> byName(String name) {
 		return (root, query, criteriaBuilder) -> compareString(criteriaBuilder, root.get(Restaurant_.name), name);
@@ -52,6 +57,8 @@ public class RestaurantSpecs extends BaseSpecs<Restaurant> {
 	@NonNull
 	public Specification<Restaurant> byCuisineId(Long cuisineId) {
 		return (root, query, criteriaBuilder) -> {
+			fetch(root, query, Restaurant_.cuisine);
+
 			if (Objects.nonNull(cuisineId)) {
 				Join<Restaurant, Cuisine> restaurantCuisineJoin = root.join(Restaurant_.cuisine);
 				return criteriaBuilder.equal(restaurantCuisineJoin.get("id"), cuisineId);

@@ -15,6 +15,11 @@ import java.util.Objects;
 
 @Component
 public class OrderSpecs extends BaseSpecs<Order> {
+
+	public OrderSpecs() {
+		super(Order.class);
+	}
+
 	@NonNull
 	public Specification<Order> byStatus(OrderStatusEnum status) {
 		return (root, query, criteriaBuilder) -> {
@@ -29,7 +34,7 @@ public class OrderSpecs extends BaseSpecs<Order> {
 	@NonNull
 	public Specification<Order> byRestaurantId(Long restaurantId) {
 		return (root, query, criteriaBuilder) -> {
-			root.fetch(Order_.restaurant);
+			fetch(root, query, Order_.restaurant);
 
 			if (Objects.nonNull(restaurantId)) {
 				Join<Order, Restaurant> orderRestaurantJoin = root.join(Order_.restaurant);
@@ -43,7 +48,7 @@ public class OrderSpecs extends BaseSpecs<Order> {
 	@NonNull
 	public Specification<Order> byClientId(Long client) {
 		return (root, query, criteriaBuilder) -> {
-			root.fetch(Order_.user);
+			fetch(root, query, Order_.user);
 
 			if (Objects.nonNull(client)) {
 				Join<Order, User> orderUserJoin = root.join(Order_.user);
