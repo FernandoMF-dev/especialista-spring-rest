@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -86,13 +87,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.CONSTRAINT_VIOLATION;
 		String detail = getMessageSourceIfAvailable("error.http_request.body_property.constraint_violation");
-		List<ApiErrorResponse.FieldError> fieldErrors = ex.getFieldErrors().stream()
-				.map(fieldError -> {
-					String message = getFieldErrorMessage(fieldError);
-					return new ApiErrorResponse.FieldError(fieldError.getField(), message);
-				})
-				.collect(Collectors.toList());
-
+		List<ApiErrorResponse.FieldError> fieldErrors = formatUrlParamFieldErrors(ex);
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).userMessage(detail).fields(fieldErrors).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
@@ -103,6 +98,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = getMessageSourceIfAvailable("error.default.not_found", new String[]{ex.getRequestURL()});
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		try {
+			ApiErrorType type = ApiErrorType.CONSTRAINT_VIOLATION;
+			String detail = getMessageSourceIfAvailable("error.http_request.url_property.constraint_violation");
+			List<ApiErrorResponse.FieldError> fieldErrors = formatQueryParamFieldErrors(ex);
+			ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).userMessage(detail).fields(fieldErrors).build();
+			return handleExceptionInternal(ex, body, headers, status, request);
+		} catch (Exception ignored) {
+			return super.handleBindException(ex, headers, status, request);
+		}
 	}
 
 	@Override
@@ -163,6 +171,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.collect(Collectors.joining("."));
 	}
 
+	private List<ApiErrorResponse.FieldError> formatUrlParamFieldErrors(MethodArgumentNotValidException ex) {
+		return ex.getFieldErrors().stream()
+				.map(fieldError -> {
+					String message = getFieldErrorMessage(fieldError);
+					return new ApiErrorResponse.FieldError(fieldError.getField(), message);
+				})
+				.collect(Collectors.toList());
+	}
+
+	private List<ApiErrorResponse.FieldError> formatQueryParamFieldErrors(BindException ex) {
+		return ex.getFieldErrors().stream()
+				.map(fieldError -> {
+					TypeMismatchException typeMismatchException = fieldError.unwrap(TypeMismatchException.class);
+					String message = getTypeMismatchMessageSource(typeMismatchException, "error.http_request.query_param.type_mismatch");
+					return new ApiErrorResponse.FieldError(fieldError.getField(), message);
+				})
+				.collect(Collectors.toList());
+	}
+
 	private String getFieldErrorMessage(FieldError fieldError) {
 		var message = ObjectUtils.defaultIfNull(fieldError.getDefaultMessage(), "error.property.constraint_violation");
 		var arguments = fieldError.getArguments();
@@ -184,6 +211,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 	}
 
+	private String getTypeMismatchMessageSource(TypeMismatchException ex, String message) {
+		return getMessageSourceIfAvailable(message, new Object[]{ex.getPropertyName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()});
+	}
+
 	// <editor-fold defaultstate="collapsed" desc="Root or specific exceptions handlers">
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
@@ -203,7 +234,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
-		String detail = getMessageSourceIfAvailable("error.http_request.url_param.type_mismatch", new Object[]{ex.getPropertyName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()});
+		String detail = getTypeMismatchMessageSource(ex, "error.http_request.url_param.type_mismatch");
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
