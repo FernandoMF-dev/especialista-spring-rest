@@ -13,17 +13,16 @@ import java.time.OffsetDateTime;
 @Setter
 @NoArgsConstructor
 public class OrderListDto implements Serializable {
-	@SortableField
 	private String code;
-	@SortableField("totalValue")
+	@SortableField(translation = "totalValue")
 	private Double value;
 	@SortableField
 	private OrderStatusEnum status;
 	@SortableField
 	private OffsetDateTime registrationDate;
-	@SortableField
+	@SortableField(recursive = true)
 	private GenericObjectDto user;
-	@SortableField
+	@SortableField(recursive = true)
 	private GenericObjectDto restaurant;
 
 	public OrderListDto(String code, Double value, OrderStatusEnum status, OffsetDateTime registrationDate,

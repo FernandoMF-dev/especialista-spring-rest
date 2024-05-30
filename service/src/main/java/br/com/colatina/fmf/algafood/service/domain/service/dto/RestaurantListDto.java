@@ -29,8 +29,8 @@ public class RestaurantListDto implements Serializable {
 	private Boolean active;
 	@JsonView(RestaurantView.Summary.class)
 	private Boolean open;
-	@SortableField("cuisine.id")
+	@SortableField(translation = "cuisine.id")
 	private Long cuisineId;
-	@SortableField("cuisine.name")
+	@SortableField(translation = "cuisine.name")
 	private String cuisineName;
 }

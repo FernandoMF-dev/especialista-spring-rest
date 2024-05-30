@@ -30,14 +30,28 @@ public class PageableTranslator {
 	}
 
 	private static <T> Map<String, String> getFieldMapping(Class<T> clazz) {
+		return getFieldMapping(clazz, "", "");
+	}
+
+	private static <T> Map<String, String> getFieldMapping(Class<T> clazz, String fieldPrefix, String translationPrefix) {
 		Map<String, String> fieldMapping = new HashMap<>();
 		for (Field field : clazz.getDeclaredFields()) {
 			SortableField annotation = field.getAnnotation(SortableField.class);
 			if (Objects.nonNull(annotation)) {
-				String mappedProperty = annotation.value().isEmpty() ? field.getName() : annotation.value();
-				fieldMapping.put(field.getName(), mappedProperty);
+				mapFieldTranslation(fieldPrefix, translationPrefix, field, annotation, fieldMapping);
 			}
 		}
 		return fieldMapping;
+	}
+
+	private static void mapFieldTranslation(String fieldPrefix, String translationPrefix, Field field, SortableField annotation, Map<String, String> fieldMapping) {
+		String fieldName = String.format("%s%s", fieldPrefix, field.getName());
+		String translation = annotation.translation().isEmpty() ? field.getName() : annotation.translation();
+		String mappedTranslation = String.format("%s%s", translationPrefix, translation);
+		fieldMapping.put(fieldName, mappedTranslation);
+		if (annotation.recursive()) {
+			Map<String, String> nestedFieldMapping = getFieldMapping(field.getType(), fieldName + ".", mappedTranslation + ".");
+			fieldMapping.putAll(nestedFieldMapping);
+		}
 	}
 }
