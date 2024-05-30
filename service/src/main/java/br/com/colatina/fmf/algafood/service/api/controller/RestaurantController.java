@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.model.view.RestaurantView;
+import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
@@ -66,6 +67,7 @@ public class RestaurantController {
 	@GetMapping("/page")
 	public ResponseEntity<Page<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of restaurants with filters {} and with the page configuration {}", filter, pageable);
+		pageable = PageableTranslator.translate(pageable, RestaurantListDto.class);
 		return new ResponseEntity<>(restaurantCrudService.page(filter, pageable), HttpStatus.OK);
 	}
 

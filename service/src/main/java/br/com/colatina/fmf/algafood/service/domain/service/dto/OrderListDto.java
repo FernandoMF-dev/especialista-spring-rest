@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import br.com.colatina.fmf.algafood.service.core.pageable.SortableField;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +13,17 @@ import java.time.OffsetDateTime;
 @Setter
 @NoArgsConstructor
 public class OrderListDto implements Serializable {
+	@SortableField
 	private String code;
+	@SortableField("totalValue")
 	private Double value;
+	@SortableField
 	private OrderStatusEnum status;
+	@SortableField
 	private OffsetDateTime registrationDate;
+	@SortableField
 	private GenericObjectDto user;
+	@SortableField
 	private GenericObjectDto restaurant;
 
 	public OrderListDto(String code, Double value, OrderStatusEnum status, OffsetDateTime registrationDate,

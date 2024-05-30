@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
@@ -45,6 +46,7 @@ public class OrderController {
 	@GetMapping("/page")
 	public ResponseEntity<Page<OrderListDto>> page(OrderPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of orders with filters {} and with the page configuration {}", filter, pageable);
+		pageable = PageableTranslator.translate(pageable, OrderListDto.class);
 		return new ResponseEntity<>(orderCrudService.page(filter, pageable), HttpStatus.OK);
 	}
 
