@@ -2,6 +2,8 @@ package br.com.colatina.fmf.algafood.service.infrastructure.service;
 
 import br.com.colatina.fmf.algafood.service.domain.model.Order;
 import br.com.colatina.fmf.algafood.service.domain.model.Order_;
+import br.com.colatina.fmf.algafood.service.domain.model.Restaurant_;
+import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import br.com.colatina.fmf.algafood.service.domain.service.SalesQueryService;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.SalesPerPeriodFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.statistics.SalesPerPeriod;
@@ -9,8 +11,14 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class SalesQueryServiceImpl implements SalesQueryService {
@@ -25,9 +33,10 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 
 	@Override
 	public List<SalesPerPeriod> findSalesPerDay(SalesPerPeriodFilter filter) {
-		var builder = entityManager.getCriteriaBuilder();
-		var query = builder.createQuery(SalesPerPeriod.class);
-		var root = query.from(Order.class);
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<SalesPerPeriod> query = builder.createQuery(SalesPerPeriod.class);
+		Root<Order> root = query.from(Order.class);
+		List<Predicate> predicates = getSalerPerPeriodPredicates(filter, root, builder);
 
 		var fnDateRegistrationDate = builder.function(FN_DATE_TRUNC, LocalDate.class, builder.literal(DAY), root.get(Order_.REGISTRATION_DATE));
 		var fnYearRegistrationDate = builder.function(YEAR, Integer.class, fnDateRegistrationDate);
@@ -43,6 +52,7 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 		);
 
 		query.select(selection);
+		query.where(predicates.toArray(new Predicate[0]));
 		query.groupBy(fnDateRegistrationDate);
 
 		return entityManager.createQuery(query).getResultList();
@@ -58,5 +68,25 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 	public List<SalesPerPeriod> findSalesPerYear(SalesPerPeriodFilter filter) {
 		// TODO implement this method
 		return List.of();
+	}
+
+	private static List<Predicate> getSalerPerPeriodPredicates(SalesPerPeriodFilter filter, Root<Order> root, CriteriaBuilder builder) {
+		List<Predicate> predicates = new ArrayList<>();
+
+		predicates.add(root.get(Order_.STATUS).in(OrderStatusEnum.CONFIRMED, OrderStatusEnum.DELIVERED));
+
+		if (Objects.nonNull(filter.getRestaurantId())) {
+			predicates.add(builder.equal(root.get(Order_.RESTAURANT).get(Restaurant_.ID), filter.getRestaurantId()));
+		}
+
+		if (Objects.nonNull(filter.getStartDate())) {
+			predicates.add(builder.greaterThanOrEqualTo(root.get(Order_.REGISTRATION_DATE), filter.getStartDate()));
+		}
+
+		if (Objects.nonNull(filter.getEndDate())) {
+			predicates.add(builder.lessThanOrEqualTo(root.get(Order_.REGISTRATION_DATE), filter.getEndDate()));
+		}
+
+		return predicates;
 	}
 }
