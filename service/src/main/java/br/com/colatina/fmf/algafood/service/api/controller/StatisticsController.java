@@ -27,4 +27,10 @@ public class StatisticsController {
 		return new ResponseEntity<>(salesQueryService.findSalesPerDay(filter), HttpStatus.OK);
 	}
 
+	@GetMapping("/sales-per-month")
+	public ResponseEntity<List<SalesPerPeriod>> findSalesPerMonth(@Valid SalesPerPeriodFilter filter) {
+		log.debug("REST request to find all monthly sales statistics for restaurant {} between dates {} and {}", filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate());
+		return new ResponseEntity<>(salesQueryService.findSalesPerMonth(filter), HttpStatus.OK);
+	}
+
 }
