@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -21,7 +22,7 @@ public class StatisticsController {
 	private final SalesQueryService salesQueryService;
 
 	@GetMapping("/sales-per-day")
-	public ResponseEntity<List<SalesPerPeriod>> findSalesPerDay(SalesPerPeriodFilter filter) {
+	public ResponseEntity<List<SalesPerPeriod>> findSalesPerDay(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all daily sales statistics for restaurant {} between dates {} and {}", filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate());
 		return new ResponseEntity<>(salesQueryService.findSalesPerDay(filter), HttpStatus.OK);
 	}

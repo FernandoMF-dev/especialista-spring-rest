@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Pattern;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -17,5 +18,6 @@ public class SalesPerPeriodFilter {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private OffsetDateTime endDate;
 
-	private String timeOffset = "00:00";
+	@Pattern(regexp = "^([+-])(\\d{2})(:?\\d{2})?$", message = "statistics.time_offset.invalid_format")
+	private String timeOffset = "+00:00";
 }

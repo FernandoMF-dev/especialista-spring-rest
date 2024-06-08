@@ -183,8 +183,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private List<ApiErrorResponse.FieldError> formatQueryParamFieldErrors(BindException ex) {
 		return ex.getFieldErrors().stream()
 				.map(fieldError -> {
-					TypeMismatchException typeMismatchException = fieldError.unwrap(TypeMismatchException.class);
-					String message = getTypeMismatchMessageSource(typeMismatchException, "error.http_request.query_param.type_mismatch");
+					String message = getQueryParamFieldErrorMessage(fieldError);
 					return new ApiErrorResponse.FieldError(fieldError.getField(), message);
 				})
 				.collect(Collectors.toList());
@@ -208,6 +207,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			return messageSource.getMessage(message, args, LocaleContextHolder.getLocale());
 		} catch (NoSuchMessageException e) {
 			return message;
+		}
+	}
+
+	private String getQueryParamFieldErrorMessage(FieldError fieldError) {
+		try {
+			TypeMismatchException typeMismatchException = fieldError.unwrap(TypeMismatchException.class);
+			return getTypeMismatchMessageSource(typeMismatchException, "error.http_request.query_param.type_mismatch");
+		} catch (Exception ignored) {
+			return getFieldErrorMessage(fieldError);
 		}
 	}
 
