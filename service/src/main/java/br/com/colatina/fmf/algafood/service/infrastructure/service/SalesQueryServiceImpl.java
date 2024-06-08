@@ -76,8 +76,19 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 
 	@Override
 	public List<SalesPerPeriod> findSalesPerYear(SalesPerPeriodFilter filter) {
-		// TODO implement this method
-		return List.of();
+		SalerPerPeriodCriteria criteria = new SalerPerPeriodCriteria(filter);
+
+		var fnDateRegistrationDate = _fnDateRegistrationDate(criteria.builder, criteria.root, filter, YEAR);
+		var fnYearRegistrationDate = _fnYearRegistrationDate(criteria.builder, fnDateRegistrationDate);
+
+		var selection = criteria.builder.construct(SalesPerPeriod.class,
+				criteria.builder.count(criteria.root.get(Order_.ID)),
+				criteria.builder.sum(criteria.root.get(Order_.TOTAL_VALUE)),
+				fnYearRegistrationDate
+		);
+
+		criteria.prepareQuery(selection, fnDateRegistrationDate);
+		return entityManager.createQuery(criteria.query).getResultList();
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Criteria query expressions">

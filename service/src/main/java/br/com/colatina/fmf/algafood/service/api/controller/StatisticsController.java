@@ -23,14 +23,25 @@ public class StatisticsController {
 
 	@GetMapping("/sales-per-day")
 	public ResponseEntity<List<SalesPerPeriod>> findSalesPerDay(@Valid SalesPerPeriodFilter filter) {
-		log.debug("REST request to find all daily sales statistics for restaurant {} between dates {} and {}", filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate());
+		log.debug("REST request to find all daily sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
+				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
+
 		return new ResponseEntity<>(salesQueryService.findSalesPerDay(filter), HttpStatus.OK);
 	}
 
 	@GetMapping("/sales-per-month")
 	public ResponseEntity<List<SalesPerPeriod>> findSalesPerMonth(@Valid SalesPerPeriodFilter filter) {
-		log.debug("REST request to find all monthly sales statistics for restaurant {} between dates {} and {}", filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate());
+		log.debug("REST request to find all monthly sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
+				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
+
 		return new ResponseEntity<>(salesQueryService.findSalesPerMonth(filter), HttpStatus.OK);
 	}
 
+	@GetMapping("/sales-per-year")
+	public ResponseEntity<List<SalesPerPeriod>> findSalesPerYear(@Valid SalesPerPeriodFilter filter) {
+		log.debug("REST request to find all yearly sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
+				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
+
+		return new ResponseEntity<>(salesQueryService.findSalesPerYear(filter), HttpStatus.OK);
+	}
 }
