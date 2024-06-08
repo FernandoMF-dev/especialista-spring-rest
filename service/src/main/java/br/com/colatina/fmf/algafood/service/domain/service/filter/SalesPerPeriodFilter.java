@@ -16,4 +16,6 @@ public class SalesPerPeriodFilter {
 
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private OffsetDateTime endDate;
+
+	private String timeOffset = "00:00";
 }

@@ -27,6 +27,7 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 	private static final String DAY = "day";
 
 	private static final String FN_DATE_TRUNC = "date_trunc";
+	private static final String FN_AT_TIME_ZONE = "at_time_zone";
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -38,7 +39,8 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 		Root<Order> root = query.from(Order.class);
 		List<Predicate> predicates = getSalerPerPeriodPredicates(filter, root, builder);
 
-		var fnDateRegistrationDate = builder.function(FN_DATE_TRUNC, LocalDate.class, builder.literal(DAY), root.get(Order_.REGISTRATION_DATE));
+		var fnDateRegistrationDate = builder.function(FN_AT_TIME_ZONE, LocalDate.class, root.get(Order_.REGISTRATION_DATE), builder.literal(filter.getTimeOffset()));
+		fnDateRegistrationDate = builder.function(FN_DATE_TRUNC, LocalDate.class, builder.literal(DAY), fnDateRegistrationDate);
 		var fnYearRegistrationDate = builder.function(YEAR, Integer.class, fnDateRegistrationDate);
 		var fnMonthRegistrationDate = builder.function(MONTH, Integer.class, fnDateRegistrationDate);
 		var fnDayRegistrationDate = builder.function(DAY, Integer.class, fnDateRegistrationDate);
