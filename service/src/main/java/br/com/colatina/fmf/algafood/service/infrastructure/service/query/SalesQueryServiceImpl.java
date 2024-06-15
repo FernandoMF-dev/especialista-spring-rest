@@ -1,4 +1,4 @@
-package br.com.colatina.fmf.algafood.service.infrastructure.service;
+package br.com.colatina.fmf.algafood.service.infrastructure.service.query;
 
 import br.com.colatina.fmf.algafood.service.domain.model.Order;
 import br.com.colatina.fmf.algafood.service.domain.model.Order_;
