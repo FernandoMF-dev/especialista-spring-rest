@@ -4,9 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.io.InputStream;
+import java.util.UUID;
 
 public interface FileStorageService {
 	void store(NewFile newFile);
+
+	default String generateFileName(String fileName) {
+		return String.format("%s_%s", UUID.randomUUID(), fileName);
+	}
 
 	@Getter
 	@Builder

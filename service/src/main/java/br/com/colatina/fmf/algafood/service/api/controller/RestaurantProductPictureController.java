@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class RestaurantProductPictureController {
 
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ProductPictureDto> updatePicture(@PathVariable Long restaurantId, @PathVariable Long productId,
-														   @Valid ProductPictureInsertDto picture) {
+														   @Valid ProductPictureInsertDto picture) throws IOException {
 		log.debug("REST request to upload a picture for the product {} from the restaurant {}", productId, restaurantId);
 		var result = productPictureCrudService.save(picture, restaurantId, productId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
