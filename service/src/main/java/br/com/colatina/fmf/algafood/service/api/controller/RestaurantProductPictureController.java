@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductPictureDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductPictureInsertDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class RestaurantProductPictureController {
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> updatePicture(@PathVariable Long restaurantId, @PathVariable Long productId,
-											  @Valid ProductPictureDto picture) {
+											  @Valid ProductPictureInsertDto picture) {
 		log.debug("REST request to upload a picture for the product {} from the restaurant {}", productId, restaurantId);
 
 		var file = picture.getFile();
