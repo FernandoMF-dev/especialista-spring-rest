@@ -34,7 +34,7 @@ public class PdfSalesReportServiceImpl implements SalesReportService {
 
 			return JasperExportManager.exportReportToPdf(jasperPrint);
 		} catch (Exception e) {
-			throw new ReportException("error.report.daily_sales", e);
+			throw new ReportException("infrastructure.error.report.daily_sales", e);
 		}
 	}
 }
