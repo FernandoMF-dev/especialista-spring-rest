@@ -26,4 +26,5 @@
 	<include file="/config/db/changelogs/20240502170000_add_columns_restaurant.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240504171000_create_table_restaurant_responsible.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240519153000_add_columns_order.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20240619101000_create_table_product_picture.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

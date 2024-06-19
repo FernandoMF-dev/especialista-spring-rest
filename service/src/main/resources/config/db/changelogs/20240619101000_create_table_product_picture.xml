@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240619101000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="tb_product_picture">
+			<column name="product_id" type="BIGINT" remarks="Unique identifier of the product that picture belongs to">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="file_name" type="VARCHAR" remarks="Original name of the file with the picture">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="description" type="VARCHAR" remarks="Description of the picture">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="content_type" type="VARCHAR" remarks="The content type of the file with the picture">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="size" type="BIGINT" remarks="The size in bytes of the file with the picture">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="tb_product_picture"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240619101000-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="tb_product_picture" columnNames="product_id" constraintName="pk_product_picture"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="tb_product_picture" constraintName="pk_product_picture"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240619101000-3" author="Fernando Martins Ferreira">
+		<addForeignKeyConstraint baseTableName="tb_product_picture" baseColumnNames="product_id"
+								 referencedTableName="tb_product" referencedColumnNames="id"
+								 constraintName="fk_product_picture_product"/>
+
+		<rollback>
+			<dropAllForeignKeyConstraints baseTableName="tb_product_picture"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
