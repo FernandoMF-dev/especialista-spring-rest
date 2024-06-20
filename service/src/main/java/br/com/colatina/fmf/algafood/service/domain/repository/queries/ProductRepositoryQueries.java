@@ -4,4 +4,6 @@ import br.com.colatina.fmf.algafood.service.domain.model.ProductPicture;
 
 public interface ProductRepositoryQueries {
 	ProductPicture save(ProductPicture productPicture);
+
+	void delete(ProductPicture productPicture);
 }

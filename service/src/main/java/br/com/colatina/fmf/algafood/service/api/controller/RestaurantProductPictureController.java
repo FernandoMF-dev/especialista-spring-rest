@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,6 +66,13 @@ public class RestaurantProductPictureController {
 		log.debug("REST request to upload a picture for the product {} from the restaurant {}", productId, restaurantId);
 		var result = productPictureCrudService.save(picture, restaurantId, productId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@DeleteMapping
+	public ResponseEntity<Void> deletePicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
+		log.debug("REST request to delete the picture for the product {} from the restaurant {}", productId, restaurantId);
+		productPictureCrudService.delete(restaurantId, productId);
+		return ResponseEntity.noContent().build();
 	}
 
 	private void validateMediaType(String acceptHeader, MediaType contentType) throws HttpMediaTypeNotAcceptableException {

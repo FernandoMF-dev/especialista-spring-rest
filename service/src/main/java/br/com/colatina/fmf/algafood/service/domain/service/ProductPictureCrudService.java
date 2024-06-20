@@ -25,6 +25,11 @@ public class ProductPictureCrudService {
 	private final ProductCrudService productCrudService;
 	private final FileStorageService fileStorageService;
 
+	public ProductPicture findPictureEntity(Long restaurantId, Long productId) {
+		return productRepository.findPictureEntityById(restaurantId, productId)
+				.orElseThrow(() -> new ResourceNotFoundException("product.picture.not_found"));
+	}
+
 	public ProductPictureDto findPictureDto(Long restaurantId, Long productId) {
 		return productRepository.findPictureDtoById(restaurantId, productId)
 				.orElseThrow(() -> new ResourceNotFoundException("product.picture.not_found"));
@@ -41,6 +46,12 @@ public class ProductPictureCrudService {
 		savePicture(entity, dto.getFile().getInputStream());
 
 		return productPictureMapper.toDto(entity);
+	}
+
+	public void delete(Long restaurantId, Long productId) {
+		ProductPicture picture = findPictureEntity(restaurantId, productId);
+		productRepository.delete(picture);
+		fileStorageService.remove(picture.getFileName());
 	}
 
 	private void mapPicturePropertiesSave(ProductPicture entity, Product product) {
