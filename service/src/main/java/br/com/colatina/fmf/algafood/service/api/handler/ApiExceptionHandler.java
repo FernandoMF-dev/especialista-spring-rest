@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -95,6 +96,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		log.error(detail, ex);
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, new HttpHeaders(), status, request);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		return ResponseEntity.status(status).headers(headers).build();
 	}
 
 	@Override
