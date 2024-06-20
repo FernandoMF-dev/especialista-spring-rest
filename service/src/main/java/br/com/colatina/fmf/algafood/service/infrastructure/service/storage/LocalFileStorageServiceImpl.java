@@ -24,6 +24,16 @@ public class LocalFileStorageServiceImpl implements FileStorageService {
 		}
 	}
 
+	@Override
+	public void remove(String fileName) {
+		try {
+			Path filePath = getFilePath(fileName);
+			Files.deleteIfExists(filePath);
+		} catch (Exception e) {
+			throw new StorageException("infrastructure.error.storage.remove", e);
+		}
+	}
+
 	private Path getFilePath(String fileName) {
 		return fileDirectory.resolve(Path.of(fileName));
 	}

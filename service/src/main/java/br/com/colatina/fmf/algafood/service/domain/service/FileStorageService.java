@@ -9,6 +9,8 @@ import java.util.UUID;
 public interface FileStorageService {
 	void store(NewFile newFile);
 
+	void remove(String fileName);
+
 	default String generateFileName(String fileName) {
 		return String.format("%s_%s", UUID.randomUUID(), fileName);
 	}

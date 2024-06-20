@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,17 +27,28 @@ public class ProductPictureCrudService {
 	public ProductPictureDto save(ProductPictureInsertDto dto, Long restaurantId, Long productId) throws IOException {
 		Product product = productCrudService.findEntityById(restaurantId, productId);
 		ProductPicture entity = productPictureMapper.toEntity(dto);
-		String fileName = fileStorageService.generateFileName(entity.getFileName());
 
-		entity.setId(productId);
-		entity.setProduct(product);
-		entity.setFileName(fileName);
-
+		deleteExistingPicture(restaurantId, productId);
+		mapPicturePropertiesSave(entity, product);
 		entity = productRepository.save(entity);
 		productRepository.flush();
 		savePicture(entity, dto.getFile().getInputStream());
 
 		return productPictureMapper.toDto(entity);
+	}
+
+	private void mapPicturePropertiesSave(ProductPicture entity, Product product) {
+		String fileName = fileStorageService.generateFileName(entity.getFileName());
+
+		entity.setId(product.getId());
+		entity.setProduct(product);
+		entity.setFileName(fileName);
+	}
+
+	private void deleteExistingPicture(Long restaurantId, Long productId) {
+		Optional<ProductPicture> saved = productRepository.findPictureEntityById(restaurantId, productId);
+
+		saved.ifPresent(productPicture -> fileStorageService.remove(productPicture.getFileName()));
 	}
 
 	private void savePicture(ProductPicture entity, InputStream inputStream) {
