@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.util.UUID;
 
 public interface FileStorageService {
+	InputStream getFile(String fileName);
+
 	void store(NewFile newFile);
 
 	void remove(String fileName);

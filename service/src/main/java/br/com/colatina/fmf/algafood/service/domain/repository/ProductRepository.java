@@ -4,6 +4,7 @@ import br.com.colatina.fmf.algafood.service.domain.model.Product;
 import br.com.colatina.fmf.algafood.service.domain.model.ProductPicture;
 import br.com.colatina.fmf.algafood.service.domain.repository.queries.ProductRepositoryQueries;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductPictureDto;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -43,4 +44,14 @@ public interface ProductRepository extends CustomJpaRepository<Product, Long>, P
 			" AND r.id = :restaurantId " +
 			" AND p.excluded = FALSE ")
 	Optional<ProductPicture> findPictureEntityById(@Param("restaurantId") Long restaurantId, @Param("productId") Long productId);
+
+	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.ProductPictureDto" +
+			"(pp.id, pp.fileName, pp.description, pp.contentType, pp.size) " +
+			" FROM ProductPicture pp " +
+			" INNER JOIN pp.product p " +
+			" INNER JOIN p.restaurant r " +
+			" WHERE p.id = :productId " +
+			" AND r.id = :restaurantId " +
+			" AND p.excluded = FALSE ")
+	Optional<ProductPictureDto> findPictureDtoById(@Param("restaurantId") Long restaurantId, @Param("productId") Long productId);
 }

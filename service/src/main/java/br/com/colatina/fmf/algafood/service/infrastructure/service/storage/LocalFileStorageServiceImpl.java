@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -13,6 +14,16 @@ import java.nio.file.Path;
 public class LocalFileStorageServiceImpl implements FileStorageService {
 	@Value("${algafood.storage.local.file-directory}")
 	private Path fileDirectory;
+
+	@Override
+	public InputStream getFile(String fileName) {
+		try {
+			Path filePath = getFilePath(fileName);
+			return Files.newInputStream(filePath);
+		} catch (Exception e) {
+			throw new StorageException("infrastructure.error.storage.get-file", e);
+		}
+	}
 
 	@Override
 	public void store(FileStorageService.NewFile newFile) {

@@ -1,13 +1,17 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
+import br.com.colatina.fmf.algafood.service.domain.service.FileStorageService;
 import br.com.colatina.fmf.algafood.service.domain.service.ProductPictureCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductPictureDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductPictureInsertDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ import java.io.IOException;
 public class RestaurantProductPictureController {
 
 	private final ProductPictureCrudService productPictureCrudService;
+	private final FileStorageService fileStorageService;
 
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ProductPictureDto> updatePicture(@PathVariable Long restaurantId, @PathVariable Long productId,
@@ -31,4 +37,29 @@ public class RestaurantProductPictureController {
 		var result = productPictureCrudService.save(picture, restaurantId, productId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ProductPictureDto> findPicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
+		log.debug("REST request to get the data of the picture for the product {} from the restaurant {}", productId, restaurantId);
+		ProductPictureDto result = productPictureCrudService.findPictureDto(restaurantId, productId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+	public ResponseEntity<InputStreamResource> getPictureFile(@PathVariable Long restaurantId, @PathVariable Long productId) {
+		log.debug("REST request to the picture file for the product {} from the restaurant {}", productId, restaurantId);
+
+		try {
+			ProductPictureDto picture = productPictureCrudService.findPictureDto(restaurantId, productId);
+			InputStream file = fileStorageService.getFile(picture.getFileName());
+			MediaType contentType = MediaType.parseMediaType(picture.getContentType());
+
+			return ResponseEntity.ok()
+					.contentType(contentType)
+					.body(new InputStreamResource(file));
+		} catch (ResourceNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
 }

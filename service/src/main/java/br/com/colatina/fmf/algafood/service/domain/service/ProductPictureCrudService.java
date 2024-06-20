@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
+import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.Product;
 import br.com.colatina.fmf.algafood.service.domain.model.ProductPicture;
 import br.com.colatina.fmf.algafood.service.domain.repository.ProductRepository;
@@ -23,6 +24,11 @@ public class ProductPictureCrudService {
 
 	private final ProductCrudService productCrudService;
 	private final FileStorageService fileStorageService;
+
+	public ProductPictureDto findPictureDto(Long restaurantId, Long productId) {
+		return productRepository.findPictureDtoById(restaurantId, productId)
+				.orElseThrow(() -> new ResourceNotFoundException("product.picture.not_found"));
+	}
 
 	public ProductPictureDto save(ProductPictureInsertDto dto, Long restaurantId, Long productId) throws IOException {
 		Product product = productCrudService.findEntityById(restaurantId, productId);
