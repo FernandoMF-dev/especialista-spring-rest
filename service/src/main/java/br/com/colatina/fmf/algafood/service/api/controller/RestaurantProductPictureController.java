@@ -33,14 +33,6 @@ public class RestaurantProductPictureController {
 	private final ProductPictureCrudService productPictureCrudService;
 	private final FileStorageService fileStorageService;
 
-	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<ProductPictureDto> updatePicture(@PathVariable Long restaurantId, @PathVariable Long productId,
-														   @Valid ProductPictureInsertDto picture) throws IOException {
-		log.debug("REST request to upload a picture for the product {} from the restaurant {}", productId, restaurantId);
-		var result = productPictureCrudService.save(picture, restaurantId, productId);
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ProductPictureDto> findPicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to get the data of the picture for the product {} from the restaurant {}", productId, restaurantId);
@@ -65,6 +57,14 @@ public class RestaurantProductPictureController {
 		} catch (ResourceNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<ProductPictureDto> updatePicture(@PathVariable Long restaurantId, @PathVariable Long productId,
+														   @Valid ProductPictureInsertDto picture) throws IOException {
+		log.debug("REST request to upload a picture for the product {} from the restaurant {}", productId, restaurantId);
+		var result = productPictureCrudService.save(picture, restaurantId, productId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	private void validateMediaType(String acceptHeader, MediaType contentType) throws HttpMediaTypeNotAcceptableException {
