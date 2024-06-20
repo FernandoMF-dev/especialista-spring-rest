@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.handler;
 
 import br.com.colatina.fmf.algafood.service.domain.exceptions.BusinessRuleException;
+import br.com.colatina.fmf.algafood.service.infrastructure.exceptions.InfrastructureException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -69,6 +70,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).userMessage(detail).build();
 		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);
+	}
+
+	@ExceptionHandler(InfrastructureException.class)
+	public ResponseEntity<Object> handleInfrastructureException(InfrastructureException ex, WebRequest request) {
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		ApiErrorType type = ApiErrorType.INTERNAL_SERVER_ERROR;
+		String detail = getMessageSourceIfAvailable(ex.getMessage());
+		String userMessage = GENERIC_ERROR_USER_MSG;
+		userMessage = getMessageSourceIfAvailable(userMessage);
+
+		log.error(userMessage, ex);
+		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).userMessage(userMessage).build();
+		return handleExceptionInternal(ex, body, new HttpHeaders(), status, request);
 	}
 
 	@ExceptionHandler(Exception.class)

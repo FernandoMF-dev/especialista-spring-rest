@@ -24,7 +24,7 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
 		try {
 			Field excludedField = getDomainClass().getDeclaredField("excluded");
 			jpql += " WHERE " + excludedField.getName() + " = FALSE";
-		} catch (NoSuchFieldException ignored) { /* Ignored exception */}
+		} catch (NoSuchFieldException ignored) { /* Ignored exception */ }
 
 		List<T> entityList = entityManager.createQuery(jpql, getDomainClass())
 				.setMaxResults(1)
