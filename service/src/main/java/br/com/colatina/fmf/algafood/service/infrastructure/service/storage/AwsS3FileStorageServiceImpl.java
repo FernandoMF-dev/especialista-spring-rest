@@ -5,7 +5,9 @@ import br.com.colatina.fmf.algafood.service.domain.service.FileStorageService;
 import br.com.colatina.fmf.algafood.service.infrastructure.exceptions.StorageException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +31,7 @@ public class AwsS3FileStorageServiceImpl implements FileStorageService {
 			var objectMetadata = new ObjectMetadata();
 			objectMetadata.setContentType(newFile.getContentType());
 
-			var putObjectRequest = new com.amazonaws.services.s3.model.PutObjectRequest(
+			var putObjectRequest = new PutObjectRequest(
 					storageProperties.getAwsS3().getBucket(),
 					getFilePath(newFile.getFileName()),
 					newFile.getInputStream(),
@@ -44,7 +46,15 @@ public class AwsS3FileStorageServiceImpl implements FileStorageService {
 
 	@Override
 	public void remove(String fileName) {
-		// TODO: Implement this method
+		try {
+			String bucket = storageProperties.getAwsS3().getBucket();
+			String filePath = getFilePath(fileName);
+
+			var deleteObjectRequest = new DeleteObjectRequest(bucket, filePath);
+			amazonS3.deleteObject(deleteObjectRequest);
+		} catch (Exception e) {
+			throw new StorageException("infrastructure.error.storage.remove", e);
+		}
 	}
 
 	private String getFilePath(String fileName) {
