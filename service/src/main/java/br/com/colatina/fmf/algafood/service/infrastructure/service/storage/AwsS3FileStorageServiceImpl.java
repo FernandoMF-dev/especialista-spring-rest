@@ -9,11 +9,9 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.net.URL;
 
-@Service
 @RequiredArgsConstructor
 public class AwsS3FileStorageServiceImpl implements FileStorageService {
 	private final StorageProperties storageProperties;

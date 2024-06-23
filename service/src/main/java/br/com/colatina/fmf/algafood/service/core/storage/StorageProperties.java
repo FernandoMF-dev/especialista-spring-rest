@@ -15,6 +15,11 @@ import java.nio.file.Path;
 public class StorageProperties {
 	private Local local = new Local();
 	private AwsS3 awsS3 = new AwsS3();
+	private StorageType type = StorageType.LOCAL;
+
+	public enum StorageType {
+		LOCAL, AWS_S3
+	}
 
 	@Getter
 	@Setter
