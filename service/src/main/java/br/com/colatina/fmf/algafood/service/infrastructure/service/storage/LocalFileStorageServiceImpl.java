@@ -1,8 +1,9 @@
 package br.com.colatina.fmf.algafood.service.infrastructure.service.storage;
 
+import br.com.colatina.fmf.algafood.service.core.storage.StorageProperties;
 import br.com.colatina.fmf.algafood.service.domain.service.FileStorageService;
 import br.com.colatina.fmf.algafood.service.infrastructure.exceptions.StorageException;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -11,9 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Service
+@RequiredArgsConstructor
 public class LocalFileStorageServiceImpl implements FileStorageService {
-	@Value("${algafood.storage.local.file-directory}")
-	private Path fileDirectory;
+	private final StorageProperties storageProperties;
 
 	@Override
 	public InputStream getFile(String fileName) {
@@ -46,6 +47,7 @@ public class LocalFileStorageServiceImpl implements FileStorageService {
 	}
 
 	private Path getFilePath(String fileName) {
-		return fileDirectory.resolve(Path.of(fileName));
+		return storageProperties.getLocal().getFileDirectory()
+				.resolve(Path.of(fileName));
 	}
 }
