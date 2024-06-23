@@ -4,14 +4,13 @@ import br.com.colatina.fmf.algafood.service.core.storage.StorageProperties;
 import br.com.colatina.fmf.algafood.service.domain.service.FileStorageService;
 import br.com.colatina.fmf.algafood.service.infrastructure.exceptions.StorageException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class LocalFileStorageServiceImpl implements FileStorageService {
 	private final StorageProperties storageProperties;
