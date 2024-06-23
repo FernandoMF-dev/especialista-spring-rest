@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -42,12 +43,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
-	private static final String ERROR_TYPE_URI = "https://fmf.algafood.com.br/";
 	public static final String GENERIC_ERROR_USER_MSG = "error.default.user_msg";
 
 	private final MessageSource messageSource;
-
 	private final Map<Class<? extends Throwable>, InvalidBodyFormatHandler> rootExceptionsHandlers;
+
+	@Value("${algafood.error.type.url}")
+	private String errorTypeUrl;
 
 	public ApiExceptionHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
@@ -179,7 +181,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return ApiErrorResponse.builder()
 				.status(status.value())
 				.timestamp(Instant.now())
-				.type(ERROR_TYPE_URI + type.getPath())
+				.type(errorTypeUrl + type.getPath())
 				.title(type.getTitle())
 				.detail(detail)
 				.userMessage(getMessageSourceIfAvailable(GENERIC_ERROR_USER_MSG));
