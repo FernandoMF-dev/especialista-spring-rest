@@ -8,6 +8,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductPictureIns
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @Slf4j
@@ -47,14 +47,19 @@ public class RestaurantProductPictureController {
 		log.debug("REST request to the picture file for the product {} from the restaurant {}", productId, restaurantId);
 		try {
 			ProductPictureDto picture = productPictureCrudService.findPictureDto(restaurantId, productId);
-			InputStream file = fileStorageService.getFile(picture.getFileName());
+			FileStorageService.RestoredFile file = fileStorageService.restoreFile(picture.getFileName());
 			MediaType contentType = MediaType.parseMediaType(picture.getContentType());
 
 			validateMediaType(acceptHeader, contentType);
 
+			if (file.hasUrl()) {
+				return ResponseEntity.status(HttpStatus.FOUND)
+						.header(HttpHeaders.LOCATION, file.getUrl())
+						.build();
+			}
 			return ResponseEntity.ok()
 					.contentType(contentType)
-					.body(new InputStreamResource(file));
+					.body(new InputStreamResource(file.getInputStream()));
 		} catch (ResourceNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}

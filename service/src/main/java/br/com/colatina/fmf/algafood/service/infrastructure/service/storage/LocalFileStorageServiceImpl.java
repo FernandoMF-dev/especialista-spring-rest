@@ -16,10 +16,12 @@ public class LocalFileStorageServiceImpl implements FileStorageService {
 	private final StorageProperties storageProperties;
 
 	@Override
-	public InputStream getFile(String fileName) {
+	public RestoredFile restoreFile(String fileName) {
 		try {
 			Path filePath = getFilePath(fileName);
-			return Files.newInputStream(filePath);
+			InputStream inputStream = Files.newInputStream(filePath);
+
+			return RestoredFile.builder().inputStream(inputStream).build();
 		} catch (Exception e) {
 			throw new StorageException("infrastructure.error.storage.get-file", e);
 		}

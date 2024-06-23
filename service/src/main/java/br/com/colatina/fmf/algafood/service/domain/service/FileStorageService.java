@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 public interface FileStorageService {
-	InputStream getFile(String fileName);
+	RestoredFile restoreFile(String fileName);
 
 	void store(NewFile newFile);
 
@@ -23,5 +23,20 @@ public interface FileStorageService {
 		private String fileName;
 		private String contentType;
 		private InputStream inputStream;
+	}
+
+	@Getter
+	@Builder
+	class RestoredFile {
+		private String url;
+		private InputStream inputStream;
+
+		public boolean hasUrl() {
+			return url != null;
+		}
+
+		public boolean hasInputStream() {
+			return inputStream != null;
+		}
 	}
 }

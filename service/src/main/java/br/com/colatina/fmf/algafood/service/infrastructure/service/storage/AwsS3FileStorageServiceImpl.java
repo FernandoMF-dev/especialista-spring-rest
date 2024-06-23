@@ -11,7 +11,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
+import java.net.URL;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +20,12 @@ public class AwsS3FileStorageServiceImpl implements FileStorageService {
 	private final AmazonS3 amazonS3;
 
 	@Override
-	public InputStream getFile(String fileName) {
-		// TODO: Implement this method
-		return null;
+	public RestoredFile restoreFile(String fileName) {
+		String filePath = getFilePath(fileName);
+		String bucket = storageProperties.getAwsS3().getBucket();
+		URL url = amazonS3.getUrl(bucket, filePath);
+
+		return RestoredFile.builder().url(url.toString()).build();
 	}
 
 	@Override
