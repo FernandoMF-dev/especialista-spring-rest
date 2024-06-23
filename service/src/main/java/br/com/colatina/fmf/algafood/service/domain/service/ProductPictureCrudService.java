@@ -71,6 +71,7 @@ public class ProductPictureCrudService {
 	private void savePicture(ProductPicture entity, InputStream inputStream) {
 		FileStorageService.NewFile newPicture = FileStorageService.NewFile.builder()
 				.fileName(entity.getFileName())
+				.contentType(entity.getContentType())
 				.inputStream(inputStream)
 				.build();
 

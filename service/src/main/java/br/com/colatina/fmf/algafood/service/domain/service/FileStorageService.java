@@ -21,6 +21,7 @@ public interface FileStorageService {
 	@Builder
 	class NewFile {
 		private String fileName;
+		private String contentType;
 		private InputStream inputStream;
 	}
 }
