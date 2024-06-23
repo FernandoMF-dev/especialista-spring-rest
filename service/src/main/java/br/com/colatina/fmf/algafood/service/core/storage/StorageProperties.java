@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.core.storage;
 
+import com.amazonaws.regions.Regions;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,7 +27,7 @@ public class StorageProperties {
 	public static class AwsS3 {
 		private AccessKey accessKey = new AccessKey();
 		private String bucket;
-		private String region;
+		private Regions region;
 		private String fileDirectory;
 
 		@Getter
