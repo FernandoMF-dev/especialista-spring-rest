@@ -47,19 +47,11 @@ public class RestaurantProductPictureController {
 		log.debug("REST request to the picture file for the product {} from the restaurant {}", productId, restaurantId);
 		try {
 			ProductPictureDto picture = productPictureCrudService.findPictureDto(restaurantId, productId);
-			FileStorageService.RestoredFile file = fileStorageService.restoreFile(picture.getFileName());
+			FileStorageService.RestoredFile restoredFile = fileStorageService.restoreFile(picture.getFileName());
 			MediaType contentType = MediaType.parseMediaType(picture.getContentType());
 
 			validateMediaType(acceptHeader, contentType);
-
-			if (file.hasUrl()) {
-				return ResponseEntity.status(HttpStatus.FOUND)
-						.header(HttpHeaders.LOCATION, file.getUrl())
-						.build();
-			}
-			return ResponseEntity.ok()
-					.contentType(contentType)
-					.body(new InputStreamResource(file.getInputStream()));
+			return getPictureFileResponse(restoredFile, contentType);
 		} catch (ResourceNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
@@ -86,5 +78,16 @@ public class RestaurantProductPictureController {
 		if (!compatible) {
 			throw new HttpMediaTypeNotAcceptableException(acceptedTypes);
 		}
+	}
+
+	private ResponseEntity<InputStreamResource> getPictureFileResponse(FileStorageService.RestoredFile restoredFile, MediaType contentType) {
+		if (restoredFile.hasUrl()) {
+			return ResponseEntity.status(HttpStatus.FOUND)
+					.header(HttpHeaders.LOCATION, restoredFile.getUrl())
+					.build();
+		}
+		return ResponseEntity.ok()
+				.contentType(contentType)
+				.body(new InputStreamResource(restoredFile.getInputStream()));
 	}
 }
