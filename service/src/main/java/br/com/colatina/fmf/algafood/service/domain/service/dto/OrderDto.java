@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDto implements Serializable {
-	private Long id;
 	private String code;
 	private Double totalValue;
 	private Double subtotal;
