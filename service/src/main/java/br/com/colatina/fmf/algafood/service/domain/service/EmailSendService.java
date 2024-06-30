@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Singular;
 
+import java.util.Map;
 import java.util.Set;
 
 public interface EmailSendService {
@@ -19,5 +20,7 @@ public interface EmailSendService {
 		private String body;
 		@Singular
 		private Set<String> recipients;
+		@Singular
+		private Map<String, Object> variables;
 	}
 }

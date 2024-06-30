@@ -18,8 +18,9 @@ public class OrderFlowService {
 
 		EmailSendService.Email email = EmailSendService.Email.builder()
 				.subject(order.getRestaurant().getName() + " - Pedido confirmado")
-				.body("Seu pedido foi confirmado com sucesso!" + "<br>" + "<strong>Código do pedido:</strong> " + order.getUuidCode())
+				.body("confirmed-order.email.html")
 				.recipient(order.getUser().getEmail())
+				.variable("order", order)
 				.build();
 		emailSendService.send(email);
 	}
