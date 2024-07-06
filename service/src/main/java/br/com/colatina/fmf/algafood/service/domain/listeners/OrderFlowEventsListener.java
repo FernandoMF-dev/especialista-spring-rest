@@ -3,15 +3,16 @@ package br.com.colatina.fmf.algafood.service.domain.listeners;
 import br.com.colatina.fmf.algafood.service.domain.events.OrderConfirmedEvent;
 import br.com.colatina.fmf.algafood.service.domain.service.EmailSendService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
 public class OrderFlowEventsListener {
 	private final EmailSendService emailSendService;
 
-	@EventListener
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void whenOrderConfirmed(OrderConfirmedEvent event) {
 		var order = event.getOrder();
 
