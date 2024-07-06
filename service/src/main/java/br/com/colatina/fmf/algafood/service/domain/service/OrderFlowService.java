@@ -27,5 +27,6 @@ public class OrderFlowService {
 	public void cancel(String orderUuid) {
 		Order order = orderCrudService.findEntityByUuid(orderUuid);
 		order.cancel();
+		orderRepository.save(order);
 	}
 }

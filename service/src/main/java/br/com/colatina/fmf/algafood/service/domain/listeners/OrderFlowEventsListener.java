@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.listeners;
 
+import br.com.colatina.fmf.algafood.service.domain.events.OrderCanceledEvent;
 import br.com.colatina.fmf.algafood.service.domain.events.OrderConfirmedEvent;
 import br.com.colatina.fmf.algafood.service.domain.service.EmailSendService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,20 @@ public class OrderFlowEventsListener {
 		var email = EmailSendService.Email.builder()
 				.subject(order.getRestaurant().getName() + " - Pedido confirmado")
 				.body("confirmed-order.email.html")
+				.recipient(order.getUser().getEmail())
+				.variable("order", order)
+				.build();
+
+		emailSendService.send(email);
+	}
+
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+	public void whenOrderCanceled(OrderCanceledEvent event) {
+		var order = event.getOrder();
+
+		var email = EmailSendService.Email.builder()
+				.subject(order.getRestaurant().getName() + " - Pedido cancelado")
+				.body("canceled-order.email.html")
 				.recipient(order.getUser().getEmail())
 				.variable("order", order)
 				.build();

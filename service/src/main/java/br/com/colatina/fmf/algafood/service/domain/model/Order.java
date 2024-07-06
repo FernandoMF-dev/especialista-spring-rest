@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.model;
 
+import br.com.colatina.fmf.algafood.service.domain.events.OrderCanceledEvent;
 import br.com.colatina.fmf.algafood.service.domain.events.OrderConfirmedEvent;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ConflictualResourceStatusException;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
@@ -108,6 +109,7 @@ public class Order extends AbstractAggregateRoot<Order> {
 	public void cancel() {
 		setStatus(OrderStatusEnum.CANCELED);
 		this.setCancellationDate(OffsetDateTime.now());
+		registerEvent(new OrderCanceledEvent(this));
 	}
 
 	private void setStatus(OrderStatusEnum status) {
