@@ -18,4 +18,10 @@ public class EmailProperties {
 	private String sender;
 	@NotNull
 	private String encoding;
+	@NotNull
+	private EmailType type = EmailType.FAKE;
+
+	public enum EmailType {
+		FAKE, SMTP
+	}
 }

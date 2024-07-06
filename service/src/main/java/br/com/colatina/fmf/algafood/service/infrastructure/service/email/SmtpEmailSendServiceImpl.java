@@ -9,17 +9,15 @@ import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 
-@Service
 @RequiredArgsConstructor
 public class SmtpEmailSendServiceImpl implements EmailSendService {
-	private final JavaMailSender mailSender;
 	private final EmailProperties emailProperties;
+	private final JavaMailSender mailSender;
 	private final Configuration freemarkerConfig;
 
 	@Override
