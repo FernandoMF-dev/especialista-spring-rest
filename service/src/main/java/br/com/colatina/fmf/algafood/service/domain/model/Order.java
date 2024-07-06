@@ -1,10 +1,13 @@
 package br.com.colatina.fmf.algafood.service.domain.model;
 
+import br.com.colatina.fmf.algafood.service.domain.events.OrderConfirmedEvent;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ConflictualResourceStatusException;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,15 +28,16 @@ import javax.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Table(name = "tb_order")
 @Entity
-public class Order {
+public class Order extends AbstractAggregateRoot<Order> {
 	@Id
+	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_order")
 	@SequenceGenerator(name = "seq_order", allocationSize = 1, sequenceName = "seq_order")
 	@Column(name = "id", nullable = false)
@@ -86,23 +90,6 @@ public class Order {
 	@Embedded
 	private Address address;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (!(o instanceof Order)) {
-			return false;
-		}
-		Order that = (Order) o;
-		return id.equals(that.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
 	public void addSubTotal(Double value) {
 		this.subtotal += value;
 	}
@@ -110,6 +97,7 @@ public class Order {
 	public void confirm() {
 		setStatus(OrderStatusEnum.CONFIRMED);
 		this.setConfirmationDate(OffsetDateTime.now());
+		registerEvent(new OrderConfirmedEvent(this));
 	}
 
 	public void deliver() {
