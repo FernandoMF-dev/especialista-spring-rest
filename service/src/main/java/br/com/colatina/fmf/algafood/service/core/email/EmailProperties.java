@@ -18,10 +18,16 @@ public class EmailProperties {
 	private String sender;
 	@NotNull
 	private String encoding;
-	@NotNull
+	private Sandbox sandbox = new Sandbox();
 	private EmailType type = EmailType.FAKE;
 
 	public enum EmailType {
-		FAKE, SMTP
+		FAKE, SMTP, SANDBOX
+	}
+
+	@Getter
+	@Setter
+	public static class Sandbox {
+		private String recipient;
 	}
 }
