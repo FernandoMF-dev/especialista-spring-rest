@@ -1,21 +1,28 @@
-function findRestaurants() {
+function consultar() {
 	$.ajax({
-		url: "http://localhost:8080/api/restaurants",
+		url: "http://localhost:8080/api/payment-methods",
 		type: "GET",
-		success: function (res) {
-			$("#req-content").text(JSON.stringify(res));
+
+		success: function(response) {
+			preencherTabela(response);
 		}
-	})
+	});
 }
 
-function closeRestaurant() {
-	$.ajax({
-		url: "http://localhost:8080/api/restaurants/1/open?value=false",
-		type: "PATCH",
-		success: function (res) {
-			alert("Restaurant closed");
-		}
-	})
+function preencherTabela(formasPagamento) {
+	$("#tabela tbody tr").remove();
+
+	$.each(formasPagamento, function(i, formaPagamento) {
+		const linha = $("<tr>");
+
+		linha.append(
+			$("<td>").text(formaPagamento.id),
+			$("<td>").text(formaPagamento.description)
+		);
+
+		linha.appendTo("#tabela");
+	});
 }
 
-$("#req-button").click(closeRestaurant);
+
+$("#btn-consultar").click(consultar);

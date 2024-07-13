@@ -1,13 +1,4 @@
-button {
-	color: #fff;
-	background-color: #007bff;
-	border: none;
-	font-size: 1rem;
-	padding: 10px;
-}
-
-#conteudo {
+.row {
+	margin-bottom: 10px;
 	margin-top: 10px;
-	font-family: Arial;
-	font-size: 1rem;
 }
