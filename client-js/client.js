@@ -1,9 +1,18 @@
+function tratarErroDeRequisicao(error, mensagemPadrao) {
+	if (error.status >= 400 && error.status <= 499) {
+		var problem = JSON.parse(error.responseText);
+		alert(problem.userMessage);
+	} else {
+		alert(mensagemPadrao);
+	}
+}
+
 function consultar() {
 	$.ajax({
 		url: "http://localhost:8080/api/payment-methods",
 		type: "GET",
 
-		success: function(response) {
+		success: function (response) {
 			preencherTabela(response);
 		}
 	});
@@ -22,18 +31,31 @@ function cadastrar() {
 		data: formaPagamentoJson,
 		contentType: "application/json",
 
-		success: function(response) {
+		success: function (response) {
 			alert("Forma de pagamento adicionada!");
 			consultar();
 		},
 
-		error: function(error) {
-			if (error.status === 400) {
-				const problem = JSON.parse(error.responseText);
-				alert(problem.userMessage);
-			} else {
-				alert("Erro ao cadastrar forma de pagamento!");
-			}
+		error: function (error) {
+			tratarErroDeRequisicao(error, "Erro ao cadastrar forma de pagamento!");
+		}
+	});
+}
+
+function excluir(formaPagamento) {
+	const url = "http://localhost:8080/api/payment-methods/" + formaPagamento.id;
+
+	$.ajax({
+		url: url,
+		type: "DELETE",
+
+		success: function (response) {
+			consultar();
+			alert("Forma de pagamento removida!");
+		},
+
+		error: function (error) {
+			tratarErroDeRequisicao(error, "Erro ao remover forma de pagamento!");
 		}
 	});
 }
@@ -41,12 +63,20 @@ function cadastrar() {
 function preencherTabela(formasPagamento) {
 	$("#tabela tbody tr").remove();
 
-	$.each(formasPagamento, function(i, formaPagamento) {
+	$.each(formasPagamento, function (i, formaPagamento) {
 		const linha = $("<tr>");
+
+		const linkAcao = $("<a href='#'>")
+			.text("Excluir")
+			.click(function (event) {
+				event.preventDefault();
+				excluir(formaPagamento);
+			});
 
 		linha.append(
 			$("<td>").text(formaPagamento.id),
-			$("<td>").text(formaPagamento.description)
+			$("<td>").text(formaPagamento.description),
+			$("<td>").append(linkAcao)
 		);
 
 		linha.appendTo("#tabela");
