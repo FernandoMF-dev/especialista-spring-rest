@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
-
+<html>
 <head>
 	<meta charset="UTF-8">
 	<title>AlgaFood</title>
@@ -8,7 +7,6 @@
 		  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 <div class="container">
 	<div class="row">
@@ -30,6 +28,16 @@
 			</tbody>
 		</table>
 	</div>
+
+	<div class="row">
+		<form>
+			<div class="form-group">
+				<label for="campo-descricao">Descrição</label>
+				<input type="text" class="form-control" id="campo-descricao">
+			</div>
+			<button type="button" class="btn btn-primary" id="btn-cadastrar">Cadastrar</button>
+		</form>
+	</div>
 </div>
 
 <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -39,5 +47,4 @@
 
 <script src="client.js"></script>
 </body>
-
 </html>
