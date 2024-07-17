@@ -4,6 +4,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.PaymentMethodCrudServ
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,14 +30,19 @@ public class PaymentMethodController {
 	@GetMapping()
 	public ResponseEntity<List<PaymentMethodDto>> findAll() {
 		log.debug("REST request to find all payment methods");
-		return new ResponseEntity<>(paymentMethodCrudService.findAll(), HttpStatus.OK);
+		List<PaymentMethodDto> result = paymentMethodCrudService.findAll();
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
+				.body(result);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<PaymentMethodDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the payment method with ID: {}", id);
-		PaymentMethodDto dto = paymentMethodCrudService.findDtoById(id);
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		PaymentMethodDto result = paymentMethodCrudService.findDtoById(id);
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
+				.body(result);
 	}
 
 	@PostMapping()
