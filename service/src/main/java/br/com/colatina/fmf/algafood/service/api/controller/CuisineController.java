@@ -27,7 +27,7 @@ import java.util.List;
 public class CuisineController {
 	private final CuisineCrudService cuisineCrudService;
 
-	@GetMapping()
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CuisineDto>> findAll() {
 		log.debug("REST request to find all cuisines");
 		return new ResponseEntity<>(cuisineCrudService.findAll(), HttpStatus.OK);
