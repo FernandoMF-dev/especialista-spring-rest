@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20240718144500-1" author="Fernando Martins Ferreira">
+		<addColumn tableName="tb_payment_method">
+			<column name="update_date" type="DATETIME"
+					remarks="Date and time of the last time the payment method's information have been altered">
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="tb_payment_method" columnName="update_date"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240718144500-2" author="Fernando Martins Ferreira">
+		<update tableName="tb_payment_method">
+			<column name="update_date" valueComputed="CURRENT_TIMESTAMP"/>
+		</update>
+
+		<rollback>
+			<update tableName="tb_payment_method">
+				<column name="update_date" valueComputed="NULL"/>
+			</update>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20240718144500-3" author="Fernando Martins Ferreira">
+		<addNotNullConstraint tableName="tb_payment_method" columnName="update_date"/>
+
+		<rollback>
+			<dropNotNullConstraint tableName="tb_payment_method" columnName="update_date"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

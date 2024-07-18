@@ -5,11 +5,15 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PaymentMethodRepository extends CustomJpaRepository<PaymentMethod, Long> {
+
+	@Query("SELECT MAX(pm.updateDate) FROM PaymentMethod pm")
+	OffsetDateTime findLastUpdate();
 
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto" +
 			"(pm.id, pm.description) " +

@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,10 @@ public class PaymentMethodCrudService {
 	public static final String ERROR_MSG_NOT_FOUND = "payment_method.not_found";
 	private final PaymentMethodRepository paymentMethodRepository;
 	private final PaymentMethodMapper paymentMethodMapper;
+
+	public OffsetDateTime findLastUpdate() {
+		return paymentMethodRepository.findLastUpdate();
+	}
 
 	public List<PaymentMethodDto> findAll() {
 		return paymentMethodRepository.findAllDto();

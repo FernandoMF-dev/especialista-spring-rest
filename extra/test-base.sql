@@ -34,10 +34,10 @@ VALUES (nextval('seq_restaurant'), 'Tuk Tuk Comida Indiana', TRUE, 15, CURRENT_T
 	   (nextval('seq_restaurant'), 'Lanchonete do Tio Sam', TRUE, 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4),
 	   (nextval('seq_restaurant'), 'Bar da Maria', TRUE, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4);
 
-INSERT INTO tb_payment_method (id, description)
-VALUES (nextval('seq_payment_method'), 'Cartão de crédito'),
-	   (nextval('seq_payment_method'), 'Cartão de débito'),
-	   (nextval('seq_payment_method'), 'Dinheiro');
+INSERT INTO tb_payment_method (id, description, update_date)
+VALUES (nextval('seq_payment_method'), 'Cartão de crédito', CURRENT_TIMESTAMP),
+	   (nextval('seq_payment_method'), 'Cartão de débito', CURRENT_TIMESTAMP),
+	   (nextval('seq_payment_method'), 'Dinheiro', CURRENT_TIMESTAMP);
 
 INSERT INTO rel_restaurant_payment_method (restaurant_id, payment_method_id)
 VALUES (1, 1),

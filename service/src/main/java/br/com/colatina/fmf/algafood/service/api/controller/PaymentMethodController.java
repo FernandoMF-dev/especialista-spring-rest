@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import javax.validation.Valid;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -28,11 +32,23 @@ public class PaymentMethodController {
 	private final PaymentMethodCrudService paymentMethodCrudService;
 
 	@GetMapping()
-	public ResponseEntity<List<PaymentMethodDto>> findAll() {
+	public ResponseEntity<List<PaymentMethodDto>> findAll(ServletWebRequest request) {
 		log.debug("REST request to find all payment methods");
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+		OffsetDateTime lastUpdate = paymentMethodCrudService.findLastUpdate();
+		String eTag = "0";
+		if (Objects.nonNull(lastUpdate)) {
+			eTag = String.valueOf(lastUpdate.toEpochSecond());
+		}
+		if (request.checkNotModified(eTag)) {
+			return null;
+		}
+
 		List<PaymentMethodDto> result = paymentMethodCrudService.findAll();
 		return ResponseEntity.ok()
 				.cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
+				.eTag(eTag)
 				.body(result);
 	}
 

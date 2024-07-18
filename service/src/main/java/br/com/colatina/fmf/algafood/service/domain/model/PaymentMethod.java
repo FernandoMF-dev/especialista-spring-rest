@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.domain.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Getter
@@ -28,6 +30,10 @@ public class PaymentMethod implements Serializable {
 
 	@Column(name = "description", nullable = false)
 	private String description;
+
+	@UpdateTimestamp
+	@Column(name = "update_date", nullable = false)
+	private OffsetDateTime updateDate;
 
 	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
