@@ -28,6 +28,10 @@ public class PaymentMethodCrudService {
 		return paymentMethodRepository.findLastUpdate();
 	}
 
+	public OffsetDateTime findLastUpdateById(Long id) {
+		return paymentMethodRepository.findLastUpdateById(id);
+	}
+
 	public List<PaymentMethodDto> findAll() {
 		return paymentMethodRepository.findAllDto();
 	}

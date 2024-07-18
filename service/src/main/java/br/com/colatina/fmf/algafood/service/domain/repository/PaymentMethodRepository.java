@@ -12,8 +12,15 @@ import java.util.Optional;
 @Repository
 public interface PaymentMethodRepository extends CustomJpaRepository<PaymentMethod, Long> {
 
-	@Query("SELECT MAX(pm.updateDate) FROM PaymentMethod pm")
+	@Query("SELECT MAX(pm.updateDate) " +
+			" FROM PaymentMethod pm")
 	OffsetDateTime findLastUpdate();
+
+	@Query("SELECT MAX(pm.updateDate) " +
+			" FROM PaymentMethod pm " +
+			" WHERE pm.id = :id " +
+			" AND pm.excluded = FALSE ")
+	OffsetDateTime findLastUpdateById(Long id);
 
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto" +
 			"(pm.id, pm.description) " +

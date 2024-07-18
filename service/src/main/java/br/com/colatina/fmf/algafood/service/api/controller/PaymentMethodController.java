@@ -35,12 +35,8 @@ public class PaymentMethodController {
 	public ResponseEntity<List<PaymentMethodDto>> findAll(ServletWebRequest request) {
 		log.debug("REST request to find all payment methods");
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
-
 		OffsetDateTime lastUpdate = paymentMethodCrudService.findLastUpdate();
-		String eTag = "0";
-		if (Objects.nonNull(lastUpdate)) {
-			eTag = String.valueOf(lastUpdate.toEpochSecond());
-		}
+		String eTag = getDeepETag(lastUpdate);
 		if (request.checkNotModified(eTag)) {
 			return null;
 		}
@@ -53,11 +49,19 @@ public class PaymentMethodController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PaymentMethodDto> findById(@PathVariable Long id) {
+	public ResponseEntity<PaymentMethodDto> findById(@PathVariable Long id, ServletWebRequest request) {
 		log.debug("REST request to find the payment method with ID: {}", id);
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		OffsetDateTime lastUpdate = paymentMethodCrudService.findLastUpdateById(id);
+		String eTag = getDeepETag(lastUpdate);
+		if (request.checkNotModified(eTag)) {
+			return null;
+		}
+
 		PaymentMethodDto result = paymentMethodCrudService.findDtoById(id);
 		return ResponseEntity.ok()
 				.cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
+				.eTag(eTag)
 				.body(result);
 	}
 
@@ -78,5 +82,13 @@ public class PaymentMethodController {
 		log.debug("REST request to delete payment method with id {}", id);
 		paymentMethodCrudService.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	private String getDeepETag(OffsetDateTime lastUpdate) {
+		String eTag = "0";
+		if (Objects.nonNull(lastUpdate)) {
+			eTag = String.valueOf(lastUpdate.toEpochSecond());
+		}
+		return eTag;
 	}
 }
