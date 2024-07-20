@@ -6,6 +6,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class CuisineController {
 
 	@ApiOperation("Find a cuisine by its ID")
 	@GetMapping("/{id}")
-	public ResponseEntity<CuisineDto> findById(@PathVariable Long id) {
+	public ResponseEntity<CuisineDto> findById(@ApiParam(value = "ID of a available cuisine", example = "1") @PathVariable Long id) {
 		log.debug("REST request to find the cuisine with ID: {}", id);
 		return new ResponseEntity<>(cuisineCrudService.findDtoById(id), HttpStatus.OK);
 	}
@@ -61,21 +62,24 @@ public class CuisineController {
 
 	@ApiOperation("Insert a new cuisine")
 	@PostMapping()
-	public ResponseEntity<CuisineDto> insert(@Valid @RequestBody CuisineDto dto) {
+	public ResponseEntity<CuisineDto> insert(@ApiParam(name = "body", value = "Cuisine data to create")
+											 @Valid @RequestBody CuisineDto dto) {
 		log.debug("REST request to insert a new cuisine: {}", dto);
 		return new ResponseEntity<>(cuisineCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
 	@ApiOperation("Update a cuisine by its ID")
 	@PutMapping("/{id}")
-	public ResponseEntity<CuisineDto> update(@Valid @RequestBody CuisineDto dto, @PathVariable Long id) {
+	public ResponseEntity<CuisineDto> update(@ApiParam(value = "ID of a available cuisine to update", example = "1") @PathVariable Long id,
+											 @ApiParam(name = "body", value = "Cuisine data to update")
+											 @Valid @RequestBody CuisineDto dto) {
 		log.debug("REST request to update cuisine with id {}: {}", id, dto);
 		return new ResponseEntity<>(cuisineCrudService.update(dto, id), HttpStatus.OK);
 	}
 
 	@ApiOperation("Delete a cuisine by its ID")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@ApiParam(value = "ID of a available cuisine to delete", example = "1") @PathVariable Long id) {
 		log.debug("REST request to delete cuisine with id {}", id);
 		cuisineCrudService.delete(id);
 		return ResponseEntity.noContent().build();
