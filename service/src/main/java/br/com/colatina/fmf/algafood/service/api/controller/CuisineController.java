@@ -1,8 +1,10 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.model.CuisinesXmlWrapper;
+import br.com.colatina.fmf.algafood.service.core.openapi.SpringFoxControllerTags;
 import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(tags = SpringFoxControllerTags.CUISINES)
 @Slf4j
 @RequiredArgsConstructor
 @RestController
