@@ -22,14 +22,13 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StateDto implements Serializable {
-	@ApiModelProperty(value = "Unique ID of the state", example = "1")
 	@NotNull(message = "state.id.not_null", groups = ValidationGroups.RequiredState.class)
 	private Long id;
-	@ApiModelProperty(value = "Acronym of the state", example = "ES")
+	@ApiModelProperty(value = "Acronym of the state", example = "ES", required = true)
 	@NotBlank(message = "state.acronym.not_null")
 	@Size(max = 2, message = "state.acronym.max_size")
 	private String acronym;
-	@ApiModelProperty(value = "Full name of the state", example = "Espírito Santo")
+	@ApiModelProperty(value = "Full name of the state", example = "Espírito Santo", required = true)
 	@NotBlank(message = "state.name.not_blank")
 	private String name;
 

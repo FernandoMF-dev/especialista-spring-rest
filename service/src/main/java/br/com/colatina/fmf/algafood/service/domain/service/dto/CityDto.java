@@ -22,17 +22,16 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 public class CityDto implements Serializable {
-	@ApiModelProperty(value = "Unique ID of the city", example = "1")
 	@NotNull(message = "city.id.not_null", groups = ValidationGroups.RequiredCity.class)
 	private Long id;
-	@ApiModelProperty(value = "Acronym of the city", example = "VIX")
+	@ApiModelProperty(value = "Acronym of the city", example = "VIX", required = true)
 	@NotNull(message = "city.acronym.not_null")
 	@Size(max = 5, message = "city.acronym.max_size")
 	private String acronym;
-	@ApiModelProperty(value = "Full name of the city", example = "Vitória")
+	@ApiModelProperty(value = "Full name of the city", example = "Vitória", required = true)
 	@NotBlank(message = "city.name.not_blank")
 	private String name;
-	@ApiModelProperty(value = "State on which the city is located")
+	@ApiModelProperty(value = "State on which the city is located", required = true)
 	@NotNull(message = "city.state.not_null")
 	@ConvertGroup(to = ValidationGroups.RequiredState.class)
 	@Valid
