@@ -1,4 +1,4 @@
-package br.com.colatina.fmf.algafood.service.api.controller.documentation;
+package br.com.colatina.fmf.algafood.service.api.documentation.controller;
 
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.api.model.CuisinesXmlWrapper;

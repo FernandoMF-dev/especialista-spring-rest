@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.api.controller.documentation.CuisineControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.CuisineControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.model.CuisinesXmlWrapper;
 import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;

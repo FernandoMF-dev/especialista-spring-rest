@@ -1,11 +1,14 @@
 package br.com.colatina.fmf.algafood.service.core.openapi;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.model.PageModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.PageableModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
-import br.com.colatina.fmf.algafood.service.core.openapi.model.PageableModelOpenApi;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
@@ -68,6 +72,12 @@ public class SpringFoxConfig {
 		docket.additionalModels(typeResolver.resolve(ApiErrorResponse.class));
 
 		docket.directModelSubstitute(Pageable.class, PageableModelOpenApi.class);
+
+		// A substituição do `Page` NÃO funciona caso o `Page<?>` esteja encapsulado em um `ResponseEntity` na configuração do endpoint.
+		// Considerando que o SpringFox não está mais recebendo atualizações, esse bug nunca será corrigido.
+		docket.alternateTypeRules(AlternateTypeRules.newRule(
+				typeResolver.resolve(Page.class, OrderListDto.class),
+				typeResolver.resolve(PageModelOpenApi.class, OrderListDto.class)));
 	}
 
 	private void setApiInfo(Docket docket) {

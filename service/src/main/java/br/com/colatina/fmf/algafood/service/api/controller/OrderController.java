@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -44,10 +45,11 @@ public class OrderController {
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<Page<OrderListDto>> page(OrderPageFilter filter, Pageable pageable) {
+	@ResponseStatus(HttpStatus.OK)
+	public Page<OrderListDto> page(OrderPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of orders with filters {} and with the page configuration {}", filter, pageable);
 		pageable = PageableTranslator.translate(pageable, OrderListDto.class);
-		return new ResponseEntity<>(orderCrudService.page(filter, pageable), HttpStatus.OK);
+		return orderCrudService.page(filter, pageable);
 	}
 
 	@PostMapping()

@@ -1,4 +1,4 @@
-package br.com.colatina.fmf.algafood.service.core.openapi.model;
+package br.com.colatina.fmf.algafood.service.api.documentation.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

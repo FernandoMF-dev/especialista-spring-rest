@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.api.controller.documentation.ProfileControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.ProfileControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.service.ProfileCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
