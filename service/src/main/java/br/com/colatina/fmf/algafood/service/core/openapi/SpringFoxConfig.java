@@ -1,9 +1,11 @@
 package br.com.colatina.fmf.algafood.service.core.openapi;
 
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
+import br.com.colatina.fmf.algafood.service.core.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,7 +57,10 @@ public class SpringFoxConfig {
 
 	private void setAdditionalModels(Docket docket) {
 		var typeResolver = new TypeResolver();
+
 		docket.additionalModels(typeResolver.resolve(ApiErrorResponse.class));
+
+		docket.directModelSubstitute(Pageable.class, PageableModelOpenApi.class);
 	}
 
 	private void setApiInfo(Docket docket) {
