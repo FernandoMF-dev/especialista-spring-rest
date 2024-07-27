@@ -69,7 +69,10 @@ public class SpringFoxConfig {
 	}
 
 	private void setControllerTags(Docket docket) {
-		docket.tags(new Tag(SpringFoxControllerTags.CUISINES, "Operations related to cuisines"));
+		docket.tags(
+				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to cuisines"),
+				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to users profiles")
+		);
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Global response messages">

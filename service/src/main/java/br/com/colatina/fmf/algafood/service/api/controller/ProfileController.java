@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.controller.documentation.ProfileControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.service.ProfileCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +23,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/profiles")
-public class ProfileController {
+public class ProfileController implements ProfileControllerDocumentation {
 	private final ProfileCrudService profileCrudService;
 
+	@Override
 	@GetMapping()
 	public ResponseEntity<List<ProfileDto>> findAll() {
 		log.debug("REST request to find all profiles");
 		return new ResponseEntity<>(profileCrudService.findAll(), HttpStatus.OK);
 	}
 
+	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<ProfileDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the profile with ID: {}", id);
@@ -38,18 +41,21 @@ public class ProfileController {
 		return new ResponseEntity<>(profile, HttpStatus.OK);
 	}
 
+	@Override
 	@PostMapping()
 	public ResponseEntity<ProfileDto> insert(@Valid @RequestBody ProfileDto dto) {
 		log.debug("REST request to insert a new profile: {}", dto);
 		return new ResponseEntity<>(profileCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
+	@Override
 	@PutMapping("/{id}")
-	public ResponseEntity<ProfileDto> update(@Valid @RequestBody ProfileDto dto, @PathVariable Long id) {
+	public ResponseEntity<ProfileDto> update(@PathVariable Long id, @Valid @RequestBody ProfileDto dto) {
 		log.debug("REST request to update profile with id {}: {}", id, dto);
 		return new ResponseEntity<>(profileCrudService.update(dto, id), HttpStatus.OK);
 	}
 
+	@Override
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete profile with id {}", id);
