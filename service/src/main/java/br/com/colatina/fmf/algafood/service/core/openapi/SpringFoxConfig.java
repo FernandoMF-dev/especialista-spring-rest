@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.core.openapi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.core.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -26,6 +28,11 @@ import java.util.function.Consumer;
 @Configuration
 @EnableSwagger2
 public class SpringFoxConfig {
+	@Bean
+	public JacksonModuleRegistrar springFoxJacksonConfig() {
+		return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
+	}
+
 	@Bean
 	public Docket api() {
 		var docket = startDocketBuild();
