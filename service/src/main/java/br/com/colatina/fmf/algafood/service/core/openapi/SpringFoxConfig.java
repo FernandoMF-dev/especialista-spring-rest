@@ -12,7 +12,6 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
-import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
@@ -27,30 +26,50 @@ import java.util.function.Consumer;
 public class SpringFoxConfig {
 	@Bean
 	public Docket api() {
-		var typeResolver = new TypeResolver();
+		var docket = startDocketBuild();
 
+		setGlobalResponseMessages(docket);
+		setAdditionalModels(docket);
+		setApiInfo(docket);
+		setControllerTags(docket);
+
+		return docket;
+	}
+
+	private Docket startDocketBuild() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("br.com.colatina.fmf.algafood.service.api.controller"))
 				.paths(PathSelectors.any())
-				.build()
-				.useDefaultResponseMessages(false)
+				.build();
+	}
+
+	private void setGlobalResponseMessages(Docket docket) {
+		docket.useDefaultResponseMessages(false)
 				.globalResponses(HttpMethod.GET, globalGetResponseMessages())
 				.globalResponses(HttpMethod.POST, globalPostResponseMessages())
 				.globalResponses(HttpMethod.PUT, globalPutResponseMessages())
 				.globalResponses(HttpMethod.PATCH, globalPatchResponseMessages())
-				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
-				.additionalModels(typeResolver.resolve(ApiErrorResponse.class))
-				.apiInfo(apiInfo())
-				.tags(new Tag(SpringFoxControllerTags.CUISINES, "Operations related to cuisines"));
+				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages());
 	}
 
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder()
+	private void setAdditionalModels(Docket docket) {
+		var typeResolver = new TypeResolver();
+		docket.additionalModels(typeResolver.resolve(ApiErrorResponse.class));
+	}
+
+	private void setApiInfo(Docket docket) {
+		var apiInfo = new ApiInfoBuilder()
 				.title("Algafood API")
 				.description("Open API for customers and restaurants")
 				.version("1.0.0")
 				.build();
+
+		docket.apiInfo(apiInfo);
+	}
+
+	private void setControllerTags(Docket docket) {
+		docket.tags(new Tag(SpringFoxControllerTags.CUISINES, "Operations related to cuisines"));
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Global response messages">
