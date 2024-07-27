@@ -1,5 +1,7 @@
 package br.com.colatina.fmf.algafood.service.core.openapi;
 
+import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +24,8 @@ import java.util.List;
 public class SpringFoxConfig {
 	@Bean
 	public Docket api() {
+		var typeResolver = new TypeResolver();
+
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("br.com.colatina.fmf.algafood.service.api.controller"))
@@ -33,6 +37,7 @@ public class SpringFoxConfig {
 				.globalResponses(HttpMethod.PUT, globalPutResponseMessages())
 				.globalResponses(HttpMethod.PATCH, globalPatchResponseMessages())
 				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+				.additionalModels(typeResolver.resolve(ApiErrorResponse.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag(SpringFoxControllerTags.CUISINES, "Operations related to cuisines"));
 	}
@@ -45,6 +50,7 @@ public class SpringFoxConfig {
 				.build();
 	}
 
+	// <editor-fold defaultstate="collapsed" desc="Global response messages">
 	private List<Response> globalGetResponseMessages() {
 		return List.of(
 				newResponseMessage(HttpStatus.NOT_FOUND),
@@ -95,4 +101,5 @@ public class SpringFoxConfig {
 				.description(httpStatus.getReasonPhrase())
 				.build();
 	}
+	// </editor-fold>
 }
