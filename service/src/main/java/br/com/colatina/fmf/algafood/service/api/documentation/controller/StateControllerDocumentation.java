@@ -19,7 +19,7 @@ public interface StateControllerDocumentation {
 	ResponseEntity<List<StateDto>> findAll();
 
 	@ApiOperation("Find a state by its ID")
-	@ApiResponse(responseCode = "400", description = "Invalid State ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+	@ApiResponse(responseCode = "400", description = "Invalid state ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
 	@ApiResponse(responseCode = "404", description = "State not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
 	ResponseEntity<StateDto> findById(@ApiParam(value = "ID of a state", example = "1") Long id);
 

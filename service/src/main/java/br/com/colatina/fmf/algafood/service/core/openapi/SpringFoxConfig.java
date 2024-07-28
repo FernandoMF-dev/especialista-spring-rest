@@ -95,10 +95,11 @@ public class SpringFoxConfig {
 
 	private void setControllerTags(Docket docket) {
 		docket.tags(
-				new Tag(SpringFoxControllerTags.CITIES, "Operations related to addresses cities"),
-				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to cuisines"),
-				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to users profiles"),
-				new Tag(SpringFoxControllerTags.STATES, "Operations related to addresses states")
+				new Tag(SpringFoxControllerTags.CITIES, "Operations related to the register of addresses cities"),
+				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to the register of cuisines"),
+				new Tag(SpringFoxControllerTags.PAYMENT_METHODS, "Operations related to the register of payment methods"),
+				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to the register of users profiles"),
+				new Tag(SpringFoxControllerTags.STATES, "Operations related to the register of addresses states")
 		);
 	}
 
