@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.request.ServletWebRequest;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
@@ -42,7 +43,7 @@ public class SpringFoxConfig {
 		var docket = startDocketBuild();
 
 		setGlobalResponseMessages(docket);
-		setAdditionalModels(docket);
+		setRepresentationModelsConfig(docket);
 		setApiInfo(docket);
 		setControllerTags(docket);
 
@@ -66,10 +67,12 @@ public class SpringFoxConfig {
 				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages());
 	}
 
-	private void setAdditionalModels(Docket docket) {
+	private void setRepresentationModelsConfig(Docket docket) {
 		var typeResolver = new TypeResolver();
 
 		docket.additionalModels(typeResolver.resolve(ApiErrorResponse.class));
+
+		docket.ignoredParameterTypes(ServletWebRequest.class);
 
 		docket.directModelSubstitute(Pageable.class, PageableModelOpenApi.class);
 
