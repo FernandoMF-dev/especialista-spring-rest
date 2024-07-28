@@ -93,14 +93,14 @@ public class SpringFoxConfig {
 	private void setControllerTags(Docket docket) {
 		docket.tags(
 				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to cuisines"),
-				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to users profiles")
+				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to users profiles"),
+				new Tag(SpringFoxControllerTags.STATES, "Operations related to addresses states")
 		);
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Global response messages">
 	private List<Response> globalGetResponseMessages() {
 		return List.of(
-				newErrorResponseMessage(HttpStatus.NOT_FOUND, true),
 				newErrorResponseMessage(HttpStatus.NOT_ACCEPTABLE, false),
 				newErrorResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR, true)
 		);
