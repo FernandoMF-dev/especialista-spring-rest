@@ -32,8 +32,8 @@ public class OrderProductDto implements Serializable {
 	@ApiModelProperty(value = "Additional observation for the product", example = "No onion")
 	private String observation;
 
-	@ApiModelProperty(value = "ID of the order", example = "1")
-	private Long orderId;
+	@ApiModelProperty(value = "Unique code of the order", example = "123e4567-e89b-12d3-a456-426614174000")
+	private String orderCode;
 
 	@ApiModelProperty(value = "ID of the product", example = "1")
 	private Long productId;

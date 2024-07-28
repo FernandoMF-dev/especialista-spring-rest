@@ -8,12 +8,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface OrderProductMapper extends EntityMapper<OrderProductDto, OrderProduct> {
 	@Override
-	@Mapping(source = "orderId", target = "order.id")
+	@Mapping(source = "orderCode", target = "order.uuidCode")
 	@Mapping(source = "productId", target = "product.id")
 	OrderProduct toEntity(OrderProductDto dto);
 
 	@Override
-	@Mapping(source = "order.id", target = "orderId")
+	@Mapping(source = "order.uuidCode", target = "orderCode")
 	@Mapping(source = "product.id", target = "productId")
 	@Mapping(source = "product.name", target = "productName")
 	@Mapping(source = "product.description", target = "productDescription")

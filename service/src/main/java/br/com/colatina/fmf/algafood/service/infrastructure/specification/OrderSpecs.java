@@ -46,12 +46,12 @@ public class OrderSpecs extends BaseSpecs<Order> {
 	}
 
 	@NonNull
-	public Specification<Order> byClientId(Long client) {
+	public Specification<Order> byCustomerId(Long client) {
 		return (root, query, criteriaBuilder) -> {
-			fetch(root, query, Order_.user);
+			fetch(root, query, Order_.customer);
 
 			if (Objects.nonNull(client)) {
-				Join<Order, User> orderUserJoin = root.join(Order_.user);
+				Join<Order, User> orderUserJoin = root.join(Order_.customer);
 				return criteriaBuilder.equal(orderUserJoin.get("id"), client);
 			}
 

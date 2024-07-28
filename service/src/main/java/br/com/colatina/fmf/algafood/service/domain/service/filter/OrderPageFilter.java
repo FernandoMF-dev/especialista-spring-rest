@@ -26,8 +26,8 @@ public class OrderPageFilter implements Serializable {
 	@ApiModelProperty(value = "ID of the restaurant", example = "1")
 	private Long restaurantId;
 
-	@ApiModelProperty(value = "ID of the client", example = "1")
-	private Long clientId;
+	@ApiModelProperty(value = "ID of the customer", example = "1")
+	private Long customerId;
 
 	@ApiModelProperty(value = "Minimum registration date for the order", example = "2023-01-01T00:00:00Z")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

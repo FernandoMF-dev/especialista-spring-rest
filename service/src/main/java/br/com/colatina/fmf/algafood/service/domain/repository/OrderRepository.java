@@ -15,7 +15,7 @@ public interface OrderRepository extends CustomJpaRepository<Order, Long>, JpaSp
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto" +
 			"(o.uuidCode, o.totalValue, o.status, o.registrationDate, u.id, u.name, r.id, r.name) " +
 			" FROM Order o " +
-			" INNER JOIN o.user u " +
+			" INNER JOIN o.customer u " +
 			" INNER JOIN o.restaurant r")
 	List<OrderListDto> findAllListDto();
 

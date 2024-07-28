@@ -48,8 +48,8 @@ public class OrderDto implements Serializable {
 	@ApiModelProperty(value = "Current status of the order", example = "CONFIRMED")
 	private OrderStatusEnum status;
 
-	@ApiModelProperty(value = "Client who emitted the order")
-	private GenericObjectDto user;
+	@ApiModelProperty(value = "Customer who emitted the order")
+	private GenericObjectDto customer;
 
 	@ApiModelProperty(value = "Restaurant that received the order")
 	private GenericObjectDto restaurant;

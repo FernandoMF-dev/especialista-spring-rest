@@ -74,8 +74,8 @@ public class Order extends AbstractAggregateRoot<Order> {
 	private OrderStatusEnum status = OrderStatusEnum.CREATED;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-	private User user;
+	@JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
+	private User customer;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)

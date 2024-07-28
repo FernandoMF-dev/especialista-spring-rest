@@ -31,21 +31,21 @@ public class OrderListDto implements Serializable {
 	@SortableField
 	private OffsetDateTime registrationDate;
 
-	@ApiModelProperty(value = "Client who emitted the order")
+	@ApiModelProperty(value = "Customer who emitted the order")
 	@SortableField(recursive = true)
-	private GenericObjectDto user;
+	private GenericObjectDto customer;
 
 	@ApiModelProperty(value = "Restaurant that received the order")
 	@SortableField(recursive = true)
 	private GenericObjectDto restaurant;
 
 	public OrderListDto(String code, Double value, OrderStatusEnum status, OffsetDateTime registrationDate,
-						Long userId, String userName, Long restaurantId, String restaurantName) {
+						Long customerId, String customerName, Long restaurantId, String restaurantName) {
 		this.code = code;
 		this.value = value;
 		this.status = status;
 		this.registrationDate = registrationDate;
-		this.user = new GenericObjectDto(userId, userName);
+		this.customer = new GenericObjectDto(customerId, customerName);
 		this.restaurant = new GenericObjectDto(restaurantId, restaurantName);
 	}
 }

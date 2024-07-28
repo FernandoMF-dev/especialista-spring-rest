@@ -20,7 +20,7 @@ public class OrderFlowEventsListener {
 		var email = EmailSendService.Email.builder()
 				.subject(order.getRestaurant().getName() + " - Pedido confirmado")
 				.body("confirmed-order.email.html")
-				.recipient(order.getUser().getEmail())
+				.recipient(order.getCustomer().getEmail())
 				.variable("order", order)
 				.build();
 
@@ -34,7 +34,7 @@ public class OrderFlowEventsListener {
 		var email = EmailSendService.Email.builder()
 				.subject(order.getRestaurant().getName() + " - Pedido cancelado")
 				.body("canceled-order.email.html")
-				.recipient(order.getUser().getEmail())
+				.recipient(order.getCustomer().getEmail())
 				.variable("order", order)
 				.build();
 

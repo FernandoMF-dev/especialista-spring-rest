@@ -55,7 +55,7 @@ public class OrderCrudService {
 		Specification<Order> spec = orderSpecs.composedAnd(
 				orderSpecs.byStatus(filter.getStatus()),
 				orderSpecs.byRestaurantId(filter.getRestaurantId()),
-				orderSpecs.byClientId(filter.getClientId()),
+				orderSpecs.byCustomerId(filter.getCustomerId()),
 				orderSpecs.byMinRegistrationDate(filter.getMinRegistrationDate()),
 				orderSpecs.byMaxRegistrationDate(filter.getMaxRegistrationDate())
 		);
@@ -77,7 +77,7 @@ public class OrderCrudService {
 
 	private void validateInsertEntities(OrderInsertDto insertDto, Order entity) {
 		try {
-			entity.setUser(userCrudService.findEntityById(insertDto.getUserId()));
+			entity.setCustomer(userCrudService.findEntityById(insertDto.getCustomerId()));
 			entity.setRestaurant(restaurantCrudService.findEntityById(insertDto.getRestaurantId()));
 			entity.setPaymentMethod(paymentMethodCrudService.findEntityById(insertDto.getPaymentMethodId()));
 			entity.getAddress().setCity(cityCrudService.findEntityById(insertDto.getAddress().getCity().getId()));
