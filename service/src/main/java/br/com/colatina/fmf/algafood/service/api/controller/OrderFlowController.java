@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.OrderFlowControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderFlowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/orders/{orderUuid}")
-public class OrderFlowController {
+public class OrderFlowController implements OrderFlowControllerDocumentation {
 	private final OrderFlowService orderFlowService;
 
+	@Override
 	@PutMapping("/confirm")
 	public ResponseEntity<Void> confirm(@PathVariable String orderUuid) {
 		log.debug("REST request to set order {} as confirmed", orderUuid);
@@ -23,6 +25,7 @@ public class OrderFlowController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
 	@PutMapping("/deliver")
 	public ResponseEntity<Void> deliver(@PathVariable String orderUuid) {
 		log.debug("REST request to set order {} as delivered", orderUuid);
@@ -30,6 +33,7 @@ public class OrderFlowController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
 	@PutMapping("/cancel")
 	public ResponseEntity<Void> cancel(@PathVariable String orderUuid) {
 		log.debug("REST request to set order {} as cancelled", orderUuid);

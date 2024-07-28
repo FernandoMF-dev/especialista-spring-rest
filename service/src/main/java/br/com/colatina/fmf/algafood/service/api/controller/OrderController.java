@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.OrderControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,10 +28,11 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/orders")
-public class OrderController {
+@RequestMapping(path = "/api/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+public class OrderController implements OrderControllerDocumentation {
 	private final OrderCrudService orderCrudService;
 
+	@Override
 	@GetMapping()
 	public ResponseEntity<List<OrderListDto>> findAll() {
 		log.debug("REST request to find all orders");
@@ -37,13 +40,15 @@ public class OrderController {
 		return new ResponseEntity<>(orders, HttpStatus.OK);
 	}
 
+	@Override
 	@GetMapping("/{uuid}")
-	public ResponseEntity<OrderDto> findById(@PathVariable String uuid) {
+	public ResponseEntity<OrderDto> findByUuid(@PathVariable String uuid) {
 		log.debug("REST request to find the order with UUID code {}", uuid);
 		OrderDto order = orderCrudService.findDtoByUuid(uuid);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
+	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public Page<OrderListDto> page(OrderPageFilter filter, Pageable pageable) {
@@ -52,6 +57,7 @@ public class OrderController {
 		return orderCrudService.page(filter, pageable);
 	}
 
+	@Override
 	@PostMapping()
 	public ResponseEntity<OrderDto> insert(@Valid @RequestBody OrderInsertDto dto) {
 		log.debug("REST request to insert a new order: {}", dto);
