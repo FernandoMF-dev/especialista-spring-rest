@@ -100,7 +100,8 @@ INSERT INTO rel_restaurant_responsible (restaurant_id, user_id)
 VALUES (1, 5),
 	   (3, 5);
 
-INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+INSERT INTO tb_order (id, restaurant_id, customer_id, payment_method_id, address_city_id, address_cep,
+					  address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date, subtotal,
 					  freight_fee, total_value, uuid_code)
 VALUES (nextval('seq_order'), 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil', 'CREATED',
@@ -112,7 +113,8 @@ VALUES (nextval('seq_order_product'), 1, 1, 1, 78.9, 78.9, null);
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 1, 2, 2, 110, 220, 'Menos picante, por favor');
 
-INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+INSERT INTO tb_order (id, restaurant_id, customer_id, payment_method_id, address_city_id, address_cep,
+					  address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date, subtotal,
 					  freight_fee, total_value, uuid_code)
 VALUES (nextval('seq_order'), 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro', 'CREATED',
@@ -121,7 +123,8 @@ VALUES (nextval('seq_order'), 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 2, 6, 1, 79, 79, 'Ao ponto');
 
-INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+INSERT INTO tb_order (id, restaurant_id, customer_id, payment_method_id, address_city_id, address_cep,
+					  address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date,
 					  confirmation_date, delivery_date, subtotal, freight_fee, total_value, uuid_code)
 VALUES (nextval('seq_order'), 1, 1, 1, 1, '38400-222', 'Rua Natal', '200', null, 'Brasil', 'DELIVERED',
@@ -131,7 +134,8 @@ INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, t
 VALUES (nextval('seq_order_product'), 3, 2, 1, 110, 110, null);
 
 
-INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+INSERT INTO tb_order (id, restaurant_id, customer_id, payment_method_id, address_city_id, address_cep,
+					  address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date,
 					  confirmation_date, delivery_date, subtotal, freight_fee, total_value, uuid_code)
 VALUES (nextval('seq_order'), 1, 2, 1, 1, '38400-800', 'Rua Fortaleza', '900', 'Apto 504', 'Centro', 'DELIVERED',
@@ -141,7 +145,8 @@ INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, t
 VALUES (nextval('seq_order_product'), 4, 3, 2, 87.2, 174.4, null);
 
 
-INSERT INTO tb_order (id, restaurant_id, user_id, payment_method_id, address_city_id, address_cep, address_public_space,
+INSERT INTO tb_order (id, restaurant_id, customer_id, payment_method_id, address_city_id, address_cep,
+					  address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date,
 					  confirmation_date, delivery_date, subtotal, freight_fee, total_value, uuid_code)
 VALUES (nextval('seq_order'), 1, 3, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20', 'Martins', 'DELIVERED',
