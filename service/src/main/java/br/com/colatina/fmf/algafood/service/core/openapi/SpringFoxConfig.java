@@ -92,6 +92,7 @@ public class SpringFoxConfig {
 
 	private void setControllerTags(Docket docket) {
 		docket.tags(
+				new Tag(SpringFoxControllerTags.CITIES, "Operations related to addresses cities"),
 				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to cuisines"),
 				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to users profiles"),
 				new Tag(SpringFoxControllerTags.STATES, "Operations related to addresses states")
