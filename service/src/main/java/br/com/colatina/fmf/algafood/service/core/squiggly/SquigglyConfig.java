@@ -9,6 +9,8 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class SquigglyConfig {
 	@Value("${algafood.squiggly.param-name}")
@@ -18,9 +20,12 @@ public class SquigglyConfig {
 	public FilterRegistrationBean<SquigglyRequestFilter> squigglyRequestFilter(ObjectMapper objectMapper) {
 		Squiggly.init(objectMapper, new RequestSquigglyContextProvider(filterParam, null));
 
+		var urlPatterns = List.of("/api/*");
+
 		var filterRegistration = new FilterRegistrationBean<SquigglyRequestFilter>();
 		filterRegistration.setFilter(new SquigglyRequestFilter());
 		filterRegistration.setOrder(1);
+		filterRegistration.setUrlPatterns(urlPatterns);
 
 		return filterRegistration;
 	}

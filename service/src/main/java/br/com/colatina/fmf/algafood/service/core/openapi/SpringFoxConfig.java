@@ -6,6 +6,7 @@ import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,12 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
+import springfox.documentation.schema.Example;
+import springfox.documentation.schema.ScalarType;
+import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
@@ -33,6 +38,9 @@ import java.util.function.Consumer;
 @Configuration
 @EnableSwagger2
 public class SpringFoxConfig {
+	@Value("${algafood.squiggly.param-name}")
+	private String squigglyParamName;
+
 	@Bean
 	public JacksonModuleRegistrar springFoxJacksonConfig() {
 		return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
@@ -43,6 +51,7 @@ public class SpringFoxConfig {
 		var docket = startDocketBuild();
 
 		setGlobalResponseMessages(docket);
+		setGlobalOperationParameters(docket);
 		setRepresentationModelsConfig(docket);
 		setApiInfo(docket);
 		setControllerTags(docket);
@@ -65,6 +74,19 @@ public class SpringFoxConfig {
 				.globalResponses(HttpMethod.PUT, globalPutResponseMessages())
 				.globalResponses(HttpMethod.PATCH, globalPatchResponseMessages())
 				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages());
+	}
+
+	private void setGlobalOperationParameters(Docket docket) {
+		docket.globalRequestParameters(List.of(
+				new RequestParameterBuilder()
+						.name(squigglyParamName)
+						.description("Names of properties to filter in the response, separated by commas")
+						.example(new Example("name,description"))
+						.in(ParameterType.QUERY)
+						.required(false)
+						.query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
+						.build()
+		));
 	}
 
 	private void setRepresentationModelsConfig(Docket docket) {
