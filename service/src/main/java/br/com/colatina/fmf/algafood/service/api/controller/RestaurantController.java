@@ -8,6 +8,8 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -36,18 +38,23 @@ import java.util.List;
 public class RestaurantController {
 	private final RestaurantCrudService restaurantCrudService;
 
+	@ApiOperation(value = "Find a list of all available restaurants")
+	@ApiImplicitParam(name = "projection", value = "Projection of the response", allowableValues = "summary, name-only",
+			example = "summary", paramType = "query", dataType = "java.lang.String")
 	@GetMapping()
 	public ResponseEntity<List<RestaurantListDto>> findAll() {
 		log.debug("REST request to find all restaurants");
 		return new ResponseEntity<>(restaurantCrudService.findAll(), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Find a list of all available restaurants", hidden = true)
 	@JsonView(RestaurantView.Summary.class)
 	@GetMapping(params = {"projection=summary"})
 	public ResponseEntity<List<RestaurantListDto>> findAllSummary() {
 		return this.findAll();
 	}
 
+	@ApiOperation(value = "Find a list of all available restaurants", hidden = true)
 	@JsonView(RestaurantView.NameOnly.class)
 	@GetMapping(params = {"projection=name-only"})
 	public ResponseEntity<List<RestaurantListDto>> findAllNameOnly() {
