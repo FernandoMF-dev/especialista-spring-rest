@@ -125,6 +125,7 @@ public class SpringFoxConfig {
 				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to the register of users profiles"),
 				new Tag(SpringFoxControllerTags.RESTAURANTS, "Operations related to the register and management of restaurants"),
 				new Tag(SpringFoxControllerTags.STATES, "Operations related to the register of addresses states"),
+				new Tag(SpringFoxControllerTags.STATISTICS, "Operations related to the generation of statistics and reports"),
 				new Tag(SpringFoxControllerTags.USERS, "Operations related to the register and management of users accounts")
 		);
 	}

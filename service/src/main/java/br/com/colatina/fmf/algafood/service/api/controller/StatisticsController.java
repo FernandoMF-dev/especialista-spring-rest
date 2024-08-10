@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.StatisticsControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.service.SalesQueryService;
 import br.com.colatina.fmf.algafood.service.domain.service.SalesReportService;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.SalesPerPeriodFilter;
@@ -21,11 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
-public class StatisticsController {
+public class StatisticsController implements StatisticsControllerDocumentation {
 	private final SalesQueryService salesQueryService;
 	private final SalesReportService salesReportService;
 
 	@GetMapping(path = "/sales-per-day")
+	@Override
 	public ResponseEntity<List<SalesPerPeriod>> findSalesPerDay(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all daily sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
@@ -34,6 +36,7 @@ public class StatisticsController {
 	}
 
 	@GetMapping(path = "/sales-per-day", produces = MediaType.APPLICATION_PDF_VALUE)
+	@Override
 	public ResponseEntity<byte[]> findSalesPerDayPdf(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to export to PDF the report with all daily sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
@@ -49,6 +52,7 @@ public class StatisticsController {
 	}
 
 	@GetMapping("/sales-per-month")
+	@Override
 	public ResponseEntity<List<SalesPerPeriod>> findSalesPerMonth(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all monthly sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
@@ -57,6 +61,7 @@ public class StatisticsController {
 	}
 
 	@GetMapping("/sales-per-year")
+	@Override
 	public ResponseEntity<List<SalesPerPeriod>> findSalesPerYear(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all yearly sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
