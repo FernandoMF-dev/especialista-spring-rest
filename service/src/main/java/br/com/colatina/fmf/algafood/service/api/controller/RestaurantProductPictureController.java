@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantProductPictureControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.service.FileStorageService;
 import br.com.colatina.fmf.algafood.service.domain.service.ProductPictureCrudService;
@@ -29,10 +30,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/restaurants/{restaurantId}/products/{productId}/pictures", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RestaurantProductPictureController {
+public class RestaurantProductPictureController implements RestaurantProductPictureControllerDocumentation {
 	private final ProductPictureCrudService productPictureCrudService;
 	private final FileStorageService fileStorageService;
 
+	@Override
 	@GetMapping
 	public ResponseEntity<ProductPictureDto> findPicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to get the data of the picture for the product {} from the restaurant {}", productId, restaurantId);
@@ -40,6 +42,7 @@ public class RestaurantProductPictureController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	@Override
 	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<InputStreamResource> getPictureFile(@PathVariable Long restaurantId, @PathVariable Long productId,
 															  @RequestHeader("accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
@@ -56,6 +59,7 @@ public class RestaurantProductPictureController {
 		}
 	}
 
+	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ProductPictureDto> updatePicture(@PathVariable Long restaurantId, @PathVariable Long productId,
 														   @Valid ProductPictureInsertDto picture) throws IOException {
@@ -64,6 +68,7 @@ public class RestaurantProductPictureController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	@Override
 	@DeleteMapping
 	public ResponseEntity<Void> deletePicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to delete the picture for the product {} from the restaurant {}", productId, restaurantId);
