@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 
-@Api(tags = SpringFoxControllerTags.ORDERS_FLOW)
+@Api(tags = SpringFoxControllerTags.ORDERS)
 public interface OrderFlowControllerDocumentation {
 	@ApiOperation("Confirm an order by its UUID")
 	@ApiResponse(responseCode = "204", description = "Order confirmed")

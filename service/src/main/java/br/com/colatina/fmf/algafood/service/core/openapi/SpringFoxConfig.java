@@ -120,7 +120,6 @@ public class SpringFoxConfig {
 				new Tag(SpringFoxControllerTags.CITIES, "Operations related to the register of addresses cities"),
 				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to the register of cuisines"),
 				new Tag(SpringFoxControllerTags.ORDERS, "Operations related to the emission and management of customer orders"),
-				new Tag(SpringFoxControllerTags.ORDERS_FLOW, "Operations related to changing the status of customer orders"),
 				new Tag(SpringFoxControllerTags.PAYMENT_METHODS, "Operations related to the register of payment methods"),
 				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to the register of users profiles"),
 				new Tag(SpringFoxControllerTags.RESTAURANTS, "Operations related to the register and management of restaurants"),
