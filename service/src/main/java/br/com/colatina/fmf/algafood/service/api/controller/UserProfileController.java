@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.UserProfileControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/users/{userId}/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserProfileController {
+public class UserProfileController implements UserProfileControllerDocumentation {
 	private final UserCrudService userCrudService;
 
+	@Override
 	@GetMapping()
 	public ResponseEntity<Set<ProfileDto>> findAll(@PathVariable Long userId) {
 		log.debug("REST request to find all profiles associated with the user {}", userId);
@@ -30,6 +32,7 @@ public class UserProfileController {
 		return new ResponseEntity<>(permissions, HttpStatus.OK);
 	}
 
+	@Override
 	@PutMapping("/{profileId}")
 	public ResponseEntity<Void> associate(@PathVariable Long userId, @PathVariable Long profileId) {
 		log.debug("REST request to associate the profile {} with the user {}", profileId, userId);
@@ -37,6 +40,7 @@ public class UserProfileController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
 	@DeleteMapping("/{profileId}")
 	public ResponseEntity<Void> disassociate(@PathVariable Long userId, @PathVariable Long profileId) {
 		log.debug("REST request to disassociate the profile {} from the user {}", profileId, userId);
