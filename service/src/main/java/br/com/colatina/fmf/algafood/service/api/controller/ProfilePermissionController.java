@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
-import br.com.colatina.fmf.algafood.service.api.documentation.controller.DocumentationProfilePermissionController;
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.ProfilePermissionControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.service.ProfileCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PermissionDto;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/profiles/{profileId}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ProfilePermissionController implements DocumentationProfilePermissionController {
+public class ProfilePermissionController implements ProfilePermissionControllerDocumentation {
 	private final ProfileCrudService profileCrudService;
 
 	@Override

@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Set;
 
 @Api(tags = SpringFoxControllerTags.PROFILES)
-public interface DocumentationProfilePermissionController {
+public interface ProfilePermissionControllerDocumentation {
 
 	@ApiOperation("Find all permissions associated with a profile")
 	@ApiResponse(responseCode = "200", description = "Permissions retrieved")
