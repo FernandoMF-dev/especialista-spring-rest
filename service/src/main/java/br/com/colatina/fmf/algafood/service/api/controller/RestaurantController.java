@@ -37,29 +37,29 @@ import java.util.List;
 public class RestaurantController implements RestaurantControllerDocumentation {
 	private final RestaurantCrudService restaurantCrudService;
 
-	@GetMapping()
 	@Override
+	@GetMapping()
 	public ResponseEntity<List<RestaurantListDto>> findAll() {
 		log.debug("REST request to find all restaurants");
 		return new ResponseEntity<>(restaurantCrudService.findAll(), HttpStatus.OK);
 	}
 
+	@Override
 	@JsonView(RestaurantView.Summary.class)
 	@GetMapping(params = {"projection=summary"})
-	@Override
 	public ResponseEntity<List<RestaurantListDto>> findAllSummary() {
 		return this.findAll();
 	}
 
+	@Override
 	@JsonView(RestaurantView.NameOnly.class)
 	@GetMapping(params = {"projection=name-only"})
-	@Override
 	public ResponseEntity<List<RestaurantListDto>> findAllNameOnly() {
 		return this.findAll();
 	}
 
-	@GetMapping("/freight-fee")
 	@Override
+	@GetMapping("/freight-fee")
 	public ResponseEntity<List<RestaurantListDto>> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
 																	  @RequestParam(value = "min", required = false) Double min,
 																	  @RequestParam(value = "max", required = false) Double max) {
@@ -69,68 +69,68 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 		return _filterByFreightFee(name, min, max);
 	}
 
-	@GetMapping("/page")
 	@Override
+	@GetMapping("/page")
 	public ResponseEntity<Page<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of restaurants with filters {} and with the page configuration {}", filter, pageable);
 		pageable = PageableTranslator.translate(pageable, RestaurantListDto.class);
 		return new ResponseEntity<>(restaurantCrudService.page(filter, pageable), HttpStatus.OK);
 	}
 
-	@GetMapping("/first")
 	@Override
+	@GetMapping("/first")
 	public ResponseEntity<RestaurantDto> findFirst() {
 		log.debug("REST request to find the first restaurant it can");
 		return new ResponseEntity<>(restaurantCrudService.findFirst(), HttpStatus.OK);
 	}
 
-	@GetMapping("/{id}")
 	@Override
+	@GetMapping("/{id}")
 	public ResponseEntity<RestaurantDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the restaurant with ID: {}", id);
 		return new ResponseEntity<>(restaurantCrudService.findDtoById(id), HttpStatus.OK);
 	}
 
-	@PostMapping()
 	@Override
+	@PostMapping()
 	public ResponseEntity<RestaurantDto> insert(@Valid @RequestBody RestaurantFormDto dto) {
 		log.debug("REST request to insert a new restaurant: {}", dto);
 		return new ResponseEntity<>(restaurantCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
-	@PutMapping("/{id}")
 	@Override
+	@PutMapping("/{id}")
 	public ResponseEntity<RestaurantDto> update(@Valid @RequestBody RestaurantFormDto dto, @PathVariable Long id) {
 		log.debug("REST request to update restaurant with id {}: {}", id, dto);
 		return new ResponseEntity<>(restaurantCrudService.update(dto, id), HttpStatus.OK);
 	}
 
-	@PatchMapping("/{id}/active")
 	@Override
+	@PatchMapping("/{id}/active")
 	public ResponseEntity<Void> toggleActive(@PathVariable Long id, @RequestParam(value = "value") Boolean active) {
 		log.debug("REST request to toggle the active status of restaurant {} with the value: {}", id, active);
 		restaurantCrudService.toggleActive(id, active);
 		return ResponseEntity.noContent().build();
 	}
 
-	@PatchMapping("/active")
 	@Override
+	@PatchMapping("/active")
 	public ResponseEntity<Void> toggleAllActive(@RequestParam(value = "value") Boolean active, @RequestBody List<Long> restaurantIds) {
 		log.debug("REST request to toggle the active status of all restaurants {} with the value: {}", restaurantIds, active);
 		restaurantCrudService.toggleActive(restaurantIds, active);
 		return ResponseEntity.noContent().build();
 	}
 
-	@PatchMapping("/{id}/open")
 	@Override
+	@PatchMapping("/{id}/open")
 	public ResponseEntity<Void> toggleOpen(@PathVariable Long id, @RequestParam(value = "value") Boolean open) {
 		log.debug("REST request to toggle the open status of restaurant {} with the value: {}", id, open);
 		restaurantCrudService.toggleOpen(id, open);
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("/{id}")
 	@Override
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete restaurant with id {}", id);
 		restaurantCrudService.delete(id);

@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Api(tags = SpringFoxControllerTags.RESTAURANTS_PRODUCTS)
+@Api(tags = SpringFoxControllerTags.PRODUCTS)
 public interface RestaurantProductControllerDocumentation {
 	@ApiOperation("Find all products for a restaurant")
 	@ApiResponse(responseCode = "200", description = "List of products retrieved")

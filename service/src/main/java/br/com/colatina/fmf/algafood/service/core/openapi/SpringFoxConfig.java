@@ -121,9 +121,9 @@ public class SpringFoxConfig {
 				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to the register of cuisines"),
 				new Tag(SpringFoxControllerTags.ORDERS, "Operations related to the emission and management of customer orders"),
 				new Tag(SpringFoxControllerTags.PAYMENT_METHODS, "Operations related to the register of payment methods"),
+				new Tag(SpringFoxControllerTags.PRODUCTS, "Operations related to the register and management of the products offered by restaurants"),
 				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to the register of users profiles"),
 				new Tag(SpringFoxControllerTags.RESTAURANTS, "Operations related to the register and management of restaurants"),
-				new Tag(SpringFoxControllerTags.RESTAURANTS_PRODUCTS, "Operations related to the register and management of the products offered by restaurants"),
 				new Tag(SpringFoxControllerTags.STATES, "Operations related to the register of addresses states")
 		);
 	}
