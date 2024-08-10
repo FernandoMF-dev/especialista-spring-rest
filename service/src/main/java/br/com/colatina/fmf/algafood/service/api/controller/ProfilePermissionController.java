@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.DocumentationProfilePermissionController;
 import br.com.colatina.fmf.algafood.service.domain.service.ProfileCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PermissionDto;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/profiles/{profileId}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ProfilePermissionController {
+public class ProfilePermissionController implements DocumentationProfilePermissionController {
 	private final ProfileCrudService profileCrudService;
 
+	@Override
 	@GetMapping()
 	public ResponseEntity<Set<PermissionDto>> findAll(@PathVariable Long profileId) {
 		log.debug("REST request to find all permissions associated with the profile {}", profileId);
@@ -30,6 +32,7 @@ public class ProfilePermissionController {
 		return new ResponseEntity<>(permissions, HttpStatus.OK);
 	}
 
+	@Override
 	@PutMapping("/{permissionId}")
 	public ResponseEntity<Void> associate(@PathVariable Long profileId, @PathVariable Long permissionId) {
 		log.debug("REST request to associate the permission {} with the profile {}", permissionId, profileId);
@@ -37,6 +40,7 @@ public class ProfilePermissionController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
 	@DeleteMapping("/{permissionId}")
 	public ResponseEntity<Void> disassociate(@PathVariable Long profileId, @PathVariable Long permissionId) {
 		log.debug("REST request to disassociate the permission {} from the profile {}", permissionId, profileId);
