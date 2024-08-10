@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.UserControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PasswordChangeDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
@@ -26,40 +27,46 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserController {
+public class UserController implements UserControllerDocumentation {
 	private final UserCrudService userCrudService;
 
+	@Override
 	@GetMapping()
 	public ResponseEntity<List<UserDto>> findAll() {
 		log.debug("REST request to find all users");
 		return new ResponseEntity<>(userCrudService.findAll(), HttpStatus.OK);
 	}
 
+	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the user with ID: {}", id);
 		return new ResponseEntity<>(userCrudService.findDtoById(id), HttpStatus.OK);
 	}
 
+	@Override
 	@PostMapping()
 	public ResponseEntity<UserDto> insert(@Valid @RequestBody UserInsertDto dto) {
 		log.debug("REST request to insert a new user: {}", dto);
 		return new ResponseEntity<>(userCrudService.insert(dto), HttpStatus.CREATED);
 	}
 
+	@Override
 	@PutMapping("/{id}")
-	public ResponseEntity<UserDto> update(@Valid @RequestBody UserDto dto, @PathVariable Long id) {
+	public ResponseEntity<UserDto> update(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
 		log.debug("REST request to update user with id {}: {}", id, dto);
 		return new ResponseEntity<>(userCrudService.update(dto, id), HttpStatus.OK);
 	}
 
+	@Override
 	@PatchMapping("/{id}/password")
-	public ResponseEntity<Void> changePassword(@Valid @RequestBody PasswordChangeDto dto, @PathVariable Long id) {
+	public ResponseEntity<Void> changePassword(@PathVariable Long id, @Valid @RequestBody PasswordChangeDto dto) {
 		log.debug("REST request to change the password of user with id {}: {}", id, dto);
 		userCrudService.changePassword(dto, id);
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete user with id {}", id);
