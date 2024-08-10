@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantResponsibleControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,11 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/restaurants/{restaurantId}/responsible")
-public class RestaurantResponsibleController {
+public class RestaurantResponsibleController implements RestaurantResponsibleControllerDocumentation {
 	private final RestaurantCrudService restaurantCrudService;
 
 	@GetMapping()
+	@Override
 	public ResponseEntity<Set<UserDto>> findAll(@PathVariable Long restaurantId) {
 		log.debug("REST request to find all user responsible for the restaurant {}", restaurantId);
 		Set<UserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurant(restaurantId);
@@ -30,6 +32,7 @@ public class RestaurantResponsibleController {
 	}
 
 	@PutMapping("/{responsibleId}")
+	@Override
 	public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long responsibleId) {
 		log.debug("REST request to associate the user {} as responsible for the restaurant {}", responsibleId, restaurantId);
 		restaurantCrudService.addResponsibleToRestaurant(restaurantId, responsibleId);
@@ -37,6 +40,7 @@ public class RestaurantResponsibleController {
 	}
 
 	@DeleteMapping("/{responsibleId}")
+	@Override
 	public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long responsibleId) {
 		log.debug("REST request to disassociate the user {} from being responsible for the restaurant {}", responsibleId, restaurantId);
 		restaurantCrudService.removeResponsibleFromRestaurant(restaurantId, responsibleId);
