@@ -4,6 +4,7 @@ import br.com.colatina.fmf.algafood.service.api.documentation.controller.OrderFl
 import br.com.colatina.fmf.algafood.service.domain.service.OrderFlowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/orders/{orderUuid}")
+@RequestMapping(path = "/api/orders/{orderUuid}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderFlowController implements OrderFlowControllerDocumentation {
 	private final OrderFlowService orderFlowService;
 

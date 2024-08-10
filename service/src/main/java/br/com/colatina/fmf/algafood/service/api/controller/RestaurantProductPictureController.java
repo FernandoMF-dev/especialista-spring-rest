@@ -28,20 +28,19 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/restaurants/{restaurantId}/products/{productId}/pictures")
+@RequestMapping(path = "/api/restaurants/{restaurantId}/products/{productId}/pictures", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantProductPictureController {
-
 	private final ProductPictureCrudService productPictureCrudService;
 	private final FileStorageService fileStorageService;
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	public ResponseEntity<ProductPictureDto> findPicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to get the data of the picture for the product {} from the restaurant {}", productId, restaurantId);
 		ProductPictureDto result = productPictureCrudService.findPictureDto(restaurantId, productId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@GetMapping
+	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<InputStreamResource> getPictureFile(@PathVariable Long restaurantId, @PathVariable Long productId,
 															  @RequestHeader("accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		log.debug("REST request to the picture file for the product {} from the restaurant {}", productId, restaurantId);

@@ -5,6 +5,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/users/{userId}/profiles")
+@RequestMapping(path = "/api/users/{userId}/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserProfileController {
 	private final UserCrudService userCrudService;
 

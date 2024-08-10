@@ -6,6 +6,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/restaurants/{restaurantId}/products")
+@RequestMapping(path = "/api/restaurants/{restaurantId}/products", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantProductController implements RestaurantProductControllerDocumentation {
 	private final ProductCrudService productCrudService;
 

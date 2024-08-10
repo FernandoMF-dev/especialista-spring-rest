@@ -6,6 +6,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/restaurants/{restaurantId}/responsible")
+@RequestMapping(path = "/api/restaurants/{restaurantId}/responsible", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantResponsibleController implements RestaurantResponsibleControllerDocumentation {
 	private final RestaurantCrudService restaurantCrudService;
 

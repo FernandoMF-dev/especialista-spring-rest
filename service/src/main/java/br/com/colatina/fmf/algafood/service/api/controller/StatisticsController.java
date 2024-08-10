@@ -20,12 +20,12 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/statistics")
+@RequestMapping(path = "/api/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StatisticsController {
 	private final SalesQueryService salesQueryService;
 	private final SalesReportService salesReportService;
 
-	@GetMapping(path = "/sales-per-day", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/sales-per-day")
 	public ResponseEntity<List<SalesPerPeriod>> findSalesPerDay(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all daily sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
