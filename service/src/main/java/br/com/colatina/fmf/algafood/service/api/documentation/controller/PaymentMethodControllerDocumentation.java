@@ -22,20 +22,20 @@ public interface PaymentMethodControllerDocumentation {
 	@ApiOperation("Find a payment method by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid payment method ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
 	@ApiResponse(responseCode = "404", description = "Payment method not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<PaymentMethodDto> findById(@ApiParam(value = "ID of a payment method", example = "1") Long id, ServletWebRequest request);
+	ResponseEntity<PaymentMethodDto> findById(@ApiParam(value = "ID of a payment method", example = "1", required = true) Long id, ServletWebRequest request);
 
 	@ApiOperation("Insert a new payment method")
 	@ApiResponse(responseCode = "201", description = "Payment method created", content = @Content(schema = @Schema(implementation = PaymentMethodDto.class)))
-	ResponseEntity<PaymentMethodDto> insert(@ApiParam(name = "body", value = "Payment method data to create") PaymentMethodDto dto);
+	ResponseEntity<PaymentMethodDto> insert(@ApiParam(name = "body", value = "Payment method data to create", required = true) PaymentMethodDto dto);
 
 	@ApiOperation("Update a payment method by its ID")
 	@ApiResponse(responseCode = "200", description = "Payment method updated", content = @Content(schema = @Schema(implementation = PaymentMethodDto.class)))
 	@ApiResponse(responseCode = "404", description = "Payment method not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<PaymentMethodDto> update(@ApiParam(value = "ID of a payment method to update", example = "1") Long id,
-											@ApiParam(name = "body", value = "Payment method data to update") PaymentMethodDto dto);
+	ResponseEntity<PaymentMethodDto> update(@ApiParam(value = "ID of a payment method to update", example = "1", required = true) Long id,
+											@ApiParam(name = "body", value = "Payment method data to update", required = true) PaymentMethodDto dto);
 
 	@ApiOperation("Delete a payment method by its ID")
 	@ApiResponse(responseCode = "204", description = "Payment method deleted")
 	@ApiResponse(responseCode = "404", description = "Payment method not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<Void> delete(@ApiParam(value = "ID of a payment method to delete", example = "1") Long id);
+	ResponseEntity<Void> delete(@ApiParam(value = "ID of a payment method to delete", example = "1", required = true) Long id);
 }

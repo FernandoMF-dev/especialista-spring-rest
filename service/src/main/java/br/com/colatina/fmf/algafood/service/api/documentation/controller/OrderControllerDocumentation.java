@@ -26,12 +26,12 @@ public interface OrderControllerDocumentation {
 	@ApiOperation("Find an order by its unique identifier code")
 	@ApiResponse(responseCode = "400", description = "Invalid order UUID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
 	@ApiResponse(responseCode = "404", description = "Order not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<OrderDto> findByUuid(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000") String uuid);
+	ResponseEntity<OrderDto> findByUuid(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000", required = true) String uuid);
 
 	@ApiOperation("Find a paginated list of orders with filters")
 	Page<OrderListDto> page(OrderPageFilter filter, Pageable pageable);
 
 	@ApiOperation("Emits a new order")
 	@ApiResponse(responseCode = "201", description = "Order created", content = @Content(schema = @Schema(implementation = OrderDto.class)))
-	ResponseEntity<OrderDto> insert(@ApiParam(name = "body", value = "Order data to create") OrderInsertDto dto);
+	ResponseEntity<OrderDto> insert(@ApiParam(name = "body", value = "Order data to create", required = true) OrderInsertDto dto);
 }

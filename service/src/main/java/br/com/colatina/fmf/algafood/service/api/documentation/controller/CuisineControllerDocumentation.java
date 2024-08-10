@@ -25,7 +25,7 @@ public interface CuisineControllerDocumentation {
 	@ApiOperation("Find a cuisine by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid Cuisine ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
 	@ApiResponse(responseCode = "404", description = "Cuisine not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<CuisineDto> findById(@ApiParam(value = "ID of a available cuisine", example = "1") Long id);
+	ResponseEntity<CuisineDto> findById(@ApiParam(value = "ID of a available cuisine", example = "1", required = true) Long id);
 
 	@ApiOperation("Find the first available cuisine it can")
 	@ApiResponse(responseCode = "404", description = "No cuisine found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
@@ -33,16 +33,16 @@ public interface CuisineControllerDocumentation {
 
 	@ApiOperation("Insert a new cuisine")
 	@ApiResponse(responseCode = "201", description = "Cuisine created", content = @Content(schema = @Schema(implementation = CuisineDto.class)))
-	ResponseEntity<CuisineDto> insert(@ApiParam(name = "body", value = "Cuisine data to create") CuisineDto dto);
+	ResponseEntity<CuisineDto> insert(@ApiParam(name = "body", value = "Cuisine data to create", required = true) CuisineDto dto);
 
 	@ApiOperation("Update a cuisine by its ID")
 	@ApiResponse(responseCode = "200", description = "Cuisine updated", content = @Content(schema = @Schema(implementation = CuisineDto.class)))
 	@ApiResponse(responseCode = "404", description = "Cuisine not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<CuisineDto> update(@ApiParam(value = "ID of a available cuisine to update", example = "1") Long id,
-									  @ApiParam(name = "body", value = "Cuisine data to update") CuisineDto dto);
+	ResponseEntity<CuisineDto> update(@ApiParam(value = "ID of a available cuisine to update", example = "1", required = true) Long id,
+									  @ApiParam(name = "body", value = "Cuisine data to update", required = true) CuisineDto dto);
 
 	@ApiOperation("Delete a cuisine by its ID")
 	@ApiResponse(responseCode = "204", description = "Cuisine deleted")
 	@ApiResponse(responseCode = "404", description = "Cuisine not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<Void> delete(@ApiParam(value = "ID of a available cuisine to delete", example = "1") Long id);
+	ResponseEntity<Void> delete(@ApiParam(value = "ID of a available cuisine to delete", example = "1", required = true) Long id);
 }

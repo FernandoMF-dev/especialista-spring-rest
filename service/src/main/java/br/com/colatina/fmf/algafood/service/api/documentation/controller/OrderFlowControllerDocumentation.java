@@ -16,17 +16,17 @@ public interface OrderFlowControllerDocumentation {
 	@ApiResponse(responseCode = "204", description = "Order confirmed")
 	@ApiResponse(responseCode = "404", description = "Order not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
 	@ApiResponse(responseCode = "409", description = "Order cannot be confirmed because of its current status", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<Void> confirm(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000") String orderUuid);
+	ResponseEntity<Void> confirm(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000", required = true) String orderUuid);
 
 	@ApiOperation("Deliver an order by its UUID")
 	@ApiResponse(responseCode = "204", description = "Order delivered")
 	@ApiResponse(responseCode = "404", description = "Order not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
 	@ApiResponse(responseCode = "409", description = "Order cannot be delivered because of its current status", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<Void> deliver(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000") String orderUuid);
+	ResponseEntity<Void> deliver(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000", required = true) String orderUuid);
 
 	@ApiOperation("Cancel an order by its UUID")
 	@ApiResponse(responseCode = "204", description = "Order cancelled")
 	@ApiResponse(responseCode = "404", description = "Order not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
 	@ApiResponse(responseCode = "409", description = "Order cannot be cancelled because of its current status", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<Void> cancel(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000") String orderUuid);
+	ResponseEntity<Void> cancel(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000", required = true) String orderUuid);
 }
