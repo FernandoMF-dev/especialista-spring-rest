@@ -123,6 +123,7 @@ public class SpringFoxConfig {
 				new Tag(SpringFoxControllerTags.ORDERS_FLOW, "Operations related to changing the status of customer orders"),
 				new Tag(SpringFoxControllerTags.PAYMENT_METHODS, "Operations related to the register of payment methods"),
 				new Tag(SpringFoxControllerTags.PROFILES, "Operations related to the register of users profiles"),
+				new Tag(SpringFoxControllerTags.RESTAURANTS, "Operations related to the register and management of restaurants"),
 				new Tag(SpringFoxControllerTags.STATES, "Operations related to the register of addresses states")
 		);
 	}

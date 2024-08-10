@@ -7,6 +7,7 @@ public class SpringFoxControllerTags {
 	public static final String ORDERS_FLOW = "Orders Flow";
 	public static final String PAYMENT_METHODS = "Payment Methods";
 	public static final String PROFILES = "Profiles";
+	public static final String RESTAURANTS = "Restaurants";
 	public static final String STATES = "States";
 
 	private SpringFoxControllerTags() {
