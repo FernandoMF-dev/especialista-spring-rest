@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class StateDto implements Serializable {
+public class StateDto extends RepresentationModel<StateDto> implements Serializable {
 	@NotNull(message = "state.id.not_null", groups = ValidationGroups.RequiredState.class)
 	private Long id;
 	@ApiModelProperty(value = "Acronym of the state", example = "ES", required = true)

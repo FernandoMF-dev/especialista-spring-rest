@@ -6,6 +6,8 @@ import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,9 @@ public class CityController implements CityControllerDocumentation {
 	public ResponseEntity<CityDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the city with ID: {}", id);
 		CityDto city = cityCrudService.findDtoById(id);
+		city.add(Link.of("http://localhost:8080/api/cities/" + id));
+		city.add(Link.of("http://localhost:8080/api/cities", IanaLinkRelations.COLLECTION));
+		city.getState().add(Link.of("http://localhost:8080/api/states/" + city.getState().getId()));
 		return new ResponseEntity<>(city, HttpStatus.OK);
 	}
 

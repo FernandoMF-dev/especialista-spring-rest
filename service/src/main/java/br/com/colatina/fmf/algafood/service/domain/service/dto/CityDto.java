@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -21,7 +22,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-public class CityDto implements Serializable {
+public class CityDto extends RepresentationModel<CityDto> implements Serializable {
 	@NotNull(message = "city.id.not_null", groups = ValidationGroups.RequiredCity.class)
 	private Long id;
 
