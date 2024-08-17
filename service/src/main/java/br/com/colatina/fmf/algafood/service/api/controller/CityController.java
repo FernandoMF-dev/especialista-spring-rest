@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.CityControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,9 @@ public class CityController implements CityControllerDocumentation {
 	@PostMapping()
 	public ResponseEntity<CityDto> insert(@Valid @RequestBody CityDto dto) {
 		log.debug("REST request to insert a new city: {}", dto);
-		return new ResponseEntity<>(cityCrudService.insert(dto), HttpStatus.CREATED);
+		CityDto result = cityCrudService.insert(dto);
+		ResourceUriUtils.addUriInResponseHeader(result.getId());
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 
 	@Override
