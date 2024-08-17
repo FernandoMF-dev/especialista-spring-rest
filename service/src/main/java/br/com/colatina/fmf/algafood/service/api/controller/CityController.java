@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,9 +45,9 @@ public class CityController implements CityControllerDocumentation {
 		log.debug("REST request to find the city with ID: {}", id);
 		CityDto city = cityCrudService.findDtoById(id);
 
-		city.add(linkTo(CityController.class).slash(city.getId()).withSelfRel());
-		city.add(linkTo(CityController.class).withRel(IanaLinkRelations.COLLECTION));
-		city.getState().add(linkTo(StateController.class).slash(city.getState().getId()).withSelfRel());
+		city.add(linkTo(methodOn(CityController.class).findById(city.getId())).withSelfRel());
+		city.add(linkTo(methodOn(CityController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+		city.getState().add(linkTo(methodOn(StateController.class).findById(city.getState().getId())).withSelfRel());
 
 		return new ResponseEntity<>(city, HttpStatus.OK);
 	}
