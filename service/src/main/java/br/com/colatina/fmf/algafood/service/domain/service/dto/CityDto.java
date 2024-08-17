@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @ApiModel(value = "City", description = "Representation model for city")
+@Relation(collectionRelation = "cities")
 @Getter
 @Setter
 @ToString

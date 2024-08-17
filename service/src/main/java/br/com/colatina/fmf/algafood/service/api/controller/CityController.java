@@ -6,6 +6,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,9 +35,15 @@ public class CityController implements CityControllerDocumentation {
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<List<CityDto>> findAll() {
+	public ResponseEntity<CollectionModel<CityDto>> findAll() {
 		log.debug("REST request to find all cities");
-		return new ResponseEntity<>(cityCrudService.findAll(), HttpStatus.OK);
+		List<CityDto> cities = cityCrudService.findAll();
+		CollectionModel<CityDto> collectionModel = CollectionModel.of(cities);
+
+		cities.forEach(this::addHypermediaLinks);
+		collectionModel.add(linkTo(methodOn(CityController.class).findAll()).withSelfRel());
+
+		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 
 	@Override
@@ -45,9 +52,7 @@ public class CityController implements CityControllerDocumentation {
 		log.debug("REST request to find the city with ID: {}", id);
 		CityDto city = cityCrudService.findDtoById(id);
 
-		city.add(linkTo(methodOn(CityController.class).findById(city.getId())).withSelfRel());
-		city.add(linkTo(methodOn(CityController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
-		city.getState().add(linkTo(methodOn(StateController.class).findById(city.getState().getId())).withSelfRel());
+		addHypermediaLinks(city);
 
 		return new ResponseEntity<>(city, HttpStatus.OK);
 	}
@@ -56,9 +61,9 @@ public class CityController implements CityControllerDocumentation {
 	@PostMapping()
 	public ResponseEntity<CityDto> insert(@Valid @RequestBody CityDto dto) {
 		log.debug("REST request to insert a new city: {}", dto);
-		CityDto result = cityCrudService.insert(dto);
-		ResourceUriUtils.addUriInResponseHeader(result.getId());
-		return new ResponseEntity<>(result, HttpStatus.CREATED);
+		CityDto city = cityCrudService.insert(dto);
+		ResourceUriUtils.addUriInResponseHeader(city.getId());
+		return new ResponseEntity<>(city, HttpStatus.CREATED);
 	}
 
 	@Override
@@ -74,5 +79,11 @@ public class CityController implements CityControllerDocumentation {
 		log.debug("REST request to delete city with id {}", id);
 		cityCrudService.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	private void addHypermediaLinks(CityDto city) {
+		city.add(linkTo(methodOn(CityController.class).findById(city.getId())).withSelfRel());
+		city.add(linkTo(methodOn(CityController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+		city.getState().add(linkTo(methodOn(StateController.class).findById(city.getState().getId())).withSelfRel());
 	}
 }

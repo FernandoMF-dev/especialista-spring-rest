@@ -9,14 +9,13 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Api(tags = SpringFoxControllerTags.CITIES)
 public interface CityControllerDocumentation {
 	@ApiOperation("Find a list of all available cities")
-	ResponseEntity<List<CityDto>> findAll();
+	ResponseEntity<CollectionModel<CityDto>> findAll();
 
 	@ApiOperation("Find a city by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid City ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
