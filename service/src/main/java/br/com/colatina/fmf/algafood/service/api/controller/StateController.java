@@ -1,10 +1,13 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.StateControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.StateHateoas;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.StateCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.StateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,33 +29,43 @@ import java.util.List;
 @RequestMapping(path = "/api/states", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StateController implements StateControllerDocumentation {
 	private final StateCrudService stateCrudService;
+	private final StateHateoas stateHateoas;
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<List<StateDto>> findAll() {
+	public ResponseEntity<CollectionModel<StateDto>> findAll() {
 		log.debug("REST request to find all states");
-		return new ResponseEntity<>(stateCrudService.findAll(), HttpStatus.OK);
+		List<StateDto> states = stateCrudService.findAll();
+		CollectionModel<StateDto> collectionModel = stateHateoas.mapCollectionModel(states);
+		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<StateDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the state with ID: {}", id);
-		return new ResponseEntity<>(stateCrudService.findDtoById(id), HttpStatus.OK);
+		StateDto state = stateCrudService.findDtoById(id);
+		stateHateoas.mapModel(state);
+		return new ResponseEntity<>(state, HttpStatus.OK);
 	}
 
 	@Override
 	@PostMapping()
 	public ResponseEntity<StateDto> insert(@Valid @RequestBody StateDto dto) {
 		log.debug("REST request to insert a new state: {}", dto);
-		return new ResponseEntity<>(stateCrudService.insert(dto), HttpStatus.CREATED);
+		StateDto state = stateCrudService.insert(dto);
+		ResourceUriUtils.addUriInResponseHeader(state.getId());
+		stateHateoas.mapModel(state);
+		return new ResponseEntity<>(state, HttpStatus.CREATED);
 	}
 
 	@Override
 	@PutMapping("/{id}")
 	public ResponseEntity<StateDto> update(@PathVariable Long id, @Valid @RequestBody StateDto dto) {
 		log.debug("REST request to update state with id {}: {}", id, dto);
-		return new ResponseEntity<>(stateCrudService.update(dto, id), HttpStatus.OK);
+		StateDto state = stateCrudService.update(dto, id);
+		stateHateoas.mapModel(state);
+		return new ResponseEntity<>(state, HttpStatus.OK);
 
 	}
 

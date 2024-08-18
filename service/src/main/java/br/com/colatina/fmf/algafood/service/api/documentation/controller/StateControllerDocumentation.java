@@ -9,14 +9,13 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Api(tags = SpringFoxControllerTags.STATES)
 public interface StateControllerDocumentation {
 	@ApiOperation("Find a list of all available states")
-	ResponseEntity<List<StateDto>> findAll();
+	ResponseEntity<CollectionModel<StateDto>> findAll();
 
 	@ApiOperation("Find a state by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid state ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
