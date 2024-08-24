@@ -9,16 +9,15 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Api(tags = SpringFoxControllerTags.PRODUCTS)
 public interface RestaurantProductControllerDocumentation {
 	@ApiOperation("Find all products for a restaurant")
 	@ApiResponse(responseCode = "200", description = "List of products retrieved")
 	@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<List<ProductDto>> findAll(@ApiParam(value = "ID of the restaurant", example = "1", required = true) Long restaurantId);
+	ResponseEntity<CollectionModel<ProductDto>> findAll(@ApiParam(value = "ID of the restaurant", example = "1", required = true) Long restaurantId);
 
 	@ApiOperation("Find a product by its ID for a restaurant")
 	@ApiResponse(responseCode = "200", description = "Product retrieved")

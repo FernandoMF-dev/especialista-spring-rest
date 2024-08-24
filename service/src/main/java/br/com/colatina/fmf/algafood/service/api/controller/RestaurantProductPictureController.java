@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantProductPictureControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.ProductHateoas;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.service.FileStorageService;
 import br.com.colatina.fmf.algafood.service.domain.service.ProductPictureCrudService;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequestMapping(path = "/api/restaurants/{restaurantId}/products/{productId}/pictures", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantProductPictureController implements RestaurantProductPictureControllerDocumentation {
 	private final ProductPictureCrudService productPictureCrudService;
+	private final ProductHateoas productHateoas;
 	private final FileStorageService fileStorageService;
 
 	@Override
@@ -39,6 +41,7 @@ public class RestaurantProductPictureController implements RestaurantProductPict
 	public ResponseEntity<ProductPictureDto> findPicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to get the data of the picture for the product {} from the restaurant {}", productId, restaurantId);
 		ProductPictureDto result = productPictureCrudService.findPictureDto(restaurantId, productId);
+		result.add(productHateoas.createPictureSelfLink(restaurantId, productId));
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

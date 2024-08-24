@@ -3,10 +3,13 @@ package br.com.colatina.fmf.algafood.service.domain.service.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,13 +17,16 @@ import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 
 @ApiModel(value = "Product", description = "Representation model for a product")
+@Relation(collectionRelation = "products")
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto implements Serializable {
+public class ProductDto extends RepresentationModel<ProductDto> implements Serializable {
 	@ApiModelProperty(value = "ID of the product", example = "1")
+	@EqualsAndHashCode.Include
 	private Long id;
 
 	@ApiModelProperty(value = "Name of the product", example = "Cheeseburger", required = true)

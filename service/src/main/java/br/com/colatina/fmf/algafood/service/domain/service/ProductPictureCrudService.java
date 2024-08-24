@@ -27,12 +27,12 @@ public class ProductPictureCrudService {
 
 	public ProductPicture findPictureEntity(Long restaurantId, Long productId) {
 		return productRepository.findPictureEntityById(restaurantId, productId)
-				.orElseThrow(() -> new ResourceNotFoundException("product.picture.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("product.picture.not_found", productId));
 	}
 
 	public ProductPictureDto findPictureDto(Long restaurantId, Long productId) {
 		return productRepository.findPictureDtoById(restaurantId, productId)
-				.orElseThrow(() -> new ResourceNotFoundException("product.picture.not_found"));
+				.orElseThrow(() -> new ResourceNotFoundException("product.picture.not_found", productId));
 	}
 
 	public ProductPictureDto save(ProductPictureInsertDto dto, Long restaurantId, Long productId) throws IOException {

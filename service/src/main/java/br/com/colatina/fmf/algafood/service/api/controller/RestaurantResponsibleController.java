@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +33,7 @@ public class RestaurantResponsibleController implements RestaurantResponsibleCon
 		log.debug("REST request to find all user responsible for the restaurant {}", restaurantId);
 		Set<UserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurant(restaurantId);
 		CollectionModel<UserDto> collectionModel = userHateoas.mapCollectionModel(responsibles);
-		collectionModel.removeLinks().add(linkTo(methodOn(RestaurantResponsibleController.class).findAll(restaurantId)).withSelfRel());
+		collectionModel.removeLinks().add(userHateoas.createResponsiblesSelfLink(restaurantId));
 		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 
