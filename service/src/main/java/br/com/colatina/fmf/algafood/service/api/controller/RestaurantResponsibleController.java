@@ -1,10 +1,12 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantResponsibleControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.UserHateoas;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/restaurants/{restaurantId}/responsible", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantResponsibleController implements RestaurantResponsibleControllerDocumentation {
 	private final RestaurantCrudService restaurantCrudService;
+	private final UserHateoas userHateoas;
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<Set<UserDto>> findAll(@PathVariable Long restaurantId) {
+	public ResponseEntity<CollectionModel<UserDto>> findAll(@PathVariable Long restaurantId) {
 		log.debug("REST request to find all user responsible for the restaurant {}", restaurantId);
 		Set<UserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurant(restaurantId);
-		return new ResponseEntity<>(responsibles, HttpStatus.OK);
+		CollectionModel<UserDto> collectionModel = userHateoas.mapCollectionModel(responsibles);
+		collectionModel.removeLinks().add(linkTo(methodOn(RestaurantResponsibleController.class).findAll(restaurantId)).withSelfRel());
+		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 
 	@Override
