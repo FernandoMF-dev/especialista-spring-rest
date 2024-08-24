@@ -10,14 +10,13 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Api(tags = SpringFoxControllerTags.CUISINES)
 public interface CuisineControllerDocumentation {
 	@ApiOperation("Find a list of all available cuisines")
-	ResponseEntity<List<CuisineDto>> findAll();
+	ResponseEntity<CollectionModel<CuisineDto>> findAll();
 
 	@ApiOperation("Find a list of all available cuisines")
 	ResponseEntity<CuisinesXmlWrapper> findAllXml();
