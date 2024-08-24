@@ -9,15 +9,14 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
-
-import java.util.List;
 
 @Api(tags = SpringFoxControllerTags.PAYMENT_METHODS)
 public interface PaymentMethodControllerDocumentation {
 	@ApiOperation("Find a list of all available payment methods")
-	ResponseEntity<List<PaymentMethodDto>> findAll(ServletWebRequest request);
+	ResponseEntity<CollectionModel<PaymentMethodDto>> findAll(ServletWebRequest request);
 
 	@ApiOperation("Find a payment method by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid payment method ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))

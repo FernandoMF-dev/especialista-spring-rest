@@ -11,8 +11,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
-	public RestaurantHateoas(AddressHateoas addressHateoas, UserHateoas userHateoas) {
-		super(RestaurantDto.class, addressHateoas, userHateoas);
+	public RestaurantHateoas(AddressHateoas addressHateoas, UserHateoas userHateoas, PaymentMethodHateoas paymentMethodHateoas) {
+		super(RestaurantDto.class, addressHateoas, userHateoas, paymentMethodHateoas);
 	}
 
 	@Override
