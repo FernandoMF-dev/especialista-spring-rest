@@ -11,16 +11,15 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Api(tags = SpringFoxControllerTags.USERS)
 public interface UserControllerDocumentation {
 
 	@ApiOperation("Find all users")
 	@ApiResponse(responseCode = "200", description = "Users retrieved")
-	ResponseEntity<List<UserDto>> findAll();
+	ResponseEntity<CollectionModel<UserDto>> findAll();
 
 	@ApiOperation("Find a user by ID")
 	@ApiResponse(responseCode = "200", description = "User retrieved")

@@ -1,12 +1,14 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.UserControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.UserHateoas;
 import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PasswordChangeDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserInsertDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,33 +31,42 @@ import java.util.List;
 @RequestMapping(path = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController implements UserControllerDocumentation {
 	private final UserCrudService userCrudService;
+	private final UserHateoas userHateoas;
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<List<UserDto>> findAll() {
+	public ResponseEntity<CollectionModel<UserDto>> findAll() {
 		log.debug("REST request to find all users");
-		return new ResponseEntity<>(userCrudService.findAll(), HttpStatus.OK);
+		List<UserDto> users = userCrudService.findAll();
+		CollectionModel<UserDto> collectionModel = userHateoas.mapCollectionModel(users);
+		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the user with ID: {}", id);
-		return new ResponseEntity<>(userCrudService.findDtoById(id), HttpStatus.OK);
+		UserDto user = userCrudService.findDtoById(id);
+		userHateoas.mapModel(user);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@Override
 	@PostMapping()
 	public ResponseEntity<UserDto> insert(@Valid @RequestBody UserInsertDto dto) {
 		log.debug("REST request to insert a new user: {}", dto);
-		return new ResponseEntity<>(userCrudService.insert(dto), HttpStatus.CREATED);
+		UserDto user = userCrudService.insert(dto);
+		userHateoas.mapModel(user);
+		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 
 	@Override
 	@PutMapping("/{id}")
 	public ResponseEntity<UserDto> update(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
 		log.debug("REST request to update user with id {}: {}", id, dto);
-		return new ResponseEntity<>(userCrudService.update(dto, id), HttpStatus.OK);
+		UserDto user = userCrudService.update(dto, id);
+		userHateoas.mapModel(user);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@Override
