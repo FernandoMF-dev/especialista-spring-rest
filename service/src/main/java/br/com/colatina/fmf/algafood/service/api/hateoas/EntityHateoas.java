@@ -1,11 +1,14 @@
 package br.com.colatina.fmf.algafood.service.api.hateoas;
 
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class EntityHateoas<M extends RepresentationModel<M>> {
@@ -29,19 +32,28 @@ public abstract class EntityHateoas<M extends RepresentationModel<M>> {
 	}
 
 	public final CollectionModel<M> mapCollectionModel(Iterable<M> models) {
-		models.forEach(this::mapModel);
-		CollectionModel<M> collection = CollectionModel.of(models);
+		CollectionModel<M> collection = CollectionModel.of(this.mapModel(models));
 		addCollectionHypermediaLinks(collection);
 		return collection;
 	}
 
-	public final void mapModel(M model) {
-		addModelHypermediaLinks(model);
-		mapSubModels(model);
+	public final PagedModel<M> mapPagedModel(Page<M> models) {
+		List<M> content = this.mapModel(models.getContent());
+		var metadata = new PagedModel.PageMetadata(models.getSize(), models.getNumber(), models.getTotalElements(), models.getTotalPages());
+		PagedModel<M> pagedModel = PagedModel.of(content, metadata);
+		addCollectionHypermediaLinks(pagedModel);
+		return pagedModel;
 	}
 
-	public final <L extends Iterable<M>> void mapModel(L models) {
+	public final M mapModel(M model) {
+		addModelHypermediaLinks(model);
+		mapSubModels(model);
+		return model;
+	}
+
+	public final <L extends Iterable<M>> L mapModel(L models) {
 		models.forEach(this::mapModel);
+		return models;
 	}
 
 	private void mapSubModels(RepresentationModel<M> model) {

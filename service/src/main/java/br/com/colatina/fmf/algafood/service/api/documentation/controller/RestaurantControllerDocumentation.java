@@ -13,9 +13,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public interface RestaurantControllerDocumentation {
 
 	@ApiOperation(value = "Find a paginated list of restaurants with filters")
 	@ApiResponse(responseCode = "200", description = "Paginated list of restaurants retrieved")
-	ResponseEntity<Page<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable);
+	ResponseEntity<PagedModel<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable);
 
 	@ApiOperation(value = "Find the first available restaurant")
 	@ApiResponse(responseCode = "200", description = "First available restaurant retrieved")

@@ -17,6 +17,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -79,10 +80,12 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@GetMapping("/page")
-	public ResponseEntity<Page<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
+	public ResponseEntity<PagedModel<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of restaurants with filters {} and with the page configuration {}", filter, pageable);
 		pageable = PageableTranslator.translate(pageable, RestaurantListDto.class);
-		return new ResponseEntity<>(restaurantCrudService.page(filter, pageable), HttpStatus.OK);
+		Page<RestaurantListDto> page = restaurantCrudService.page(filter, pageable);
+		PagedModel<RestaurantListDto> pagedModel = restaurantListHateoas.mapPagedModel(page);
+		return new ResponseEntity<>(pagedModel, HttpStatus.OK);
 	}
 
 	@Override
