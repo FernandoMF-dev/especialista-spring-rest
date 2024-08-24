@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -26,21 +27,21 @@ public interface RestaurantControllerDocumentation {
 	@ApiImplicitParam(name = "projection", value = "Projection of the response", allowableValues = "summary, name-only",
 			example = "summary", paramType = "query", dataType = "java.lang.String")
 	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
-	ResponseEntity<List<RestaurantListDto>> findAll();
+	ResponseEntity<CollectionModel<RestaurantListDto>> findAll();
 
 	@ApiOperation(value = "Find a list of all available restaurants with a 'summary' projection", hidden = true)
 	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
-	ResponseEntity<List<RestaurantListDto>> findAllSummary();
+	ResponseEntity<CollectionModel<RestaurantListDto>> findAllSummary();
 
 	@ApiOperation(value = "Find a list of all available restaurants with a 'name-only' projection", hidden = true)
 	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
-	ResponseEntity<List<RestaurantListDto>> findAllNameOnly();
+	ResponseEntity<CollectionModel<RestaurantListDto>> findAllNameOnly();
 
 	@ApiOperation(value = "Filter restaurants by freight fee")
 	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
-	ResponseEntity<List<RestaurantListDto>> filterByFreightFee(@ApiParam(value = "Name of the restaurant", example = "Burger King") String name,
-															   @ApiParam(value = "Minimum freight fee", example = "5.00") Double min,
-															   @ApiParam(value = "Maximum freight fee", example = "15.00") Double max);
+	ResponseEntity<CollectionModel<RestaurantListDto>> filterByFreightFee(@ApiParam(value = "Name of the restaurant", example = "Burger King") String name,
+																		  @ApiParam(value = "Minimum freight fee", example = "5.00") Double min,
+																		  @ApiParam(value = "Maximum freight fee", example = "15.00") Double max);
 
 	@ApiOperation(value = "Find a paginated list of restaurants with filters")
 	@ApiResponse(responseCode = "200", description = "Paginated list of restaurants retrieved")

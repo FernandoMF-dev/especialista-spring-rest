@@ -6,21 +6,27 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
 @ApiModel(value = "Restaurant (Listed)", description = "Representation model for a restaurant when displayed in a list")
+@Relation(collectionRelation = "restaurants")
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestaurantListDto implements Serializable {
+public class RestaurantListDto extends RepresentationModel<RestaurantListDto> implements Serializable {
 	@ApiModelProperty(value = "ID of the restaurant", example = "1")
+	@EqualsAndHashCode.Include
 	@SortableField
 	@JsonView({RestaurantView.Summary.class, RestaurantView.NameOnly.class})
 	private Long id;

@@ -2,24 +2,29 @@ package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @ApiModel(value = "Restaurant", description = "Representation model for a restaurant")
+@Relation(collectionRelation = "restaurants")
 @Getter
 @Setter
 @ToString
-public class RestaurantDto implements Serializable {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class RestaurantDto extends RepresentationModel<RestaurantDto> implements Serializable {
 	@ApiModelProperty(value = "ID of the restaurant", example = "1")
+	@EqualsAndHashCode.Include
 	private Long id;
 
 	@ApiModelProperty(value = "Name of the restaurant", example = "Burger King")
@@ -54,21 +59,4 @@ public class RestaurantDto implements Serializable {
 
 	@ApiModelProperty(value = "Address of the restaurant")
 	private AddressDto address;
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (!(o instanceof RestaurantDto)) {
-			return false;
-		}
-		RestaurantDto that = (RestaurantDto) o;
-		return id.equals(that.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
 }

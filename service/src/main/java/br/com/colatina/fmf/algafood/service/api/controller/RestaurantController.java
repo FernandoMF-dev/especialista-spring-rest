@@ -1,6 +1,8 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.RestaurantHateoas;
+import br.com.colatina.fmf.algafood.service.api.hateoas.RestaurantListHateoas;
 import br.com.colatina.fmf.algafood.service.api.model.view.RestaurantView;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,33 +40,37 @@ import java.util.List;
 @RequestMapping(path = "/api/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController implements RestaurantControllerDocumentation {
 	private final RestaurantCrudService restaurantCrudService;
+	private final RestaurantHateoas restaurantHateoas;
+	private final RestaurantListHateoas restaurantListHateoas;
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<List<RestaurantListDto>> findAll() {
+	public ResponseEntity<CollectionModel<RestaurantListDto>> findAll() {
 		log.debug("REST request to find all restaurants");
-		return new ResponseEntity<>(restaurantCrudService.findAll(), HttpStatus.OK);
+		List<RestaurantListDto> restaurants = restaurantCrudService.findAll();
+		CollectionModel<RestaurantListDto> collectionModel = restaurantListHateoas.mapCollectionModel(restaurants);
+		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 
 	@Override
 	@JsonView(RestaurantView.Summary.class)
 	@GetMapping(params = {"projection=summary"})
-	public ResponseEntity<List<RestaurantListDto>> findAllSummary() {
+	public ResponseEntity<CollectionModel<RestaurantListDto>> findAllSummary() {
 		return this.findAll();
 	}
 
 	@Override
 	@JsonView(RestaurantView.NameOnly.class)
 	@GetMapping(params = {"projection=name-only"})
-	public ResponseEntity<List<RestaurantListDto>> findAllNameOnly() {
+	public ResponseEntity<CollectionModel<RestaurantListDto>> findAllNameOnly() {
 		return this.findAll();
 	}
 
 	@Override
 	@GetMapping("/freight-fee")
-	public ResponseEntity<List<RestaurantListDto>> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
-																	  @RequestParam(value = "min", required = false) Double min,
-																	  @RequestParam(value = "max", required = false) Double max) {
+	public ResponseEntity<CollectionModel<RestaurantListDto>> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
+																				 @RequestParam(value = "min", required = false) Double min,
+																				 @RequestParam(value = "max", required = false) Double max) {
 		if (Strings.isEmpty(name)) {
 			return _filterByFreightFee(min, max);
 		}
@@ -82,28 +89,36 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 	@GetMapping("/first")
 	public ResponseEntity<RestaurantDto> findFirst() {
 		log.debug("REST request to find the first restaurant it can");
-		return new ResponseEntity<>(restaurantCrudService.findFirst(), HttpStatus.OK);
+		RestaurantDto restaurant = restaurantCrudService.findFirst();
+		restaurantHateoas.mapModel(restaurant);
+		return new ResponseEntity<>(restaurant, HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<RestaurantDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the restaurant with ID: {}", id);
-		return new ResponseEntity<>(restaurantCrudService.findDtoById(id), HttpStatus.OK);
+		RestaurantDto restaurant = restaurantCrudService.findDtoById(id);
+		restaurantHateoas.mapModel(restaurant);
+		return new ResponseEntity<>(restaurant, HttpStatus.OK);
 	}
 
 	@Override
 	@PostMapping()
 	public ResponseEntity<RestaurantDto> insert(@Valid @RequestBody RestaurantFormDto dto) {
 		log.debug("REST request to insert a new restaurant: {}", dto);
-		return new ResponseEntity<>(restaurantCrudService.insert(dto), HttpStatus.CREATED);
+		RestaurantDto restaurant = restaurantCrudService.insert(dto);
+		restaurantHateoas.mapModel(restaurant);
+		return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
 	}
 
 	@Override
 	@PutMapping("/{id}")
 	public ResponseEntity<RestaurantDto> update(@Valid @RequestBody RestaurantFormDto dto, @PathVariable Long id) {
 		log.debug("REST request to update restaurant with id {}: {}", id, dto);
-		return new ResponseEntity<>(restaurantCrudService.update(dto, id), HttpStatus.OK);
+		RestaurantDto restaurant = restaurantCrudService.update(dto, id);
+		restaurantHateoas.mapModel(restaurant);
+		return new ResponseEntity<>(restaurant, HttpStatus.OK);
 	}
 
 	@Override
@@ -138,13 +153,17 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 		return ResponseEntity.noContent().build();
 	}
 
-	private ResponseEntity<List<RestaurantListDto>> _filterByFreightFee(Double min, Double max) {
+	private ResponseEntity<CollectionModel<RestaurantListDto>> _filterByFreightFee(Double min, Double max) {
 		log.debug("REST request to find all restaurants with freight fee between {} and {}", min, max);
-		return new ResponseEntity<>(restaurantCrudService.filterByFreightFee(min, max), HttpStatus.OK);
+		List<RestaurantListDto> restaurants = restaurantCrudService.filterByFreightFee(min, max);
+		CollectionModel<RestaurantListDto> collectionModel = restaurantListHateoas.mapCollectionModel(restaurants);
+		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 
-	private ResponseEntity<List<RestaurantListDto>> _filterByFreightFee(String name, Double min, Double max) {
+	private ResponseEntity<CollectionModel<RestaurantListDto>> _filterByFreightFee(String name, Double min, Double max) {
 		log.debug("REST request to find all restaurants with name like \"{}\" and freight fee between {} and {}", name, min, max);
-		return new ResponseEntity<>(restaurantCrudService.filterByFreightFee(name, min, max), HttpStatus.OK);
+		List<RestaurantListDto> restaurants = restaurantCrudService.filterByFreightFee(name, min, max);
+		CollectionModel<RestaurantListDto> collectionModel = restaurantListHateoas.mapCollectionModel(restaurants);
+		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 }
