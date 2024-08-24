@@ -11,19 +11,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
-	private final CityHateoas cityHateoas;
-
-	public RestaurantHateoas(CityHateoas cityHateoas, UserHateoas userHateoas) {
-		super(RestaurantDto.class, userHateoas);
-		this.cityHateoas = cityHateoas;
+	public RestaurantHateoas(AddressHateoas addressHateoas, UserHateoas userHateoas) {
+		super(RestaurantDto.class, addressHateoas, userHateoas);
 	}
 
 	@Override
 	protected void addModelHypermediaLinks(RestaurantDto model) {
 		model.add(linkTo(methodOn(RestaurantController.class).findById(model.getId())).withSelfRel());
 		model.add(linkTo(methodOn(RestaurantController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
-
-		cityHateoas.addModelHypermediaLinks(model.getAddress().getCity());
 	}
 
 	@Override

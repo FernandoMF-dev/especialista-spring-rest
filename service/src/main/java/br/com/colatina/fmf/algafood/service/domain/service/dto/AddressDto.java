@@ -5,10 +5,13 @@ import br.com.colatina.fmf.algafood.service.core.validation.constraints.Cep;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -17,12 +20,14 @@ import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
 
 @ApiModel(value = "Address", description = "Representation model for an address")
+@Relation(collectionRelation = "addresses")
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressDto implements Serializable {
+public class AddressDto extends RepresentationModel<AddressDto> implements Serializable {
 	@ApiModelProperty(value = "Postal code of the address", example = "12345-678", required = true)
 	@NotBlank(message = "address.cep.not_blank")
 	@Cep(message = "address.cep.invalid")
