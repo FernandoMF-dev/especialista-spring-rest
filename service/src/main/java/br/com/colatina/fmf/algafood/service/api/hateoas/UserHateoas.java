@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.hateoas;
 import br.com.colatina.fmf.algafood.service.api.controller.RestaurantResponsibleController;
 import br.com.colatina.fmf.algafood.service.api.controller.UserController;
 import br.com.colatina.fmf.algafood.service.api.controller.UserProfileController;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.GenericObjectDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -32,5 +33,11 @@ public class UserHateoas extends EntityHateoas<UserDto> {
 
 	public Link createResponsiblesSelfLink(Long restaurantId) {
 		return linkTo(methodOn(RestaurantResponsibleController.class).findAll(restaurantId)).withSelfRel();
+	}
+
+	public GenericObjectDto mapModel(GenericObjectDto model) {
+		model.add(linkTo(methodOn(UserController.class).findById(model.getId())).withSelfRel());
+		model.add(linkTo(methodOn(UserController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+		return model;
 	}
 }

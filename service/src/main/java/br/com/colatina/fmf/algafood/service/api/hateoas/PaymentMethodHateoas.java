@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.hateoas;
 
 import br.com.colatina.fmf.algafood.service.api.controller.PaymentMethodController;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.GenericObjectDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -23,5 +24,11 @@ public class PaymentMethodHateoas extends EntityHateoas<PaymentMethodDto> {
 	@Override
 	protected void addCollectionHypermediaLinks(CollectionModel<PaymentMethodDto> collection) {
 		collection.add(linkTo(PaymentMethodController.class).withSelfRel());
+	}
+
+	public GenericObjectDto mapModel(GenericObjectDto model) {
+		model.add(linkTo(PaymentMethodController.class).slash(model.getId()).withSelfRel());
+		model.add(linkTo(PaymentMethodController.class).withRel(IanaLinkRelations.COLLECTION));
+		return model;
 	}
 }
