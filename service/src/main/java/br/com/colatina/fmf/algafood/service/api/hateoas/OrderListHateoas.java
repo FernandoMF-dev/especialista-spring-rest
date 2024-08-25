@@ -26,8 +26,8 @@ public class OrderListHateoas extends EntityHateoas<OrderListDto> {
 		model.add(linkTo(methodOn(OrderController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
 		model.add(getPageLink(linkTo(OrderController.class).slash("page").toUri()));
 
-		this.restaurantHateoas.mapModel(model.getRestaurant());
-		this.userHateoas.mapModel(model.getCustomer());
+		this.restaurantHateoas.mapGenericModel(model.getRestaurant());
+		this.userHateoas.mapGenericModel(model.getCustomer());
 	}
 
 	@Override

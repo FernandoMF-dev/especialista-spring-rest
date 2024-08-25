@@ -31,13 +31,13 @@ public class UserHateoas extends EntityHateoas<UserDto> {
 		collection.add(linkTo(methodOn(UserController.class).findAll()).withSelfRel());
 	}
 
-	public Link createResponsiblesSelfLink(Long restaurantId) {
-		return linkTo(methodOn(RestaurantResponsibleController.class).findAll(restaurantId)).withSelfRel();
-	}
-
-	public GenericObjectDto mapModel(GenericObjectDto model) {
+	@Override
+	public void mapGenericModel(GenericObjectDto model) {
 		model.add(linkTo(methodOn(UserController.class).findById(model.getId())).withSelfRel());
 		model.add(linkTo(methodOn(UserController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
-		return model;
+	}
+
+	public Link createResponsiblesSelfLink(Long restaurantId) {
+		return linkTo(methodOn(RestaurantResponsibleController.class).findAll(restaurantId)).withSelfRel();
 	}
 }

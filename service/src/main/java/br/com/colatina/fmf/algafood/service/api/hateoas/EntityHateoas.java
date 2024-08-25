@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.hateoas;
 
+import br.com.colatina.fmf.algafood.service.domain.service.dto.GenericObjectDto;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -97,6 +98,10 @@ public abstract class EntityHateoas<M extends RepresentationModel<M>> {
 	private Method getGetter(RepresentationModel<M> model, Field field) throws NoSuchMethodException {
 		String getterName = "get" + Character.toUpperCase(field.getName().charAt(0)) + field.getName().substring(1);
 		return model.getClass().getMethod(getterName);
+	}
+
+	protected void mapGenericModel(GenericObjectDto model) {
+		// Optional to be overridden
 	}
 
 	protected Link getPageLink(URI uri) {

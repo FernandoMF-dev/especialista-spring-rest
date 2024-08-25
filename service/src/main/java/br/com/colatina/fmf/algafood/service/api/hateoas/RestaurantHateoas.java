@@ -35,9 +35,9 @@ public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
 		collection.add(linkTo(methodOn(RestaurantController.class).findFirst()).withRel(IanaLinkRelations.FIRST));
 	}
 
-	public GenericObjectDto mapModel(GenericObjectDto model) {
+	@Override
+	public void mapGenericModel(GenericObjectDto model) {
 		model.add(linkTo(methodOn(RestaurantController.class).findById(model.getId())).withSelfRel());
 		model.add(linkTo(methodOn(RestaurantController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
-		return model;
 	}
 }

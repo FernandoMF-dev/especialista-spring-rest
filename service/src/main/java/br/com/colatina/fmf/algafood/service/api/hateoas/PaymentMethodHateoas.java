@@ -26,9 +26,9 @@ public class PaymentMethodHateoas extends EntityHateoas<PaymentMethodDto> {
 		collection.add(linkTo(PaymentMethodController.class).withSelfRel());
 	}
 
-	public GenericObjectDto mapModel(GenericObjectDto model) {
+	@Override
+	public void mapGenericModel(GenericObjectDto model) {
 		model.add(linkTo(PaymentMethodController.class).slash(model.getId()).withSelfRel());
 		model.add(linkTo(PaymentMethodController.class).withRel(IanaLinkRelations.COLLECTION));
-		return model;
 	}
 }
