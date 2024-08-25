@@ -12,16 +12,15 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Api(tags = SpringFoxControllerTags.ORDERS)
 public interface OrderControllerDocumentation {
 	@ApiOperation("Find a list of all registered orders")
-	ResponseEntity<List<OrderListDto>> findAll();
+	ResponseEntity<CollectionModel<OrderListDto>> findAll();
 
 	@ApiOperation("Find an order by its unique identifier code")
 	@ApiResponse(responseCode = "400", description = "Invalid order UUID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
@@ -29,7 +28,7 @@ public interface OrderControllerDocumentation {
 	ResponseEntity<OrderDto> findByUuid(@ApiParam(value = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000", required = true) String uuid);
 
 	@ApiOperation("Find a paginated list of orders with filters")
-	Page<OrderListDto> page(OrderPageFilter filter, Pageable pageable);
+	PagedModel<OrderListDto> page(OrderPageFilter filter, Pageable pageable);
 
 	@ApiOperation("Emits a new order")
 	@ApiResponse(responseCode = "201", description = "Order created", content = @Content(schema = @Schema(implementation = OrderDto.class)))

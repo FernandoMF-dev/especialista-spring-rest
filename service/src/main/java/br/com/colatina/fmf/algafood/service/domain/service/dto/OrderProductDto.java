@@ -3,10 +3,12 @@ package br.com.colatina.fmf.algafood.service.domain.service.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 
@@ -14,10 +16,12 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderProductDto implements Serializable {
+public class OrderProductDto extends RepresentationModel<OrderProductDto> implements Serializable {
 	@ApiModelProperty(value = "ID of the product in the order", example = "1")
+	@EqualsAndHashCode.Include
 	private Long id;
 
 	@ApiModelProperty(value = "Quantity of the product", example = "1")

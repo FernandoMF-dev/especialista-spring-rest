@@ -1,6 +1,8 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.OrderControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.OrderHateoas;
+import br.com.colatina.fmf.algafood.service.api.hateoas.OrderListHateoas;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
@@ -11,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +35,16 @@ import java.util.List;
 @RequestMapping(path = "/api/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController implements OrderControllerDocumentation {
 	private final OrderCrudService orderCrudService;
+	private final OrderHateoas orderHateoas;
+	private final OrderListHateoas orderListHateoas;
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<List<OrderListDto>> findAll() {
+	public ResponseEntity<CollectionModel<OrderListDto>> findAll() {
 		log.debug("REST request to find all orders");
 		List<OrderListDto> orders = orderCrudService.findAll();
-		return new ResponseEntity<>(orders, HttpStatus.OK);
+		CollectionModel<OrderListDto> collectionModel = orderListHateoas.mapCollectionModel(orders);
+		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 
 	@Override
@@ -45,22 +52,26 @@ public class OrderController implements OrderControllerDocumentation {
 	public ResponseEntity<OrderDto> findByUuid(@PathVariable String uuid) {
 		log.debug("REST request to find the order with UUID code {}", uuid);
 		OrderDto order = orderCrudService.findDtoByUuid(uuid);
+		orderHateoas.mapModel(order);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<OrderListDto> page(OrderPageFilter filter, Pageable pageable) {
+	public PagedModel<OrderListDto> page(OrderPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of orders with filters {} and with the page configuration {}", filter, pageable);
 		pageable = PageableTranslator.translate(pageable, OrderListDto.class);
-		return orderCrudService.page(filter, pageable);
+		Page<OrderListDto> page = orderCrudService.page(filter, pageable);
+		return orderListHateoas.mapPagedModel(page);
 	}
 
 	@Override
 	@PostMapping()
 	public ResponseEntity<OrderDto> insert(@Valid @RequestBody OrderInsertDto dto) {
 		log.debug("REST request to insert a new order: {}", dto);
-		return new ResponseEntity<>(orderCrudService.insert(dto), HttpStatus.CREATED);
+		OrderDto order = orderCrudService.insert(dto);
+		orderHateoas.mapModel(order);
+		return new ResponseEntity<>(order, HttpStatus.CREATED);
 	}
 }

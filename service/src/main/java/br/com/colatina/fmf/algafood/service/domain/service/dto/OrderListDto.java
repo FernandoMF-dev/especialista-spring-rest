@@ -4,19 +4,25 @@ import br.com.colatina.fmf.algafood.service.core.pageable.SortableField;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 @ApiModel(value = "Order (Listed)", description = "Representation model for a order when displayed in a list")
+@Relation(collectionRelation = "orders")
 @Getter
 @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
-public class OrderListDto implements Serializable {
+public class OrderListDto extends RepresentationModel<OrderListDto> implements Serializable {
 	@ApiModelProperty(value = "Unique code of the order", example = "123e4567-e89b-12d3-a456-426614174000")
+	@EqualsAndHashCode.Include
 	private String code;
 
 	@ApiModelProperty(value = "Total value of the order, including the subtotal and the freight fee", example = "100.00")
