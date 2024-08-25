@@ -1,7 +1,9 @@
 package br.com.colatina.fmf.algafood.service.api.hateoas;
 
 import br.com.colatina.fmf.algafood.service.api.controller.OrderController;
+import br.com.colatina.fmf.algafood.service.api.controller.OrderFlowController;
 import br.com.colatina.fmf.algafood.service.api.controller.RestaurantProductController;
+import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -31,6 +33,7 @@ public class OrderHateoas extends EntityHateoas<OrderDto> {
 		model.add(linkTo(methodOn(OrderController.class).findByUuid(model.getCode())).withSelfRel());
 		model.add(linkTo(methodOn(OrderController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
 		model.add(getPageLink());
+		addOrderFlowHypermediaLinks(model);
 
 		this.restaurantHateoas.mapGenericModel(model.getRestaurant());
 		this.userHateoas.mapGenericModel(model.getCustomer());
@@ -60,5 +63,19 @@ public class OrderHateoas extends EntityHateoas<OrderDto> {
 		);
 
 		return Link.of(link.getTemplate().with(filterVariables), link.getRel());
+	}
+
+	private void addOrderFlowHypermediaLinks(OrderDto model) {
+		if (model.getStatus().canStatusChangeTo(OrderStatusEnum.CONFIRMED)) {
+			model.add(linkTo(methodOn(OrderFlowController.class).confirm(model.getCode())).withRel("confirm"));
+		}
+
+		if (model.getStatus().canStatusChangeTo(OrderStatusEnum.CANCELED)) {
+			model.add(linkTo(methodOn(OrderFlowController.class).cancel(model.getCode())).withRel("cancel"));
+		}
+
+		if (model.getStatus().canStatusChangeTo(OrderStatusEnum.DELIVERED)) {
+			model.add(linkTo(methodOn(OrderFlowController.class).deliver(model.getCode())).withRel("deliver"));
+		}
 	}
 }
