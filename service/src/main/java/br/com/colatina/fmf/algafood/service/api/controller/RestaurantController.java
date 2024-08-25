@@ -3,14 +3,12 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.hateoas.RestaurantHateoas;
 import br.com.colatina.fmf.algafood.service.api.hateoas.RestaurantListHateoas;
-import br.com.colatina.fmf.algafood.service.api.model.view.RestaurantView;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -51,20 +49,6 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 		List<RestaurantListDto> restaurants = restaurantCrudService.findAll();
 		CollectionModel<RestaurantListDto> collectionModel = restaurantListHateoas.mapCollectionModel(restaurants);
 		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
-	}
-
-	@Override
-	@JsonView(RestaurantView.Summary.class)
-	@GetMapping(params = {"projection=summary"})
-	public ResponseEntity<CollectionModel<RestaurantListDto>> findAllSummary() {
-		return this.findAll();
-	}
-
-	@Override
-	@JsonView(RestaurantView.NameOnly.class)
-	@GetMapping(params = {"projection=name-only"})
-	public ResponseEntity<CollectionModel<RestaurantListDto>> findAllNameOnly() {
-		return this.findAll();
 	}
 
 	@Override

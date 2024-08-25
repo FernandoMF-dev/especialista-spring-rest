@@ -7,7 +7,6 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,18 +23,8 @@ import java.util.List;
 public interface RestaurantControllerDocumentation {
 
 	@ApiOperation(value = "Find a list of all available restaurants")
-	@ApiImplicitParam(name = "projection", value = "Projection of the response", allowableValues = "summary, name-only",
-			example = "summary", paramType = "query", dataType = "java.lang.String")
 	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
 	ResponseEntity<CollectionModel<RestaurantListDto>> findAll();
-
-	@ApiOperation(value = "Find a list of all available restaurants with a 'summary' projection", hidden = true)
-	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
-	ResponseEntity<CollectionModel<RestaurantListDto>> findAllSummary();
-
-	@ApiOperation(value = "Find a list of all available restaurants with a 'name-only' projection", hidden = true)
-	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
-	ResponseEntity<CollectionModel<RestaurantListDto>> findAllNameOnly();
 
 	@ApiOperation(value = "Filter restaurants by freight fee")
 	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
