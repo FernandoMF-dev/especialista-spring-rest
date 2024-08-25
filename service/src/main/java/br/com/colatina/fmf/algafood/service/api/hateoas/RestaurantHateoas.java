@@ -1,6 +1,8 @@
 package br.com.colatina.fmf.algafood.service.api.hateoas;
 
 import br.com.colatina.fmf.algafood.service.api.controller.RestaurantController;
+import br.com.colatina.fmf.algafood.service.api.controller.RestaurantProductController;
+import br.com.colatina.fmf.algafood.service.api.controller.RestaurantResponsibleController;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -20,6 +22,8 @@ public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
 	protected void addModelHypermediaLinks(RestaurantDto model) {
 		model.add(linkTo(methodOn(RestaurantController.class).findById(model.getId())).withSelfRel());
 		model.add(linkTo(methodOn(RestaurantController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+		model.add(linkTo(methodOn(RestaurantProductController.class).findAll(model.getId())).withRel("products"));
+		model.add(linkTo(methodOn(RestaurantResponsibleController.class).findAll(model.getId())).withRel("responsibles"));
 	}
 
 	@Override

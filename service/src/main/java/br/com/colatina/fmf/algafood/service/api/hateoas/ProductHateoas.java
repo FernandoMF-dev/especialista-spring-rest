@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.hateoas;
 
+import br.com.colatina.fmf.algafood.service.api.controller.RestaurantController;
 import br.com.colatina.fmf.algafood.service.api.controller.RestaurantProductController;
 import br.com.colatina.fmf.algafood.service.api.controller.RestaurantProductPictureController;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
@@ -21,6 +22,8 @@ public class ProductHateoas extends EntityHateoas<ProductDto> {
 	protected void addModelHypermediaLinks(ProductDto model) {
 		model.add(linkTo(methodOn(RestaurantProductController.class).findById(model.getRestaurantId(), model.getId())).withSelfRel());
 		model.add(linkTo(methodOn(RestaurantProductController.class).findAll(model.getRestaurantId())).withRel(IanaLinkRelations.COLLECTION));
+		model.add(linkTo(methodOn(RestaurantProductPictureController.class).findPicture(model.getRestaurantId(), model.getId())).withRel("picture"));
+		model.add(linkTo(methodOn(RestaurantController.class).findById(model.getRestaurantId())).withRel("restaurant"));
 	}
 
 	@Override
