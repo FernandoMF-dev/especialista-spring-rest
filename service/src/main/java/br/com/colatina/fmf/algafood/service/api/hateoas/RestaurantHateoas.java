@@ -29,6 +29,8 @@ public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
 		model.add(getPageLink());
 		model.add(linkTo(methodOn(RestaurantProductController.class).findAll(model.getId())).withRel("products"));
 		model.add(linkTo(methodOn(RestaurantResponsibleController.class).findAll(model.getId())).withRel("responsibles"));
+
+		addStatusChangeHypermediaLinks(model);
 	}
 
 	@Override
@@ -56,5 +58,13 @@ public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
 		);
 
 		return Link.of(link.getTemplate().with(filterVariables), link.getRel());
+	}
+
+	private void addStatusChangeHypermediaLinks(RestaurantDto model) {
+		String toggleOpenRel = Boolean.TRUE.equals(model.getOpen()) ? "close" : "open";
+		model.add(linkTo(methodOn(RestaurantController.class).toggleOpen(model.getId(), !model.getOpen())).withRel(toggleOpenRel));
+
+		String toggleActiveRel = Boolean.TRUE.equals(model.getActive()) ? "deactivate" : "activate";
+		model.add(linkTo(methodOn(RestaurantController.class).toggleActive(model.getId(), !model.getActive())).withRel(toggleActiveRel));
 	}
 }
