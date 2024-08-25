@@ -2,11 +2,16 @@ package br.com.colatina.fmf.algafood.service.api.hateoas;
 
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,5 +97,19 @@ public abstract class EntityHateoas<M extends RepresentationModel<M>> {
 	private Method getGetter(RepresentationModel<M> model, Field field) throws NoSuchMethodException {
 		String getterName = "get" + Character.toUpperCase(field.getName().charAt(0)) + field.getName().substring(1);
 		return model.getClass().getMethod(getterName);
+	}
+
+	protected Link getPageLink(URI uri) {
+		TemplateVariables pageVariables = new TemplateVariables(
+				new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
+				new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
+				new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
+		);
+
+		UriTemplate url = UriTemplate.of(uri.toString(), pageVariables);
+
+		String relation = "page";
+
+		return Link.of(url, relation);
 	}
 }

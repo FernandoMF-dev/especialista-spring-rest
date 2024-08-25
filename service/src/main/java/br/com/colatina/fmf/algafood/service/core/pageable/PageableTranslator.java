@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.core.pageable;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
  * Class to translate the original Pageable object's sort property based on the DTO class that is returned.
  * It creates a new Pageable object with the sort fields updated based on the SortableField annotations in the DTO class.
  */
+@UtilityClass
 public class PageableTranslator {
 	public static <T> Pageable translate(Pageable pageable, Class<T> clazz) {
 		Map<String, String> fieldMapping = getFieldMapping(clazz);

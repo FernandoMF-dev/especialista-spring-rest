@@ -19,12 +19,13 @@ public class RestaurantListHateoas extends EntityHateoas<RestaurantListDto> {
 	protected void addModelHypermediaLinks(RestaurantListDto model) {
 		model.add(linkTo(methodOn(RestaurantController.class).findById(model.getId())).withSelfRel());
 		model.add(linkTo(methodOn(RestaurantController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+		model.add(getPageLink(linkTo(RestaurantController.class).slash("page").toUri()));
 	}
 
 	@Override
 	protected void addCollectionHypermediaLinks(CollectionModel<RestaurantListDto> collection) {
 		collection.add(linkTo(methodOn(RestaurantController.class).findAll()).withSelfRel());
-		collection.add(linkTo(RestaurantController.class).slash("page").withRel("page"));
+		collection.add(getPageLink(linkTo(RestaurantController.class).slash("page").toUri()));
 		collection.add(linkTo(methodOn(RestaurantController.class).findFirst()).withRel(IanaLinkRelations.FIRST));
 	}
 }

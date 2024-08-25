@@ -27,7 +27,7 @@ public class OrderHateoas extends EntityHateoas<OrderDto> {
 	protected void addModelHypermediaLinks(OrderDto model) {
 		model.add(linkTo(methodOn(OrderController.class).findByUuid(model.getCode())).withSelfRel());
 		model.add(linkTo(methodOn(OrderController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
-		model.add(linkTo(OrderController.class).slash("page").withRel("page"));
+		model.add(getPageLink(linkTo(OrderController.class).slash("page").toUri()));
 
 		this.restaurantHateoas.mapModel(model.getRestaurant());
 		this.userHateoas.mapModel(model.getCustomer());
@@ -42,6 +42,6 @@ public class OrderHateoas extends EntityHateoas<OrderDto> {
 	@Override
 	protected void addCollectionHypermediaLinks(CollectionModel<OrderDto> collection) {
 		collection.add(linkTo(methodOn(OrderController.class).findAll()).withSelfRel());
-		collection.add(linkTo(OrderController.class).slash("page").withRel("page"));
+		collection.add(getPageLink(linkTo(OrderController.class).slash("page").toUri()));
 	}
 }
