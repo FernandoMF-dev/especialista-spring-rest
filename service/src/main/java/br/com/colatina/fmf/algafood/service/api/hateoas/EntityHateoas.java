@@ -7,6 +7,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariable.VariableType;
 import org.springframework.hateoas.TemplateVariables;
 import org.springframework.hateoas.UriTemplate;
 
@@ -106,9 +107,9 @@ public abstract class EntityHateoas<M extends RepresentationModel<M>> {
 
 	protected Link getPageLink(URI uri) {
 		TemplateVariables pageVariables = new TemplateVariables(
-				new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
-				new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
-				new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
+				new TemplateVariable("page", VariableType.REQUEST_PARAM),
+				new TemplateVariable("size", VariableType.REQUEST_PARAM),
+				new TemplateVariable("sort", VariableType.REQUEST_PARAM)
 		);
 
 		UriTemplate url = UriTemplate.of(uri.toString(), pageVariables);
