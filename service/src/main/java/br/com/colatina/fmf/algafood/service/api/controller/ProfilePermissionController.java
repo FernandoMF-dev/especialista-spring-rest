@@ -1,10 +1,12 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.ProfilePermissionControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.ProfileHateoas;
 import br.com.colatina.fmf.algafood.service.domain.service.ProfileCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PermissionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +25,15 @@ import java.util.Set;
 @RequestMapping(path = "/api/profiles/{profileId}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfilePermissionController implements ProfilePermissionControllerDocumentation {
 	private final ProfileCrudService profileCrudService;
+	private final ProfileHateoas profileHateoas;
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<Set<PermissionDto>> findAll(@PathVariable Long profileId) {
+	public ResponseEntity<CollectionModel<PermissionDto>> findAll(@PathVariable Long profileId) {
 		log.debug("REST request to find all permissions associated with the profile {}", profileId);
 		Set<PermissionDto> permissions = profileCrudService.findAllPermissionsByProfile(profileId);
-		return new ResponseEntity<>(permissions, HttpStatus.OK);
+		CollectionModel<PermissionDto> collection = profileHateoas.mapPermissionsCollectionModel(permissions, profileId);
+		return new ResponseEntity<>(collection, HttpStatus.OK);
 	}
 
 	@Override

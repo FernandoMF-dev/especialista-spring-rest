@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.hateoas;
 
 import br.com.colatina.fmf.algafood.service.api.controller.ProfileController;
 import br.com.colatina.fmf.algafood.service.api.controller.ProfilePermissionController;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.PermissionDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -12,8 +13,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class ProfileHateoas extends EntityHateoas<ProfileDto> {
-	public ProfileHateoas() {
-		super(ProfileDto.class);
+	private final PermissionHateoas permissionHateoas;
+
+	public ProfileHateoas(PermissionHateoas permissionHateoas) {
+		super(ProfileDto.class, permissionHateoas);
+		this.permissionHateoas = permissionHateoas;
 	}
 
 	@Override
@@ -26,5 +30,14 @@ public class ProfileHateoas extends EntityHateoas<ProfileDto> {
 	@Override
 	protected void addCollectionHypermediaLinks(CollectionModel<ProfileDto> collection) {
 		collection.add(linkTo(methodOn(ProfileController.class).findAll()).withSelfRel());
+	}
+
+	public CollectionModel<PermissionDto> mapPermissionsCollectionModel(Iterable<PermissionDto> permissions, Long profileId) {
+		CollectionModel<PermissionDto> collection = permissionHateoas.mapCollectionModel(permissions);
+		collection.removeLinks();
+		collection.add(linkTo(methodOn(ProfilePermissionController.class).findAll(profileId)).withSelfRel());
+		collection.add(linkTo(methodOn(ProfilePermissionController.class).associate(profileId, null)).withRel("associate"));
+		collection.getContent().forEach(permission -> permission.add(linkTo(methodOn(ProfilePermissionController.class).disassociate(profileId, permission.getId())).withRel("disassociate")));
+		return collection;
 	}
 }
