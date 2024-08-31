@@ -41,7 +41,7 @@ public class RestaurantProductPictureController implements RestaurantProductPict
 	public ResponseEntity<ProductPictureDto> findPicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to get the data of the picture for the product {} from the restaurant {}", productId, restaurantId);
 		ProductPictureDto result = productPictureCrudService.findPictureDto(restaurantId, productId);
-		result.add(productHateoas.createPictureSelfLink(restaurantId, productId));
+		productHateoas.mapPictureModel(result, restaurantId, productId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

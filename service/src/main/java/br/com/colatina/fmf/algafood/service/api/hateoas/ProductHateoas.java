@@ -4,6 +4,7 @@ import br.com.colatina.fmf.algafood.service.api.controller.RestaurantController;
 import br.com.colatina.fmf.algafood.service.api.controller.RestaurantProductController;
 import br.com.colatina.fmf.algafood.service.api.controller.RestaurantProductPictureController;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductPictureDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
@@ -35,7 +36,8 @@ public class ProductHateoas extends EntityHateoas<ProductDto> {
 		return linkTo(methodOn(RestaurantProductController.class).findAll(restaurantId)).withSelfRel();
 	}
 
-	public Link createPictureSelfLink(Long restaurantId, Long productId) {
-		return linkTo(methodOn(RestaurantProductPictureController.class).findPicture(restaurantId, productId)).withSelfRel();
+	public void mapPictureModel(ProductPictureDto picture, Long restaurantId, Long productId) {
+		picture.add(linkTo(methodOn(RestaurantProductPictureController.class).findPicture(restaurantId, productId)).withSelfRel());
+		picture.add(linkTo(methodOn(RestaurantProductController.class).findById(restaurantId, productId)).withRel("product"));
 	}
 }
