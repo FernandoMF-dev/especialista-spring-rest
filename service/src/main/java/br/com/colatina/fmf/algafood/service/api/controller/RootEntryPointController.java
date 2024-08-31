@@ -39,6 +39,7 @@ public class RootEntryPointController {
 		root.add(linkTo(PaymentMethodController.class).withRel("payment-methods"));
 		root.add(linkTo(ProfileController.class).withRel("profiles"));
 		root.add(linkTo(RestaurantController.class).withRel("restaurants"));
+		root.add(linkTo(StatisticsController.class).withRel("statistics"));
 		root.add(linkTo(StateController.class).withRel("states"));
 		root.add(linkTo(UserController.class).withRel("users"));
 

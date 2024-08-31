@@ -1,12 +1,15 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.StatisticsControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.StatisticsHateoas;
+import br.com.colatina.fmf.algafood.service.api.model.HypermediaModel;
 import br.com.colatina.fmf.algafood.service.domain.service.SalesQueryService;
 import br.com.colatina.fmf.algafood.service.domain.service.SalesReportService;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.SalesPerPeriodFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.statistics.SalesPerPeriod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,14 +28,23 @@ import java.util.List;
 public class StatisticsController implements StatisticsControllerDocumentation {
 	private final SalesQueryService salesQueryService;
 	private final SalesReportService salesReportService;
+	private final StatisticsHateoas statisticsHateoas;
+
+	@GetMapping
+	public HypermediaModel statistics() {
+		log.debug("REST request to get the available statistics endpoints");
+		return statisticsHateoas.getRootHypermediaModel();
+	}
 
 	@GetMapping(path = "/sales-per-day")
 	@Override
-	public ResponseEntity<List<SalesPerPeriod>> findSalesPerDay(@Valid SalesPerPeriodFilter filter) {
+	public ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerDay(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all daily sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
 
-		return new ResponseEntity<>(salesQueryService.findSalesPerDay(filter), HttpStatus.OK);
+		List<SalesPerPeriod> result = salesQueryService.findSalesPerDay(filter);
+		CollectionModel<SalesPerPeriod> collection = statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-day");
+		return new ResponseEntity<>(collection, HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/sales-per-day", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -53,19 +65,23 @@ public class StatisticsController implements StatisticsControllerDocumentation {
 
 	@GetMapping("/sales-per-month")
 	@Override
-	public ResponseEntity<List<SalesPerPeriod>> findSalesPerMonth(@Valid SalesPerPeriodFilter filter) {
+	public ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerMonth(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all monthly sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
 
-		return new ResponseEntity<>(salesQueryService.findSalesPerMonth(filter), HttpStatus.OK);
+		List<SalesPerPeriod> result = salesQueryService.findSalesPerMonth(filter);
+		CollectionModel<SalesPerPeriod> collection = statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-month");
+		return new ResponseEntity<>(collection, HttpStatus.OK);
 	}
 
 	@GetMapping("/sales-per-year")
 	@Override
-	public ResponseEntity<List<SalesPerPeriod>> findSalesPerYear(@Valid SalesPerPeriodFilter filter) {
+	public ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerYear(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all yearly sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
 
-		return new ResponseEntity<>(salesQueryService.findSalesPerYear(filter), HttpStatus.OK);
+		List<SalesPerPeriod> result = salesQueryService.findSalesPerYear(filter);
+		CollectionModel<SalesPerPeriod> collection = statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-year");
+		return new ResponseEntity<>(collection, HttpStatus.OK);
 	}
 }

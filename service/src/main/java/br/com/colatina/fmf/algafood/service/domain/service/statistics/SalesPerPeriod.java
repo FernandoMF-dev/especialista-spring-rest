@@ -3,16 +3,21 @@ package br.com.colatina.fmf.algafood.service.domain.service.statistics;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
 @ApiModel(value = "SalesPerPeriod", description = "Representation model for sales statistics per period")
+@Relation(collectionRelation = "sales-per-period")
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SalesPerPeriod implements Serializable {
+public class SalesPerPeriod extends RepresentationModel<SalesPerPeriod> implements Serializable {
 	@ApiModelProperty(value = "Total number of sales", example = "100")
 	private Long totalSales;
 
