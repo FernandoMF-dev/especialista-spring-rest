@@ -1,9 +1,11 @@
 package br.com.colatina.fmf.algafood.service.core.openapi;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.model.CityCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.LinksModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.PageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.PageableModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -101,8 +104,10 @@ public class SpringFoxConfig {
 		docket.directModelSubstitute(Pageable.class, PageableModelOpenApi.class);
 		docket.directModelSubstitute(Links.class, LinksModelOpenApi.class);
 
-		// A substituição do `Page` NÃO funciona caso o `Page<?>` esteja encapsulado em um `ResponseEntity` na configuração do endpoint.
+		// A substituição de modelos usando a função `alternateTypeRules()` não funciona caso a resposta esteja encapsulado em um `ResponseEntity` na configuração do endpoint.
 		// Considerando que o SpringFox não está mais recebendo atualizações, esse bug nunca será corrigido.
+		// Eventualmente a intenção do curso é substituir a documentação do SpringFox pelo SpringDoc. Espero que o SpringDoc não tenha esse problema.
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityDto.class), CityCollectionModelOpenApi.class));
 		docket.alternateTypeRules(AlternateTypeRules.newRule(
 				typeResolver.resolve(Page.class, OrderListDto.class),
 				typeResolver.resolve(PageModelOpenApi.class, OrderListDto.class)));

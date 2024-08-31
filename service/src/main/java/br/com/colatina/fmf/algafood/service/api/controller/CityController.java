@@ -33,11 +33,10 @@ public class CityController implements CityControllerDocumentation {
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<CollectionModel<CityDto>> findAll() {
+	public CollectionModel<CityDto> findAll() {
 		log.debug("REST request to find all cities");
 		List<CityDto> cities = cityCrudService.findAll();
-		CollectionModel<CityDto> collectionModel = cityHateoas.mapCollectionModel(cities);
-		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+		return cityHateoas.mapCollectionModel(cities);
 	}
 
 	@Override

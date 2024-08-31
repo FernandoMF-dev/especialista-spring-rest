@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 @Api(tags = SpringFoxControllerTags.CITIES)
 public interface CityControllerDocumentation {
 	@ApiOperation("Find a list of all available cities")
-	ResponseEntity<CollectionModel<CityDto>> findAll();
+	CollectionModel<CityDto> findAll();
 
 	@ApiOperation("Find a city by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid City ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
