@@ -9,14 +9,13 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Api(tags = SpringFoxControllerTags.PROFILES)
 public interface ProfileControllerDocumentation {
 	@ApiOperation("Find a list of all profiles")
-	ResponseEntity<List<ProfileDto>> findAll();
+	ResponseEntity<CollectionModel<ProfileDto>> findAll();
 
 	@ApiOperation("Find a profile by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid Profile ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))

@@ -1,10 +1,12 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.ProfileControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.ProfileHateoas;
 import br.com.colatina.fmf.algafood.service.domain.service.ProfileCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +28,14 @@ import java.util.List;
 @RequestMapping(path = "/api/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController implements ProfileControllerDocumentation {
 	private final ProfileCrudService profileCrudService;
+	private final ProfileHateoas profileHateoas;
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<List<ProfileDto>> findAll() {
+	public ResponseEntity<CollectionModel<ProfileDto>> findAll() {
 		log.debug("REST request to find all profiles");
-		return new ResponseEntity<>(profileCrudService.findAll(), HttpStatus.OK);
+		List<ProfileDto> profiles = profileCrudService.findAll();
+		return new ResponseEntity<>(profileHateoas.mapCollectionModel(profiles), HttpStatus.OK);
 	}
 
 	@Override
@@ -39,21 +43,23 @@ public class ProfileController implements ProfileControllerDocumentation {
 	public ResponseEntity<ProfileDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the profile with ID: {}", id);
 		ProfileDto profile = profileCrudService.findDtoById(id);
-		return new ResponseEntity<>(profile, HttpStatus.OK);
+		return new ResponseEntity<>(profileHateoas.mapModel(profile), HttpStatus.OK);
 	}
 
 	@Override
 	@PostMapping()
 	public ResponseEntity<ProfileDto> insert(@Valid @RequestBody ProfileDto dto) {
 		log.debug("REST request to insert a new profile: {}", dto);
-		return new ResponseEntity<>(profileCrudService.insert(dto), HttpStatus.CREATED);
+		ProfileDto profile = profileCrudService.insert(dto);
+		return new ResponseEntity<>(profileHateoas.mapModel(profile), HttpStatus.CREATED);
 	}
 
 	@Override
 	@PutMapping("/{id}")
 	public ResponseEntity<ProfileDto> update(@PathVariable Long id, @Valid @RequestBody ProfileDto dto) {
 		log.debug("REST request to update profile with id {}: {}", id, dto);
-		return new ResponseEntity<>(profileCrudService.update(dto, id), HttpStatus.OK);
+		ProfileDto profile = profileCrudService.update(dto, id);
+		return new ResponseEntity<>(profileHateoas.mapModel(profile), HttpStatus.OK);
 	}
 
 	@Override
