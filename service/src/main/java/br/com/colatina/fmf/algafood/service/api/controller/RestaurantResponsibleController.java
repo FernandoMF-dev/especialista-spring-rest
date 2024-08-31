@@ -1,7 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantResponsibleControllerDocumentation;
-import br.com.colatina.fmf.algafood.service.api.hateoas.UserHateoas;
+import br.com.colatina.fmf.algafood.service.api.hateoas.RestaurantHateoas;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +25,14 @@ import java.util.Set;
 @RequestMapping(path = "/api/restaurants/{restaurantId}/responsible", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantResponsibleController implements RestaurantResponsibleControllerDocumentation {
 	private final RestaurantCrudService restaurantCrudService;
-	private final UserHateoas userHateoas;
+	private final RestaurantHateoas restaurantHateoas;
 
 	@Override
 	@GetMapping()
 	public ResponseEntity<CollectionModel<UserDto>> findAll(@PathVariable Long restaurantId) {
 		log.debug("REST request to find all user responsible for the restaurant {}", restaurantId);
 		Set<UserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurant(restaurantId);
-		CollectionModel<UserDto> collectionModel = userHateoas.mapCollectionModel(responsibles);
-		collectionModel.removeLinks().add(userHateoas.createResponsiblesSelfLink(restaurantId));
+		CollectionModel<UserDto> collectionModel = restaurantHateoas.mapResponsiblesCollectionModel(responsibles, restaurantId);
 		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
 	}
 

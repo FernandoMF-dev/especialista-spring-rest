@@ -5,6 +5,7 @@ import br.com.colatina.fmf.algafood.service.api.controller.RestaurantProductCont
 import br.com.colatina.fmf.algafood.service.api.controller.RestaurantResponsibleController;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.GenericObjectDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
@@ -17,9 +18,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
+	private final UserHateoas userHateoas;
+
 	public RestaurantHateoas(AddressHateoas addressHateoas, UserHateoas userHateoas, CuisineHateoas cuisineHateoas,
 							 PaymentMethodHateoas paymentMethodHateoas, ProductHateoas productHateoas) {
 		super(RestaurantDto.class, addressHateoas, userHateoas, cuisineHateoas, paymentMethodHateoas, productHateoas);
+		this.userHateoas = userHateoas;
 	}
 
 	@Override
@@ -44,6 +48,15 @@ public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
 	public void mapGenericModel(GenericObjectDto model) {
 		model.add(linkTo(methodOn(RestaurantController.class).findById(model.getId())).withSelfRel());
 		model.add(linkTo(methodOn(RestaurantController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+	}
+
+	public CollectionModel<UserDto> mapResponsiblesCollectionModel(Iterable<UserDto> users, Long restaurantId) {
+		CollectionModel<UserDto> collection = userHateoas.mapCollectionModel(users);
+		collection.removeLinks();
+		collection.add(linkTo(methodOn(RestaurantResponsibleController.class).findAll(restaurantId)).withSelfRel());
+		collection.add(linkTo(methodOn(RestaurantResponsibleController.class).associate(restaurantId, null)).withRel("associate"));
+		collection.getContent().forEach(responsible -> responsible.add(linkTo(methodOn(RestaurantResponsibleController.class).disassociate(restaurantId, responsible.getId())).withRel("disassociate")));
+		return collection;
 	}
 
 	private Link getPageLink() {
