@@ -1,10 +1,12 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.UserProfileControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.hateoas.UserHateoas;
 import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +25,15 @@ import java.util.Set;
 @RequestMapping(path = "/api/users/{userId}/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserProfileController implements UserProfileControllerDocumentation {
 	private final UserCrudService userCrudService;
+	private final UserHateoas userHateoas;
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<Set<ProfileDto>> findAll(@PathVariable Long userId) {
+	public ResponseEntity<CollectionModel<ProfileDto>> findAll(@PathVariable Long userId) {
 		log.debug("REST request to find all profiles associated with the user {}", userId);
 		Set<ProfileDto> permissions = userCrudService.findAllProfilesByUser(userId);
-		return new ResponseEntity<>(permissions, HttpStatus.OK);
+		CollectionModel<ProfileDto> collection = userHateoas.mapProfilesCollectionModel(permissions, userId);
+		return new ResponseEntity<>(collection, HttpStatus.OK);
 	}
 
 	@Override

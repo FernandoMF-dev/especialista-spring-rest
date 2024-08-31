@@ -9,15 +9,14 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Set;
 
 @Api(tags = SpringFoxControllerTags.USERS)
 public interface UserProfileControllerDocumentation {
 	@ApiOperation("Find all profiles associated with a user")
 	@ApiResponse(responseCode = "200", description = "Profiles retrieved")
-	ResponseEntity<Set<ProfileDto>> findAll(@ApiParam(value = "ID of the user", example = "1", required = true) Long userId);
+	ResponseEntity<CollectionModel<ProfileDto>> findAll(@ApiParam(value = "ID of the user", example = "1", required = true) Long userId);
 
 	@ApiOperation("Associate a profile with a user")
 	@ApiResponse(responseCode = "204", description = "Profile associated")
