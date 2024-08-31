@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.model.HypermediaModel;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringFoxControllerTags;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.SalesPerPeriodFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.statistics.SalesPerPeriod;
@@ -12,6 +13,10 @@ import org.springframework.http.ResponseEntity;
 
 @Api(tags = SpringFoxControllerTags.STATISTICS)
 public interface StatisticsControllerDocumentation {
+	@ApiOperation("Find available statistics endpoints")
+	@ApiResponse(responseCode = "200", description = "Available statistics endpoints retrieved")
+	HypermediaModel statistics();
+
 	@ApiOperation("Find daily sales statistics")
 	@ApiResponse(responseCode = "200", description = "Daily sales statistics retrieved")
 	ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerDay(@ApiParam(value = "Filter for sales per period", required = true) SalesPerPeriodFilter filter);

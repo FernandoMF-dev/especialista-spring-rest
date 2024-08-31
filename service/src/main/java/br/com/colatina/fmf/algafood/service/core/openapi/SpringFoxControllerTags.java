@@ -8,6 +8,7 @@ public class SpringFoxControllerTags {
 	public static final String PRODUCTS = "Products";
 	public static final String PROFILES = "Profiles";
 	public static final String RESTAURANTS = "Restaurants";
+	public static final String ROOT = "Root";
 	public static final String STATES = "States";
 	public static final String STATISTICS = "Statistics";
 	public static final String USERS = "Users";

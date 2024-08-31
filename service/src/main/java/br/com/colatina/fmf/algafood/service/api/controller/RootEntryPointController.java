@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.controller.RootEntryPointControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.model.HypermediaModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-public class RootEntryPointController {
+public class RootEntryPointController implements RootEntryPointControllerDocumentation {
 	@GetMapping()
+	@Override
 	public HypermediaModel root() {
 		log.debug("REST request to get root entry point");
 		HypermediaModel root = new HypermediaModel();
@@ -29,6 +31,7 @@ public class RootEntryPointController {
 	}
 
 	@GetMapping("/api")
+	@Override
 	public HypermediaModel rootApi() {
 		log.debug("REST request to get root entry point of the API");
 		HypermediaModel root = new HypermediaModel();

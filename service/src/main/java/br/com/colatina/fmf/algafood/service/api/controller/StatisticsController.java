@@ -31,6 +31,7 @@ public class StatisticsController implements StatisticsControllerDocumentation {
 	private final StatisticsHateoas statisticsHateoas;
 
 	@GetMapping
+	@Override
 	public HypermediaModel statistics() {
 		log.debug("REST request to get the available statistics endpoints");
 		return statisticsHateoas.getRootHypermediaModel();
