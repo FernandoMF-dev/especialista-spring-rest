@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@ApiModel(value = "Restaurant (Input)", description = "Representation model for creating or updating a restaurant")
+@ApiModel(value = "Model <Restaurant (Input)>", description = "Representation model for creating or updating a restaurant")
 @Getter
 @Setter
 @ToString

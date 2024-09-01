@@ -14,7 +14,7 @@ import org.springframework.hateoas.server.core.Relation;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-@ApiModel(value = "Profile", description = "Representation model for profile")
+@ApiModel(value = "Model <Profile>", description = "Representation model for profile")
 @Relation(collectionRelation = "profiles")
 @Getter
 @Setter

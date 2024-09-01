@@ -6,12 +6,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-@ApiModel("CollectionModel <PaymentMethod>")
+@ApiModel("Collection <PaymentMethod>")
 public class PaymentMethodCollectionModelOpenApi {
 	private EmbeddedPaymentMethodCollectionModelOpenApi _embedded;
 	private LinksModelOpenApi _links;
 
 	@Data
+	@ApiModel("CollectionContent <PaymentMethod>")
 	private static class EmbeddedPaymentMethodCollectionModelOpenApi {
 		private PaymentMethodDto[] payment_methods;
 	}

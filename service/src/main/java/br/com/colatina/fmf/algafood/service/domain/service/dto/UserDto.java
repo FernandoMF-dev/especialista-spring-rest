@@ -15,7 +15,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-@ApiModel(value = "User", description = "Representation model for a user account")
+@ApiModel(value = "Model <User>", description = "Representation model for a user account")
 @Relation(collectionRelation = "users")
 @Getter
 @Setter

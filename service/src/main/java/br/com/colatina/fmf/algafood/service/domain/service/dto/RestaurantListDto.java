@@ -14,7 +14,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
-@ApiModel(value = "Restaurant (Listed)", description = "Representation model for a restaurant when displayed in a list")
+@ApiModel(value = "Model <Restaurant (Listed)>", description = "Representation model for a restaurant when displayed in a list")
 @Relation(collectionRelation = "restaurants")
 @Getter
 @Setter

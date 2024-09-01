@@ -11,7 +11,7 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-@ApiModel(value = "User (Password Change)", description = "Representation model for changing a user's password")
+@ApiModel(value = "Model <PasswordChange>", description = "Representation model for changing a user's password")
 @Getter
 @Setter
 @ToString

@@ -14,7 +14,7 @@ import org.springframework.hateoas.server.core.Relation;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-@ApiModel(value = "Order (Listed)", description = "Representation model for a order when displayed in a list")
+@ApiModel(value = "Model <Order (Listed)>", description = "Representation model for a order when displayed in a list")
 @Relation(collectionRelation = "orders")
 @Getter
 @Setter

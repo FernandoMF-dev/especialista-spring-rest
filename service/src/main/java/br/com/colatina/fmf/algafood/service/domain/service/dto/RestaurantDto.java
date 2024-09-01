@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@ApiModel(value = "Restaurant", description = "Representation model for a restaurant")
+@ApiModel(value = "Model <Restaurant>", description = "Representation model for a restaurant")
 @Relation(collectionRelation = "restaurants")
 @Getter
 @Setter

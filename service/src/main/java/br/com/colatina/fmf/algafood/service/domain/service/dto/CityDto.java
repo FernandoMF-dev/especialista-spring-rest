@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
 
-@ApiModel(value = "City", description = "Representation model for city")
+@ApiModel(value = "Model <City>", description = "Representation model for city")
 @Relation(collectionRelation = "cities")
 @Getter
 @Setter

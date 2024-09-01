@@ -17,7 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApiModel(value = "Order", description = "Representation model for an registered order")
+@ApiModel(value = "Model <Order>", description = "Representation model for an registered order")
 @Relation(collectionRelation = "orders")
 @Getter
 @Setter

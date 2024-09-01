@@ -6,12 +6,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-@ApiModel("CollectionModel <Permission>")
+@ApiModel("Collection <Permission>")
 public class PermissionCollectionModelOpenApi {
 	private EmbeddedPermissionCollectionModelOpenApi _embedded;
 	private LinksModelOpenApi _links;
 
 	@Data
+	@ApiModel("CollectionContent <Permission>")
 	private static class EmbeddedPermissionCollectionModelOpenApi {
 		private PermissionDto[] permissions;
 	}

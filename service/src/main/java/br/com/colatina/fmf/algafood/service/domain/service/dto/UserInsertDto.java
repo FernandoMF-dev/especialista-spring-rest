@@ -11,7 +11,7 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-@ApiModel(value = "User (Create)", description = "Representation model for registering a new user account")
+@ApiModel(value = "Model <User (Create)>", description = "Representation model for registering a new user account")
 @Getter
 @Setter
 @ToString

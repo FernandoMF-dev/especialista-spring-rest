@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
 
-@ApiModel(value = "Address", description = "Representation model for an address")
+@ApiModel(value = "Model <Address>", description = "Representation model for an address")
 @Relation(collectionRelation = "addresses")
 @Getter
 @Setter

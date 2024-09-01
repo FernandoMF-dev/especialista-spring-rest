@@ -10,7 +10,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
-@ApiModel(value = "Restaurant (Filter)", description = "Filter model for paginating restaurants")
+@ApiModel(value = "Filter <Restaurant>", description = "Filter model for paginating restaurants")
 @Getter
 @Setter
 @ToString

@@ -14,7 +14,7 @@ import org.springframework.hateoas.server.core.Relation;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-@ApiModel(value = "PaymentMethod", description = "Representation model for payment method")
+@ApiModel(value = "Model <PaymentMethod>", description = "Representation model for payment method")
 @Relation(collectionRelation = "payment_methods")
 @Getter
 @Setter

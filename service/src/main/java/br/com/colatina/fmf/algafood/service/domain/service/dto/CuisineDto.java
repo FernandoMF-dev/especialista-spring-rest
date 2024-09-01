@@ -15,7 +15,7 @@ import org.springframework.hateoas.server.core.Relation;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-@ApiModel(value = "Cuisine", description = "Representation model for cuisine")
+@ApiModel(value = "Model <Cuisine>", description = "Representation model for cuisine")
 @Relation(collectionRelation = "cuisines")
 @Getter
 @Setter

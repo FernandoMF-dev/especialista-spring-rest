@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Pattern;
 import java.time.OffsetDateTime;
 
-@ApiModel(value = "SalesPerPeriod (Filter)", description = "Filter model for sales statistics per period")
+@ApiModel(value = "Filter <SalesPerPeriod>", description = "Filter model for sales statistics per period")
 @Getter
 @Setter
 public class SalesPerPeriodFilter {

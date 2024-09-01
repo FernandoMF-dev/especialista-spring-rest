@@ -6,12 +6,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-@ApiModel("CollectionModel <Cuisine>")
+@ApiModel("Collection <Cuisine>")
 public class CuisineCollectionModelOpenApi {
 	private EmbeddedCuisineCollectionModelOpenApi _embedded;
 	private LinksModelOpenApi _links;
 
 	@Data
+	@ApiModel("CollectionContent <Cuisine>")
 	private static class EmbeddedCuisineCollectionModelOpenApi {
 		private CuisineDto[] cuisines;
 	}

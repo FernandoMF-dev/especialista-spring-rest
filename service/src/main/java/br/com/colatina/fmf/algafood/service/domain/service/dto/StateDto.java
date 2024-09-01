@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-@ApiModel(value = "State", description = "Representation model for state")
+@ApiModel(value = "Model <State>", description = "Representation model for state")
 @Relation(collectionRelation = "states")
 @Getter
 @Setter

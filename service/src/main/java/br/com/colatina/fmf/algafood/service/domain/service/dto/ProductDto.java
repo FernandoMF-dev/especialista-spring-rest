@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 
-@ApiModel(value = "Product", description = "Representation model for a product")
+@ApiModel(value = "Model <Product>", description = "Representation model for a product")
 @Relation(collectionRelation = "products")
 @Getter
 @Setter

@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApiModel(value = "Order (Input)", description = "Representation model for emitting a new order")
+@ApiModel(value = "Model <Order (Input)>", description = "Representation model for emitting a new order")
 @Getter
 @Setter
 @ToString

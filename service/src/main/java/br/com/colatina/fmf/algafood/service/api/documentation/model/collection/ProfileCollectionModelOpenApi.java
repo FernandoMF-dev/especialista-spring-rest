@@ -6,12 +6,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-@ApiModel("CollectionModel <Profile>")
+@ApiModel("Collection <Profile>")
 public class ProfileCollectionModelOpenApi {
 	private EmbeddedProfileCollectionModelOpenApi _embedded;
 	private LinksModelOpenApi _links;
 
 	@Data
+	@ApiModel("CollectionContent <Profile>")
 	private static class EmbeddedProfileCollectionModelOpenApi {
 		private ProfileDto[] profiles;
 	}

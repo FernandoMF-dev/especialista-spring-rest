@@ -13,7 +13,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
-@ApiModel(value = "Permission", description = "Representation model for a permission")
+@ApiModel(value = "Model <Permission>", description = "Representation model for a permission")
 @Relation(collectionRelation = "permissions")
 @Getter
 @Setter

@@ -6,12 +6,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-@ApiModel("CollectionModel <Order (Listed)>")
+@ApiModel("Collection <Order (Listed)>")
 public class OrderCollectionModelOpenApi {
 	private EmbeddedOrderCollectionModelOpenApi _embedded;
 	private LinksModelOpenApi _links;
 
 	@Data
+	@ApiModel("CollectionContent <Order (Listed)>")
 	private static class EmbeddedOrderCollectionModelOpenApi {
 		private OrderListDto[] orders;
 	}

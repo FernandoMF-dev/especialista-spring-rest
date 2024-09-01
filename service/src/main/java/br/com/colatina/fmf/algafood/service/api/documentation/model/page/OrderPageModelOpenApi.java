@@ -7,13 +7,14 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
-@ApiModel("PageModel <Order (Listed)>")
+@ApiModel("Page <Order (Listed)>")
 public class OrderPageModelOpenApi {
 	private EmbeddedOrderPageModelOpenApi _embedded;
 	private LinksModelOpenApi _links;
 	private PageModelOpenApi page;
 
 	@Data
+	@ApiModel("PageContent <Order (Listed)>")
 	private static class EmbeddedOrderPageModelOpenApi {
 		private OrderListDto[] orders;
 	}

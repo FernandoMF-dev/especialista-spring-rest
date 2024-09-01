@@ -13,7 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-@ApiModel(value = "Order (Filter)", description = "Filter model for paginating orders")
+@ApiModel(value = "Filter <Order>", description = "Filter model for paginating orders")
 @Getter
 @Setter
 @ToString

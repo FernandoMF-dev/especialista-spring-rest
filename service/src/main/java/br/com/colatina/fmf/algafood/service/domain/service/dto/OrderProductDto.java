@@ -12,7 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 
-@ApiModel(value = "OrderProduct", description = "Representation model for the products included in a registered order")
+@ApiModel(value = "Model <OrderProduct>", description = "Representation model for the products included in a registered order")
 @Getter
 @Setter
 @ToString

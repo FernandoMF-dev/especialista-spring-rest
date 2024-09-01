@@ -12,8 +12,8 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
-@ApiModel(value = "Product Picture", description = "Representation model for a product picture")
-@Relation(collectionRelation = "product-pictures")
+@ApiModel(value = "Model <ProductPicture>", description = "Representation model for a product picture")
+@Relation(collectionRelation = "product_pictures")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)

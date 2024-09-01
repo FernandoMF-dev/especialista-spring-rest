@@ -12,7 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 
-@ApiModel(value = "GenericObject", description = "Representation model for a generic object with only an ID and a name/description")
+@ApiModel(value = "Model <GenericObject>", description = "Representation model for a generic object with only an ID and a name/description")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)

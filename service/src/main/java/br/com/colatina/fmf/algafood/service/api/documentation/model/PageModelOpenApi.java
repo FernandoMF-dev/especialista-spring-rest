@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel("Page")
+@ApiModel("PageMetadata")
 public class PageModelOpenApi {
 	@ApiModelProperty(value = "Size of the page", example = "10")
 	private Integer size;

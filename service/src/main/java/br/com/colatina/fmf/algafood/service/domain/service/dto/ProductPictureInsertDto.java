@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@ApiModel(value = "Product Picture (Input)", description = "Representation model for inserting a product picture")
+@ApiModel(value = "Model <ProductPicture (Input)>", description = "Representation model for inserting a product picture")
 @Getter
 @Setter
 public class ProductPictureInsertDto {

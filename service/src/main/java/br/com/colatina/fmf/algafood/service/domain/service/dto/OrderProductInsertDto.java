@@ -12,7 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@ApiModel(value = "OrderProduct (Input)", description = "Representation model for the products included in a new order being emitted")
+@ApiModel(value = "Model <OrderProduct (Input)>", description = "Representation model for the products included in a new order being emitted")
 @Getter
 @Setter
 @ToString
