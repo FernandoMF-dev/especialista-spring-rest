@@ -35,11 +35,10 @@ public class UserController implements UserControllerDocumentation {
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<CollectionModel<UserDto>> findAll() {
+	public CollectionModel<UserDto> findAll() {
 		log.debug("REST request to find all users");
 		List<UserDto> users = userCrudService.findAll();
-		CollectionModel<UserDto> collectionModel = userHateoas.mapCollectionModel(users);
-		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+		return userHateoas.mapCollectionModel(users);
 	}
 
 	@Override

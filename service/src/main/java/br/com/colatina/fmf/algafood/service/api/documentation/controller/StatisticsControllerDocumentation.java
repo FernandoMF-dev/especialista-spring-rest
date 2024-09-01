@@ -19,7 +19,7 @@ public interface StatisticsControllerDocumentation {
 
 	@ApiOperation("Find daily sales statistics")
 	@ApiResponse(responseCode = "200", description = "Daily sales statistics retrieved")
-	ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerDay(@ApiParam(value = "Filter for sales per period", required = true) SalesPerPeriodFilter filter);
+	CollectionModel<SalesPerPeriod> findSalesPerDay(@ApiParam(value = "Filter for sales per period", required = true) SalesPerPeriodFilter filter);
 
 	@ApiOperation("Export daily sales statistics")
 	@ApiResponse(responseCode = "200", description = "PDF report generated")
@@ -27,9 +27,9 @@ public interface StatisticsControllerDocumentation {
 
 	@ApiOperation("Find monthly sales statistics")
 	@ApiResponse(responseCode = "200", description = "Monthly sales statistics retrieved")
-	ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerMonth(@ApiParam(value = "Filter for sales per period", required = true) SalesPerPeriodFilter filter);
+	CollectionModel<SalesPerPeriod> findSalesPerMonth(@ApiParam(value = "Filter for sales per period", required = true) SalesPerPeriodFilter filter);
 
 	@ApiOperation("Find yearly sales statistics")
 	@ApiResponse(responseCode = "200", description = "Yearly sales statistics retrieved")
-	ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerYear(@ApiParam(value = "Filter for sales per period", required = true) SalesPerPeriodFilter filter);
+	CollectionModel<SalesPerPeriod> findSalesPerYear(@ApiParam(value = "Filter for sales per period", required = true) SalesPerPeriodFilter filter);
 }

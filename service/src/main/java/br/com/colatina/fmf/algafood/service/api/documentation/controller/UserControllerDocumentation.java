@@ -19,7 +19,7 @@ public interface UserControllerDocumentation {
 
 	@ApiOperation("Find all users")
 	@ApiResponse(responseCode = "200", description = "Users retrieved")
-	ResponseEntity<CollectionModel<UserDto>> findAll();
+	CollectionModel<UserDto> findAll();
 
 	@ApiOperation("Find a user by ID")
 	@ApiResponse(responseCode = "200", description = "User retrieved")

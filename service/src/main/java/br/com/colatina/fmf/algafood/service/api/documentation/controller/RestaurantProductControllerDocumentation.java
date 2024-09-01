@@ -17,7 +17,7 @@ public interface RestaurantProductControllerDocumentation {
 	@ApiOperation("Find all products for a restaurant")
 	@ApiResponse(responseCode = "200", description = "List of products retrieved")
 	@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<CollectionModel<ProductDto>> findAll(@ApiParam(value = "ID of the restaurant", example = "1", required = true) Long restaurantId);
+	CollectionModel<ProductDto> findAll(@ApiParam(value = "ID of the restaurant", example = "1", required = true) Long restaurantId);
 
 	@ApiOperation("Find a product by its ID for a restaurant")
 	@ApiResponse(responseCode = "200", description = "Product retrieved")

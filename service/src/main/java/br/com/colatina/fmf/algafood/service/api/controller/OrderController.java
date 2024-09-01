@@ -40,11 +40,10 @@ public class OrderController implements OrderControllerDocumentation {
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<CollectionModel<OrderListDto>> findAll() {
+	public CollectionModel<OrderListDto> findAll() {
 		log.debug("REST request to find all orders");
 		List<OrderListDto> orders = orderCrudService.findAll();
-		CollectionModel<OrderListDto> collectionModel = orderListHateoas.mapCollectionModel(orders);
-		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+		return orderListHateoas.mapCollectionModel(orders);
 	}
 
 	@Override

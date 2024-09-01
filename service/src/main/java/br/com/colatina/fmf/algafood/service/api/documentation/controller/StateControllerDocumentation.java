@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 @Api(tags = SpringFoxControllerTags.STATES)
 public interface StateControllerDocumentation {
 	@ApiOperation("Find a list of all available states")
-	ResponseEntity<CollectionModel<StateDto>> findAll();
+	CollectionModel<StateDto> findAll();
 
 	@ApiOperation("Find a state by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid state ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))

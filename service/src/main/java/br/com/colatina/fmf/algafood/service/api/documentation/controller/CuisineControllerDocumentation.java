@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 @Api(tags = SpringFoxControllerTags.CUISINES)
 public interface CuisineControllerDocumentation {
 	@ApiOperation("Find a list of all available cuisines")
-	ResponseEntity<CollectionModel<CuisineDto>> findAll();
+	CollectionModel<CuisineDto> findAll();
 
 	@ApiOperation("Find a list of all available cuisines")
 	ResponseEntity<CuisinesXmlWrapper> findAllXml();

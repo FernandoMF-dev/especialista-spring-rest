@@ -24,11 +24,11 @@ public interface RestaurantControllerDocumentation {
 
 	@ApiOperation(value = "Find a list of all available restaurants")
 	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
-	ResponseEntity<CollectionModel<RestaurantListDto>> findAll();
+	CollectionModel<RestaurantListDto> findAll();
 
 	@ApiOperation(value = "Filter restaurants by freight fee")
 	@ApiResponse(responseCode = "200", description = "List of restaurants retrieved")
-	ResponseEntity<CollectionModel<RestaurantListDto>> filterByFreightFee(@ApiParam(value = "Name of the restaurant", example = "Burger King") String name,
+	CollectionModel<RestaurantListDto> filterByFreightFee(@ApiParam(value = "Name of the restaurant", example = "Burger King") String name,
 																		  @ApiParam(value = "Minimum freight fee", example = "5.00") Double min,
 																		  @ApiParam(value = "Maximum freight fee", example = "15.00") Double max);
 

@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +38,12 @@ public class StatisticsController implements StatisticsControllerDocumentation {
 
 	@GetMapping(path = "/sales-per-day")
 	@Override
-	public ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerDay(@Valid SalesPerPeriodFilter filter) {
+	public CollectionModel<SalesPerPeriod> findSalesPerDay(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all daily sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
 
 		List<SalesPerPeriod> result = salesQueryService.findSalesPerDay(filter);
-		CollectionModel<SalesPerPeriod> collection = statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-day");
-		return new ResponseEntity<>(collection, HttpStatus.OK);
+		return statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-day");
 	}
 
 	@GetMapping(path = "/sales-per-day", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -66,23 +64,21 @@ public class StatisticsController implements StatisticsControllerDocumentation {
 
 	@GetMapping("/sales-per-month")
 	@Override
-	public ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerMonth(@Valid SalesPerPeriodFilter filter) {
+	public CollectionModel<SalesPerPeriod> findSalesPerMonth(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all monthly sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
 
 		List<SalesPerPeriod> result = salesQueryService.findSalesPerMonth(filter);
-		CollectionModel<SalesPerPeriod> collection = statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-month");
-		return new ResponseEntity<>(collection, HttpStatus.OK);
+		return statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-month");
 	}
 
 	@GetMapping("/sales-per-year")
 	@Override
-	public ResponseEntity<CollectionModel<SalesPerPeriod>> findSalesPerYear(@Valid SalesPerPeriodFilter filter) {
+	public CollectionModel<SalesPerPeriod> findSalesPerYear(@Valid SalesPerPeriodFilter filter) {
 		log.debug("REST request to find all yearly sales statistics for restaurant {} between dates {} and {}, with a time offset of {}",
 				filter.getRestaurantId(), filter.getStartDate(), filter.getEndDate(), filter.getTimeOffset());
 
 		List<SalesPerPeriod> result = salesQueryService.findSalesPerYear(filter);
-		CollectionModel<SalesPerPeriod> collection = statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-year");
-		return new ResponseEntity<>(collection, HttpStatus.OK);
+		return statisticsHateoas.mapSalesPerPeriodModel(result, "sales-per-year");
 	}
 }

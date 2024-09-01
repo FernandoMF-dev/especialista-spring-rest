@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.PaymentMethodCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringFoxControllerTags;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
@@ -15,7 +16,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 @Api(tags = SpringFoxControllerTags.PAYMENT_METHODS)
 public interface PaymentMethodControllerDocumentation {
-	@ApiOperation("Find a list of all available payment methods")
+	@ApiOperation(value = "Find a list of all available payment methods")
+	@io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = PaymentMethodCollectionModelOpenApi.class)
 	ResponseEntity<CollectionModel<PaymentMethodDto>> findAll(ServletWebRequest request);
 
 	@ApiOperation("Find a payment method by its ID")

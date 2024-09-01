@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 public interface UserProfileControllerDocumentation {
 	@ApiOperation("Find all profiles associated with a user")
 	@ApiResponse(responseCode = "200", description = "Profiles retrieved")
-	ResponseEntity<CollectionModel<ProfileDto>> findAll(@ApiParam(value = "ID of the user", example = "1", required = true) Long userId);
+	CollectionModel<ProfileDto> findAll(@ApiParam(value = "ID of the user", example = "1", required = true) Long userId);
 
 	@ApiOperation("Associate a profile with a user")
 	@ApiResponse(responseCode = "204", description = "Profile associated")

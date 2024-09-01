@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 @Api(tags = SpringFoxControllerTags.PROFILES)
 public interface ProfileControllerDocumentation {
 	@ApiOperation("Find a list of all profiles")
-	ResponseEntity<CollectionModel<ProfileDto>> findAll();
+	CollectionModel<ProfileDto> findAll();
 
 	@ApiOperation("Find a profile by its ID")
 	@ApiResponse(responseCode = "400", description = "Invalid Profile ID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))

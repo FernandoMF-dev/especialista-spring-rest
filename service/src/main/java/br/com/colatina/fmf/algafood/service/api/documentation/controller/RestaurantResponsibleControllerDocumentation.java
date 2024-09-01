@@ -17,7 +17,7 @@ public interface RestaurantResponsibleControllerDocumentation {
 	@ApiOperation("Find all users responsible for a restaurant")
 	@ApiResponse(responseCode = "200", description = "List of users responsible for the restaurant")
 	@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<CollectionModel<UserDto>> findAll(@ApiParam(value = "ID of the restaurant", example = "1", required = true) Long restaurantId);
+	CollectionModel<UserDto> findAll(@ApiParam(value = "ID of the restaurant", example = "1", required = true) Long restaurantId);
 
 	@ApiOperation("Associate a user as a responsible for a restaurant")
 	@ApiResponse(responseCode = "204", description = "Responsible associated")

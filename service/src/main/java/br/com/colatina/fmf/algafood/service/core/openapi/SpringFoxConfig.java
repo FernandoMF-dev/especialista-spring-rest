@@ -1,14 +1,32 @@
 package br.com.colatina.fmf.algafood.service.core.openapi;
 
-import br.com.colatina.fmf.algafood.service.api.documentation.model.CityCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.LinksModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.OrderPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.PageableModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.RestaurantPageModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.CityCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.CuisineCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.OrderCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.PaymentMethodCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.PermissionCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.ProductCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.ProfileCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.RestaurantCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.SalesPerPeriodCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.StateCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.UserCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.page.OrderPageModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.page.RestaurantPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.PermissionDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.StateDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
+import br.com.colatina.fmf.algafood.service.domain.service.statistics.SalesPerPeriod;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
@@ -111,6 +129,17 @@ public class SpringFoxConfig {
 		// Considerando que o SpringFox não está mais recebendo atualizações, esse bug nunca será corrigido.
 		// Eventualmente a intenção do curso é substituir a documentação do SpringFox pelo SpringDoc. Espero que o SpringDoc não tenha esse problema.
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityDto.class), CityCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CuisineDto.class), CuisineCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, OrderListDto.class), OrderCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, PaymentMethodDto.class), PaymentMethodCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, PermissionDto.class), PermissionCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, ProductDto.class), ProductCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, ProfileDto.class), ProfileCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, RestaurantListDto.class), RestaurantCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, SalesPerPeriod.class), SalesPerPeriodCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, StateDto.class), StateCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, UserDto.class), UserCollectionModelOpenApi.class));
+
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, OrderListDto.class), OrderPageModelOpenApi.class));
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, RestaurantListDto.class), RestaurantPageModelOpenApi.class));
 	}

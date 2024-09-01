@@ -32,10 +32,10 @@ public class ProfileController implements ProfileControllerDocumentation {
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<CollectionModel<ProfileDto>> findAll() {
+	public CollectionModel<ProfileDto> findAll() {
 		log.debug("REST request to find all profiles");
 		List<ProfileDto> profiles = profileCrudService.findAll();
-		return new ResponseEntity<>(profileHateoas.mapCollectionModel(profiles), HttpStatus.OK);
+		return profileHateoas.mapCollectionModel(profiles);
 	}
 
 	@Override

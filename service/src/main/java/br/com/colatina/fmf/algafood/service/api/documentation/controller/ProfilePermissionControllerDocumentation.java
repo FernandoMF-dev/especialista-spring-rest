@@ -18,7 +18,7 @@ public interface ProfilePermissionControllerDocumentation {
 	@ApiOperation("Find all permissions associated with a profile")
 	@ApiResponse(responseCode = "200", description = "Permissions retrieved")
 	@ApiResponse(responseCode = "404", description = "Profile not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	ResponseEntity<CollectionModel<PermissionDto>> findAll(@ApiParam(value = "ID of the profile", example = "1", required = true) Long profileId);
+	CollectionModel<PermissionDto> findAll(@ApiParam(value = "ID of the profile", example = "1", required = true) Long profileId);
 
 	@ApiOperation("Associate a permission with a profile")
 	@ApiResponse(responseCode = "204", description = "Permission associated")

@@ -1,5 +1,6 @@
-package br.com.colatina.fmf.algafood.service.api.documentation.model;
+package br.com.colatina.fmf.algafood.service.api.documentation.model.collection;
 
+import br.com.colatina.fmf.algafood.service.api.documentation.model.LinksModelOpenApi;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;

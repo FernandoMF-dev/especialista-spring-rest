@@ -12,7 +12,7 @@ import org.springframework.hateoas.server.core.Relation;
 import java.io.Serializable;
 
 @ApiModel(value = "SalesPerPeriod", description = "Representation model for sales statistics per period")
-@Relation(collectionRelation = "sales-per-period")
+@Relation(collectionRelation = "sales_per_period")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)

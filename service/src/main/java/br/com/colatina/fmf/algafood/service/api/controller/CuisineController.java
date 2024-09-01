@@ -33,10 +33,10 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CollectionModel<CuisineDto>> findAll() {
+	public CollectionModel<CuisineDto> findAll() {
 		log.debug("REST request to find all cuisines");
 		List<CuisineDto> cuisines = cuisineCrudService.findAll();
-		return new ResponseEntity<>(cuisineHateoas.mapCollectionModel(cuisines), HttpStatus.OK);
+		return cuisineHateoas.mapCollectionModel(cuisines);
 	}
 
 	@Override

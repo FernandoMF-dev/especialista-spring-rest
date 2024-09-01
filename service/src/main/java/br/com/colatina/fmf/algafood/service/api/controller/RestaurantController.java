@@ -44,18 +44,17 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<CollectionModel<RestaurantListDto>> findAll() {
+	public CollectionModel<RestaurantListDto> findAll() {
 		log.debug("REST request to find all restaurants");
 		List<RestaurantListDto> restaurants = restaurantCrudService.findAll();
-		CollectionModel<RestaurantListDto> collectionModel = restaurantListHateoas.mapCollectionModel(restaurants);
-		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+		return restaurantListHateoas.mapCollectionModel(restaurants);
 	}
 
 	@Override
 	@GetMapping("/freight-fee")
-	public ResponseEntity<CollectionModel<RestaurantListDto>> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
-																				 @RequestParam(value = "min", required = false) Double min,
-																				 @RequestParam(value = "max", required = false) Double max) {
+	public CollectionModel<RestaurantListDto> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
+																 @RequestParam(value = "min", required = false) Double min,
+																 @RequestParam(value = "max", required = false) Double max) {
 		if (Strings.isEmpty(name)) {
 			return _filterByFreightFee(min, max);
 		}
@@ -139,17 +138,15 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 		return ResponseEntity.noContent().build();
 	}
 
-	private ResponseEntity<CollectionModel<RestaurantListDto>> _filterByFreightFee(Double min, Double max) {
+	private CollectionModel<RestaurantListDto> _filterByFreightFee(Double min, Double max) {
 		log.debug("REST request to find all restaurants with freight fee between {} and {}", min, max);
 		List<RestaurantListDto> restaurants = restaurantCrudService.filterByFreightFee(min, max);
-		CollectionModel<RestaurantListDto> collectionModel = restaurantListHateoas.mapCollectionModel(restaurants);
-		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+		return restaurantListHateoas.mapCollectionModel(restaurants);
 	}
 
-	private ResponseEntity<CollectionModel<RestaurantListDto>> _filterByFreightFee(String name, Double min, Double max) {
+	private CollectionModel<RestaurantListDto> _filterByFreightFee(String name, Double min, Double max) {
 		log.debug("REST request to find all restaurants with name like \"{}\" and freight fee between {} and {}", name, min, max);
 		List<RestaurantListDto> restaurants = restaurantCrudService.filterByFreightFee(name, min, max);
-		CollectionModel<RestaurantListDto> collectionModel = restaurantListHateoas.mapCollectionModel(restaurants);
-		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+		return restaurantListHateoas.mapCollectionModel(restaurants);
 	}
 }

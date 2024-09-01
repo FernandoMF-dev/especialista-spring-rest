@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 @Api(tags = SpringFoxControllerTags.ORDERS)
 public interface OrderControllerDocumentation {
 	@ApiOperation("Find a list of all registered orders")
-	ResponseEntity<CollectionModel<OrderListDto>> findAll();
+	CollectionModel<OrderListDto> findAll();
 
 	@ApiOperation("Find an order by its unique identifier code")
 	@ApiResponse(responseCode = "400", description = "Invalid order UUID", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))

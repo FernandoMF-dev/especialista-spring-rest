@@ -7,7 +7,6 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,11 +28,10 @@ public class RestaurantResponsibleController implements RestaurantResponsibleCon
 
 	@Override
 	@GetMapping()
-	public ResponseEntity<CollectionModel<UserDto>> findAll(@PathVariable Long restaurantId) {
+	public CollectionModel<UserDto> findAll(@PathVariable Long restaurantId) {
 		log.debug("REST request to find all user responsible for the restaurant {}", restaurantId);
 		Set<UserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurant(restaurantId);
-		CollectionModel<UserDto> collectionModel = restaurantHateoas.mapResponsiblesCollectionModel(responsibles, restaurantId);
-		return new ResponseEntity<>(collectionModel, HttpStatus.OK);
+		return restaurantHateoas.mapResponsiblesCollectionModel(responsibles, restaurantId);
 	}
 
 	@Override
