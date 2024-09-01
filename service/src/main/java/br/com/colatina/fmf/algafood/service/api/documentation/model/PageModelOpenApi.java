@@ -5,14 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @ApiModel("Page")
-public class PageModelOpenApi<T> {
-	@ApiModelProperty(value = "Page content")
-	private List<T> content;
+public class PageModelOpenApi {
 	@ApiModelProperty(value = "Size of the page", example = "10")
 	private Integer size;
 	@ApiModelProperty(value = "Total number of elements", example = "50")
@@ -21,6 +17,4 @@ public class PageModelOpenApi<T> {
 	private Integer totalPages;
 	@ApiModelProperty(value = "Current page number (starts at 0)", example = "0")
 	private Integer number;
-	@ApiModelProperty(value = "Number of elements in the current page", example = "10")
-	private Integer numberOfElements;
 }

@@ -2,7 +2,7 @@ package br.com.colatina.fmf.algafood.service.core.openapi;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.model.CityCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.LinksModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.PageModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.OrderPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.PageableModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
@@ -12,10 +12,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -108,9 +108,7 @@ public class SpringFoxConfig {
 		// Considerando que o SpringFox não está mais recebendo atualizações, esse bug nunca será corrigido.
 		// Eventualmente a intenção do curso é substituir a documentação do SpringFox pelo SpringDoc. Espero que o SpringDoc não tenha esse problema.
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityDto.class), CityCollectionModelOpenApi.class));
-		docket.alternateTypeRules(AlternateTypeRules.newRule(
-				typeResolver.resolve(Page.class, OrderListDto.class),
-				typeResolver.resolve(PageModelOpenApi.class, OrderListDto.class)));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, OrderListDto.class), OrderPageModelOpenApi.class));
 	}
 
 	private void setApiInfo(Docket docket) {
