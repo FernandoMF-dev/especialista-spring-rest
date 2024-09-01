@@ -4,9 +4,11 @@ import br.com.colatina.fmf.algafood.service.api.documentation.model.CityCollecti
 import br.com.colatina.fmf.algafood.service.api.documentation.model.LinksModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.OrderPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.documentation.model.PageableModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.documentation.model.RestaurantPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpMethod;
@@ -99,7 +102,7 @@ public class SpringFoxConfig {
 
 		docket.additionalModels(typeResolver.resolve(ApiErrorResponse.class));
 
-		docket.ignoredParameterTypes(ServletWebRequest.class);
+		docket.ignoredParameterTypes(ServletWebRequest.class, LinkRelation.class);
 
 		docket.directModelSubstitute(Pageable.class, PageableModelOpenApi.class);
 		docket.directModelSubstitute(Links.class, LinksModelOpenApi.class);
@@ -109,6 +112,7 @@ public class SpringFoxConfig {
 		// Eventualmente a intenção do curso é substituir a documentação do SpringFox pelo SpringDoc. Espero que o SpringDoc não tenha esse problema.
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityDto.class), CityCollectionModelOpenApi.class));
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, OrderListDto.class), OrderPageModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, RestaurantListDto.class), RestaurantPageModelOpenApi.class));
 	}
 
 	private void setApiInfo(Docket docket) {

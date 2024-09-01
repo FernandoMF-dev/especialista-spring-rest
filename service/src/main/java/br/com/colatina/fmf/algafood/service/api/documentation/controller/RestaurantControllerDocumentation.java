@@ -34,7 +34,7 @@ public interface RestaurantControllerDocumentation {
 
 	@ApiOperation(value = "Find a paginated list of restaurants with filters")
 	@ApiResponse(responseCode = "200", description = "Paginated list of restaurants retrieved")
-	ResponseEntity<PagedModel<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable);
+	PagedModel<RestaurantListDto> page(RestaurantPageFilter filter, Pageable pageable);
 
 	@ApiOperation(value = "Find the first available restaurant")
 	@ApiResponse(responseCode = "200", description = "First available restaurant retrieved")

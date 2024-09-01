@@ -64,12 +64,11 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@GetMapping("/page")
-	public ResponseEntity<PagedModel<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
+	public PagedModel<RestaurantListDto> page(RestaurantPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of restaurants with filters {} and with the page configuration {}", filter, pageable);
 		pageable = PageableTranslator.translate(pageable, RestaurantListDto.class);
 		Page<RestaurantListDto> page = restaurantCrudService.page(filter, pageable);
-		PagedModel<RestaurantListDto> pagedModel = restaurantListHateoas.mapPagedModel(page);
-		return new ResponseEntity<>(pagedModel, HttpStatus.OK);
+		return restaurantListHateoas.mapPagedModel(page);
 	}
 
 	@Override
