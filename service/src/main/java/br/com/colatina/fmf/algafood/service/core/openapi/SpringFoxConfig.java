@@ -1,21 +1,21 @@
 package br.com.colatina.fmf.algafood.service.core.openapi;
 
-import br.com.colatina.fmf.algafood.service.api.documentation.model.LinksModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.PageableModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.CityCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.CuisineCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.OrderCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.PaymentMethodCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.PermissionCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.ProductCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.ProfileCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.RestaurantCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.SalesPerPeriodCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.StateCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.collection.UserCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.page.OrderPageModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.documentation.model.page.RestaurantPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.LinksModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.PageableModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.CityCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.CuisineCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.OrderCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.PaymentMethodCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.PermissionCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.ProductCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.ProfileCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.RestaurantCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.SalesPerPeriodCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.StateCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.UserCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.page.OrderPageModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.page.RestaurantPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
@@ -88,7 +88,7 @@ public class SpringFoxConfig {
 	private Docket startDocketBuild() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("br.com.colatina.fmf.algafood.service.api.controller"))
+				.apis(RequestHandlerSelectors.basePackage("br.com.colatina.fmf.algafood.service.api.v1.controller"))
 				.paths(PathSelectors.any())
 				.build();
 	}

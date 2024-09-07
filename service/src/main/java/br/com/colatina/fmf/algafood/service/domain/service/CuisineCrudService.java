@@ -1,6 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
-import br.com.colatina.fmf.algafood.service.api.model.CuisinesXmlWrapper;
+import br.com.colatina.fmf.algafood.service.api.v1.model.CuisinesXmlWrapper;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceInUseException;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.model.Cuisine;
