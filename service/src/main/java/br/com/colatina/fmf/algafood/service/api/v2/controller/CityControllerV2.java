@@ -5,13 +5,13 @@ import br.com.colatina.fmf.algafood.service.api.v2.assembler.CityModelAssemblerV
 import br.com.colatina.fmf.algafood.service.api.v2.assembler.CityModelDisassemblerV2;
 import br.com.colatina.fmf.algafood.service.api.v2.model.CityModelV2;
 import br.com.colatina.fmf.algafood.service.api.v2.model.input.CityInputV2;
-import br.com.colatina.fmf.algafood.service.core.web.CustomMediaTypes;
 import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,8 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/cities", produces = CustomMediaTypes.V2_APPLICATION_JSON_VALUE)
+//@RequestMapping(path = "/api/cities", produces = CustomMediaTypes.V2_APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v2/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CityControllerV2 {
 	private final CityCrudService cityCrudService;
 

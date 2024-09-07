@@ -1,5 +1,14 @@
-package br.com.colatina.fmf.algafood.service.api.v1.controller;
+package br.com.colatina.fmf.algafood.service.api;
 
+import br.com.colatina.fmf.algafood.service.api.v1.controller.CityController;
+import br.com.colatina.fmf.algafood.service.api.v1.controller.CuisineController;
+import br.com.colatina.fmf.algafood.service.api.v1.controller.OrderController;
+import br.com.colatina.fmf.algafood.service.api.v1.controller.PaymentMethodController;
+import br.com.colatina.fmf.algafood.service.api.v1.controller.ProfileController;
+import br.com.colatina.fmf.algafood.service.api.v1.controller.RestaurantController;
+import br.com.colatina.fmf.algafood.service.api.v1.controller.StateController;
+import br.com.colatina.fmf.algafood.service.api.v1.controller.StatisticsController;
+import br.com.colatina.fmf.algafood.service.api.v1.controller.UserController;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.RootEntryPointControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.model.HypermediaModel;
 import lombok.RequiredArgsConstructor;
