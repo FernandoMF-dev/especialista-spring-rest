@@ -22,6 +22,7 @@
 		<jasperreports.version>6.21.3</jasperreports.version>
 		<aws-java-sdk-s3.version>1.12.748</aws-java-sdk-s3.version>
 		<springfox.version>3.0.0</springfox.version>
+		<modelmapper.version>2.3.0</modelmapper.version>
 	</properties>
 
 	<dependencies>
@@ -120,6 +121,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
 		</dependency>
 	</dependencies>
 

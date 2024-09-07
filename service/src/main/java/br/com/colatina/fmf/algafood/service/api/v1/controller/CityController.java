@@ -34,7 +34,7 @@ public class CityController implements CityControllerDocumentation {
 	@Override
 	@GetMapping()
 	public CollectionModel<CityDto> findAll() {
-		log.debug("REST request to find all cities");
+		log.debug("REST V1 request to find all cities");
 		List<CityDto> cities = cityCrudService.findAll();
 		return cityHateoas.mapCollectionModel(cities);
 	}
@@ -42,7 +42,7 @@ public class CityController implements CityControllerDocumentation {
 	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<CityDto> findById(@PathVariable Long id) {
-		log.debug("REST request to find the city with ID: {}", id);
+		log.debug("REST V1 request to find the city with ID: {}", id);
 		CityDto city = cityCrudService.findDtoById(id);
 		return new ResponseEntity<>(cityHateoas.mapModel(city), HttpStatus.OK);
 	}
@@ -50,7 +50,7 @@ public class CityController implements CityControllerDocumentation {
 	@Override
 	@PostMapping()
 	public ResponseEntity<CityDto> insert(@Valid @RequestBody CityDto dto) {
-		log.debug("REST request to insert a new city: {}", dto);
+		log.debug("REST V1 request to insert a new city: {}", dto);
 		CityDto city = cityCrudService.insert(dto);
 		ResourceUriUtils.addLocationUriInResponseHeader(city.getId());
 		return new ResponseEntity<>(cityHateoas.mapModel(city), HttpStatus.CREATED);
@@ -59,7 +59,7 @@ public class CityController implements CityControllerDocumentation {
 	@Override
 	@PutMapping("/{id}")
 	public ResponseEntity<CityDto> update(@PathVariable Long id, @Valid @RequestBody CityDto dto) {
-		log.debug("REST request to update city with id {}: {}", id, dto);
+		log.debug("REST V1 request to update city with id {}: {}", id, dto);
 		CityDto city = cityCrudService.update(dto, id);
 		return new ResponseEntity<>(cityHateoas.mapModel(city), HttpStatus.OK);
 	}
@@ -67,7 +67,7 @@ public class CityController implements CityControllerDocumentation {
 	@Override
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		log.debug("REST request to delete city with id {}", id);
+		log.debug("REST V1 request to delete city with id {}", id);
 		cityCrudService.delete(id);
 		return ResponseEntity.noContent().build();
 	}

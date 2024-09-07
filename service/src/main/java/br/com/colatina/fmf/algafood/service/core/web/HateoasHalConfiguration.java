@@ -6,11 +6,12 @@ import org.springframework.hateoas.mediatype.hal.HalConfiguration;
 import org.springframework.http.MediaType;
 
 @Configuration
-public class AlgaHalConfiguration {
+public class HateoasHalConfiguration {
 	@Bean
 	public HalConfiguration globalPolicy() {
 		return new HalConfiguration()
 				.withMediaType(MediaType.APPLICATION_JSON)
-				.withMediaType(CustomMediaTypes.V1_APPLICATION_JSON);
+				.withMediaType(CustomMediaTypes.V1_APPLICATION_JSON)
+				.withMediaType(CustomMediaTypes.V2_APPLICATION_JSON);
 	}
 }

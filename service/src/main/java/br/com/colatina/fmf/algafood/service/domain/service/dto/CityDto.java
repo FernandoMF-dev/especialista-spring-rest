@@ -26,6 +26,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 public class CityDto extends RepresentationModel<CityDto> implements Serializable {
+	@ApiModelProperty(value = "ID of the city", example = "1")
 	@NotNull(message = "city.id.not_null", groups = ValidationGroups.RequiredCity.class)
 	@EqualsAndHashCode.Include
 	private Long id;
