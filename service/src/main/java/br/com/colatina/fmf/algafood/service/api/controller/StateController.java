@@ -44,8 +44,7 @@ public class StateController implements StateControllerDocumentation {
 	public ResponseEntity<StateDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the state with ID: {}", id);
 		StateDto state = stateCrudService.findDtoById(id);
-		stateHateoas.mapModel(state);
-		return new ResponseEntity<>(state, HttpStatus.OK);
+		return new ResponseEntity<>(stateHateoas.mapModel(state), HttpStatus.OK);
 	}
 
 	@Override
@@ -53,9 +52,8 @@ public class StateController implements StateControllerDocumentation {
 	public ResponseEntity<StateDto> insert(@Valid @RequestBody StateDto dto) {
 		log.debug("REST request to insert a new state: {}", dto);
 		StateDto state = stateCrudService.insert(dto);
-		ResourceUriUtils.addUriInResponseHeader(state.getId());
-		stateHateoas.mapModel(state);
-		return new ResponseEntity<>(state, HttpStatus.CREATED);
+		ResourceUriUtils.addLocationUriInResponseHeader(state.getId());
+		return new ResponseEntity<>(stateHateoas.mapModel(state), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -63,8 +61,7 @@ public class StateController implements StateControllerDocumentation {
 	public ResponseEntity<StateDto> update(@PathVariable Long id, @Valid @RequestBody StateDto dto) {
 		log.debug("REST request to update state with id {}: {}", id, dto);
 		StateDto state = stateCrudService.update(dto, id);
-		stateHateoas.mapModel(state);
-		return new ResponseEntity<>(state, HttpStatus.OK);
+		return new ResponseEntity<>(stateHateoas.mapModel(state), HttpStatus.OK);
 
 	}
 

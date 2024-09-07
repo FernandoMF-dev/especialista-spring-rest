@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.CuisineControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.hateoas.CuisineHateoas;
 import br.com.colatina.fmf.algafood.service.api.model.CuisinesXmlWrapper;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +52,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 	public ResponseEntity<CuisineDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the cuisine with ID: {}", id);
 		CuisineDto cuisine = cuisineCrudService.findDtoById(id);
-		cuisineHateoas.mapModel(cuisine);
-		return new ResponseEntity<>(cuisine, HttpStatus.OK);
+		return new ResponseEntity<>(cuisineHateoas.mapModel(cuisine), HttpStatus.OK);
 	}
 
 	@Override
@@ -60,8 +60,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 	public ResponseEntity<CuisineDto> findFirst() {
 		log.debug("REST request to find the first cuisine it can");
 		CuisineDto cuisine = cuisineCrudService.findFirst();
-		cuisineHateoas.mapModel(cuisine);
-		return new ResponseEntity<>(cuisine, HttpStatus.OK);
+		return new ResponseEntity<>(cuisineHateoas.mapModel(cuisine), HttpStatus.OK);
 	}
 
 	@Override
@@ -69,8 +68,8 @@ public class CuisineController implements CuisineControllerDocumentation {
 	public ResponseEntity<CuisineDto> insert(@Valid @RequestBody CuisineDto dto) {
 		log.debug("REST request to insert a new cuisine: {}", dto);
 		CuisineDto cuisine = cuisineCrudService.insert(dto);
-		cuisineHateoas.mapModel(cuisine);
-		return new ResponseEntity<>(cuisine, HttpStatus.CREATED);
+		ResourceUriUtils.addLocationUriInResponseHeader(cuisine.getId());
+		return new ResponseEntity<>(cuisineHateoas.mapModel(cuisine), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -78,8 +77,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 	public ResponseEntity<CuisineDto> update(@PathVariable Long id, @Valid @RequestBody CuisineDto dto) {
 		log.debug("REST request to update cuisine with id {}: {}", id, dto);
 		CuisineDto cuisine = cuisineCrudService.update(dto, id);
-		cuisineHateoas.mapModel(cuisine);
-		return new ResponseEntity<>(cuisine, HttpStatus.OK);
+		return new ResponseEntity<>(cuisineHateoas.mapModel(cuisine), HttpStatus.OK);
 	}
 
 	@Override

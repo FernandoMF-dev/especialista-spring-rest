@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantProductControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.hateoas.ProductHateoas;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.ProductCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,7 @@ public class RestaurantProductController implements RestaurantProductControllerD
 	public ResponseEntity<ProductDto> insert(@PathVariable Long restaurantId, @Valid @RequestBody ProductDto dto) {
 		log.debug("REST request to insert a new product in restaurant {}: {}", restaurantId, dto);
 		ProductDto product = productCrudService.insert(restaurantId, dto);
+		ResourceUriUtils.addLocationUriInResponseHeader(product.getId());
 		return new ResponseEntity<>(productHateoas.mapModel(product), HttpStatus.CREATED);
 	}
 

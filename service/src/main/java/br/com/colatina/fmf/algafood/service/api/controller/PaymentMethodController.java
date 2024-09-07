@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.PaymentMethodControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.hateoas.PaymentMethodHateoas;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.PaymentMethodCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
 import lombok.RequiredArgsConstructor;
@@ -78,8 +79,8 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 	public ResponseEntity<PaymentMethodDto> insert(@Valid @RequestBody PaymentMethodDto dto) {
 		log.debug("REST request to insert a new payment method: {}", dto);
 		PaymentMethodDto paymentMethod = paymentMethodCrudService.insert(dto);
-		paymentMethodHateoas.mapModel(paymentMethod);
-		return new ResponseEntity<>(paymentMethod, HttpStatus.CREATED);
+		ResourceUriUtils.addLocationUriInResponseHeader(paymentMethod.getId());
+		return new ResponseEntity<>(paymentMethodHateoas.mapModel(paymentMethod), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -87,8 +88,7 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 	public ResponseEntity<PaymentMethodDto> update(@PathVariable Long id, @Valid @RequestBody PaymentMethodDto dto) {
 		log.debug("REST request to update payment method with id {}: {}", id, dto);
 		PaymentMethodDto paymentMethod = paymentMethodCrudService.update(dto, id);
-		paymentMethodHateoas.mapModel(paymentMethod);
-		return new ResponseEntity<>(paymentMethod, HttpStatus.OK);
+		return new ResponseEntity<>(paymentMethodHateoas.mapModel(paymentMethod), HttpStatus.OK);
 	}
 
 	@Override

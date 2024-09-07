@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.UserControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.hateoas.UserHateoas;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PasswordChangeDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
@@ -46,8 +47,7 @@ public class UserController implements UserControllerDocumentation {
 	public ResponseEntity<UserDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the user with ID: {}", id);
 		UserDto user = userCrudService.findDtoById(id);
-		userHateoas.mapModel(user);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		return new ResponseEntity<>(userHateoas.mapModel(user), HttpStatus.OK);
 	}
 
 	@Override
@@ -55,8 +55,8 @@ public class UserController implements UserControllerDocumentation {
 	public ResponseEntity<UserDto> insert(@Valid @RequestBody UserInsertDto dto) {
 		log.debug("REST request to insert a new user: {}", dto);
 		UserDto user = userCrudService.insert(dto);
-		userHateoas.mapModel(user);
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
+		ResourceUriUtils.addLocationUriInResponseHeader(user.getId());
+		return new ResponseEntity<>(userHateoas.mapModel(user), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -64,8 +64,7 @@ public class UserController implements UserControllerDocumentation {
 	public ResponseEntity<UserDto> update(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
 		log.debug("REST request to update user with id {}: {}", id, dto);
 		UserDto user = userCrudService.update(dto, id);
-		userHateoas.mapModel(user);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		return new ResponseEntity<>(userHateoas.mapModel(user), HttpStatus.OK);
 	}
 
 	@Override

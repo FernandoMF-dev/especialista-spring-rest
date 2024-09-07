@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.ProfileControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.hateoas.ProfileHateoas;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.ProfileCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,7 @@ public class ProfileController implements ProfileControllerDocumentation {
 	public ResponseEntity<ProfileDto> insert(@Valid @RequestBody ProfileDto dto) {
 		log.debug("REST request to insert a new profile: {}", dto);
 		ProfileDto profile = profileCrudService.insert(dto);
+		ResourceUriUtils.addLocationUriInResponseHeader(profile.getId());
 		return new ResponseEntity<>(profileHateoas.mapModel(profile), HttpStatus.CREATED);
 	}
 

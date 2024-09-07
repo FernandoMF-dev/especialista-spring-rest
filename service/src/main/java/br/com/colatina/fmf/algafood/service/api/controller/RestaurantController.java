@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.RestaurantControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.hateoas.RestaurantHateoas;
 import br.com.colatina.fmf.algafood.service.api.hateoas.RestaurantListHateoas;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
@@ -75,8 +76,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 	public ResponseEntity<RestaurantDto> findFirst() {
 		log.debug("REST request to find the first restaurant it can");
 		RestaurantDto restaurant = restaurantCrudService.findFirst();
-		restaurantHateoas.mapModel(restaurant);
-		return new ResponseEntity<>(restaurant, HttpStatus.OK);
+		return new ResponseEntity<>(restaurantHateoas.mapModel(restaurant), HttpStatus.OK);
 	}
 
 	@Override
@@ -84,8 +84,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 	public ResponseEntity<RestaurantDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the restaurant with ID: {}", id);
 		RestaurantDto restaurant = restaurantCrudService.findDtoById(id);
-		restaurantHateoas.mapModel(restaurant);
-		return new ResponseEntity<>(restaurant, HttpStatus.OK);
+		return new ResponseEntity<>(restaurantHateoas.mapModel(restaurant), HttpStatus.OK);
 	}
 
 	@Override
@@ -93,8 +92,8 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 	public ResponseEntity<RestaurantDto> insert(@Valid @RequestBody RestaurantFormDto dto) {
 		log.debug("REST request to insert a new restaurant: {}", dto);
 		RestaurantDto restaurant = restaurantCrudService.insert(dto);
-		restaurantHateoas.mapModel(restaurant);
-		return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
+		ResourceUriUtils.addLocationUriInResponseHeader(restaurant.getId());
+		return new ResponseEntity<>(restaurantHateoas.mapModel(restaurant), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -102,8 +101,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 	public ResponseEntity<RestaurantDto> update(@Valid @RequestBody RestaurantFormDto dto, @PathVariable Long id) {
 		log.debug("REST request to update restaurant with id {}: {}", id, dto);
 		RestaurantDto restaurant = restaurantCrudService.update(dto, id);
-		restaurantHateoas.mapModel(restaurant);
-		return new ResponseEntity<>(restaurant, HttpStatus.OK);
+		return new ResponseEntity<>(restaurantHateoas.mapModel(restaurant), HttpStatus.OK);
 	}
 
 	@Override

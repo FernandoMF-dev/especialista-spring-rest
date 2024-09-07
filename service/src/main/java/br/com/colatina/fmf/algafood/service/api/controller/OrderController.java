@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.controller;
 import br.com.colatina.fmf.algafood.service.api.documentation.controller.OrderControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.hateoas.OrderHateoas;
 import br.com.colatina.fmf.algafood.service.api.hateoas.OrderListHateoas;
+import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
@@ -51,8 +52,7 @@ public class OrderController implements OrderControllerDocumentation {
 	public ResponseEntity<OrderDto> findByUuid(@PathVariable String uuid) {
 		log.debug("REST request to find the order with UUID code {}", uuid);
 		OrderDto order = orderCrudService.findDtoByUuid(uuid);
-		orderHateoas.mapModel(order);
-		return new ResponseEntity<>(order, HttpStatus.OK);
+		return new ResponseEntity<>(orderHateoas.mapModel(order), HttpStatus.OK);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class OrderController implements OrderControllerDocumentation {
 	public ResponseEntity<OrderDto> insert(@Valid @RequestBody OrderInsertDto dto) {
 		log.debug("REST request to insert a new order: {}", dto);
 		OrderDto order = orderCrudService.insert(dto);
-		orderHateoas.mapModel(order);
-		return new ResponseEntity<>(order, HttpStatus.CREATED);
+		ResourceUriUtils.addLocationUriInResponseHeader(order.getCode());
+		return new ResponseEntity<>(orderHateoas.mapModel(order), HttpStatus.CREATED);
 	}
 }

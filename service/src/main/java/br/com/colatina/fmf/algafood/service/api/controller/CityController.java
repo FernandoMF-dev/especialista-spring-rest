@@ -44,8 +44,7 @@ public class CityController implements CityControllerDocumentation {
 	public ResponseEntity<CityDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the city with ID: {}", id);
 		CityDto city = cityCrudService.findDtoById(id);
-		cityHateoas.mapModel(city);
-		return new ResponseEntity<>(city, HttpStatus.OK);
+		return new ResponseEntity<>(cityHateoas.mapModel(city), HttpStatus.OK);
 	}
 
 	@Override
@@ -53,9 +52,8 @@ public class CityController implements CityControllerDocumentation {
 	public ResponseEntity<CityDto> insert(@Valid @RequestBody CityDto dto) {
 		log.debug("REST request to insert a new city: {}", dto);
 		CityDto city = cityCrudService.insert(dto);
-		ResourceUriUtils.addUriInResponseHeader(city.getId());
-		cityHateoas.mapModel(city);
-		return new ResponseEntity<>(city, HttpStatus.CREATED);
+		ResourceUriUtils.addLocationUriInResponseHeader(city.getId());
+		return new ResponseEntity<>(cityHateoas.mapModel(city), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -63,8 +61,7 @@ public class CityController implements CityControllerDocumentation {
 	public ResponseEntity<CityDto> update(@PathVariable Long id, @Valid @RequestBody CityDto dto) {
 		log.debug("REST request to update city with id {}: {}", id, dto);
 		CityDto city = cityCrudService.update(dto, id);
-		cityHateoas.mapModel(city);
-		return new ResponseEntity<>(city, HttpStatus.OK);
+		return new ResponseEntity<>(cityHateoas.mapModel(city), HttpStatus.OK);
 	}
 
 	@Override
