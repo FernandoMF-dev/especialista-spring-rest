@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.v2.controller;
 import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.api.v2.assembler.CityModelAssemblerV2;
 import br.com.colatina.fmf.algafood.service.api.v2.assembler.CityModelDisassemblerV2;
+import br.com.colatina.fmf.algafood.service.api.v2.documentation.controller.CityControllerV2Documentation;
 import br.com.colatina.fmf.algafood.service.api.v2.model.CityModelV2;
 import br.com.colatina.fmf.algafood.service.api.v2.model.input.CityInputV2;
 import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
@@ -30,13 +31,14 @@ import java.util.List;
 @RestController
 //@RequestMapping(path = "/api/cities", produces = CustomMediaTypes.V2_APPLICATION_JSON_VALUE)
 @RequestMapping(path = "/api/v2/cities", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CityControllerV2 {
+public class CityControllerV2 implements CityControllerV2Documentation {
 	private final CityCrudService cityCrudService;
 
 	private final CityModelAssemblerV2 cityModelAssemblerV2;
 	private final CityModelDisassemblerV2 cityModelDisassemblerV2;
 
 	@GetMapping()
+	@Override
 	public CollectionModel<CityModelV2> findAll() {
 		log.debug("REST V2 request to find all cities");
 		List<CityDto> cities = cityCrudService.findAll();
@@ -44,6 +46,7 @@ public class CityControllerV2 {
 	}
 
 	@GetMapping("/{id}")
+	@Override
 	public ResponseEntity<CityModelV2> findById(@PathVariable Long id) {
 		log.debug("REST V2 request to find the city with ID: {}", id);
 		CityDto dto = cityCrudService.findDtoById(id);
@@ -51,6 +54,7 @@ public class CityControllerV2 {
 	}
 
 	@PostMapping()
+	@Override
 	public ResponseEntity<CityModelV2> insert(@Valid @RequestBody CityInputV2 input) {
 		log.debug("REST V2 request to insert a new city: {}", input);
 		CityDto dto = cityModelDisassemblerV2.toDomainObject(input);
@@ -60,6 +64,7 @@ public class CityControllerV2 {
 	}
 
 	@PutMapping("/{id}")
+	@Override
 	public ResponseEntity<CityModelV2> update(@PathVariable Long id, @Valid @RequestBody CityInputV2 input) {
 		log.debug("REST V2 request to update city with id {}: {}", id, input);
 		CityDto dto = cityModelDisassemblerV2.toDomainObject(input);
@@ -68,6 +73,7 @@ public class CityControllerV2 {
 	}
 
 	@DeleteMapping("/{id}")
+	@Override
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST V2 request to delete city with id {}", id);
 		cityCrudService.delete(id);

@@ -16,6 +16,8 @@ import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collectio
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.UserCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.page.OrderPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.page.RestaurantPageModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v2.documentation.model.CityCollectionModelOpenApiV2;
+import br.com.colatina.fmf.algafood.service.api.v2.model.CityModelV2;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
@@ -72,37 +74,30 @@ public class SpringFoxConfig {
 		return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
 	}
 
+	// <editor-fold desc="API version 1">
 	@Bean
-	public Docket api() {
-		var docket = startDocketBuild();
+	public Docket apiDocketV1() {
+		var docket = startDocketBuildV1();
 
 		setGlobalResponseMessages(docket);
-		setGlobalOperationParameters(docket);
-		setRepresentationModelsConfig(docket);
-		setApiInfo(docket);
-		setControllerTags(docket);
+		setGlobalOperationParametersV1(docket);
+		setRepresentationModelsConfigV1(docket);
+		setApiInfoV1(docket);
+		setControllerTagsV1(docket);
 
 		return docket;
 	}
 
-	private Docket startDocketBuild() {
+	private Docket startDocketBuildV1() {
 		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("V1")
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("br.com.colatina.fmf.algafood.service.api.v1.controller"))
 				.paths(PathSelectors.any())
 				.build();
 	}
 
-	private void setGlobalResponseMessages(Docket docket) {
-		docket.useDefaultResponseMessages(false)
-				.globalResponses(HttpMethod.GET, globalGetResponseMessages())
-				.globalResponses(HttpMethod.POST, globalPostResponseMessages())
-				.globalResponses(HttpMethod.PUT, globalPutResponseMessages())
-				.globalResponses(HttpMethod.PATCH, globalPatchResponseMessages())
-				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages());
-	}
-
-	private void setGlobalOperationParameters(Docket docket) {
+	private void setGlobalOperationParametersV1(Docket docket) {
 		docket.globalRequestParameters(List.of(
 				new RequestParameterBuilder()
 						.name(squigglyParamName)
@@ -115,7 +110,7 @@ public class SpringFoxConfig {
 		));
 	}
 
-	private void setRepresentationModelsConfig(Docket docket) {
+	private void setRepresentationModelsConfigV1(Docket docket) {
 		var typeResolver = new TypeResolver();
 
 		docket.additionalModels(typeResolver.resolve(ApiErrorResponse.class));
@@ -144,7 +139,7 @@ public class SpringFoxConfig {
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, RestaurantListDto.class), RestaurantPageModelOpenApi.class));
 	}
 
-	private void setApiInfo(Docket docket) {
+	private void setApiInfoV1(Docket docket) {
 		var apiInfo = new ApiInfoBuilder()
 				.title("Algafood API")
 				.description("Open API for customers and restaurants")
@@ -154,7 +149,7 @@ public class SpringFoxConfig {
 		docket.apiInfo(apiInfo);
 	}
 
-	private void setControllerTags(Docket docket) {
+	private void setControllerTagsV1(Docket docket) {
 		docket.tags(
 				new Tag(SpringFoxControllerTags.CITIES, "Operations related to the register of addresses cities"),
 				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to the register of cuisines"),
@@ -168,6 +163,84 @@ public class SpringFoxConfig {
 				new Tag(SpringFoxControllerTags.STATISTICS, "Operations related to the generation of statistics and reports"),
 				new Tag(SpringFoxControllerTags.USERS, "Operations related to the register and management of users accounts")
 		);
+	}
+	// </editor-fold>
+
+	// <editor-fold desc="API version 2">
+	@Bean
+	public Docket apiDocketV2() {
+		var docket = startDocketBuildV2();
+
+		setGlobalResponseMessages(docket);
+		setGlobalOperationParametersV2(docket);
+		setRepresentationModelsConfigV2(docket);
+		setApiInfoV2(docket);
+		setControllerTagsV2(docket);
+
+		return docket;
+	}
+
+	private Docket startDocketBuildV2() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("V2")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("br.com.colatina.fmf.algafood.service.api.v2.controller"))
+				.paths(PathSelectors.any())
+				.build();
+	}
+
+	private void setGlobalOperationParametersV2(Docket docket) {
+		docket.globalRequestParameters(List.of(
+				new RequestParameterBuilder()
+						.name(squigglyParamName)
+						.description("Names of properties to filter in the response, separated by commas")
+						.example(new Example("name,description"))
+						.in(ParameterType.QUERY)
+						.required(false)
+						.query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
+						.build()
+		));
+	}
+
+	private void setRepresentationModelsConfigV2(Docket docket) {
+		var typeResolver = new TypeResolver();
+
+		docket.additionalModels(typeResolver.resolve(ApiErrorResponse.class));
+
+		docket.ignoredParameterTypes(ServletWebRequest.class, LinkRelation.class);
+
+		docket.directModelSubstitute(Links.class, LinksModelOpenApi.class);
+
+		// A substituição de modelos usando a função `alternateTypeRules()` não funciona caso a resposta esteja encapsulado em um `ResponseEntity` na configuração do endpoint.
+		// Considerando que o SpringFox não está mais recebendo atualizações, esse bug nunca será corrigido.
+		// Eventualmente a intenção do curso é substituir a documentação do SpringFox pelo SpringDoc. Espero que o SpringDoc não tenha esse problema.
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityModelV2.class), CityCollectionModelOpenApiV2.class));
+	}
+
+	private void setApiInfoV2(Docket docket) {
+		var apiInfo = new ApiInfoBuilder()
+				.title("Algafood API")
+				.description("Open API for customers and restaurants")
+				.version("2.0.0")
+				.build();
+
+		docket.apiInfo(apiInfo);
+	}
+
+	private void setControllerTagsV2(Docket docket) {
+		docket.tags(
+				new Tag(SpringFoxControllerTags.CITIES, "Operations related to the register of addresses cities")
+		);
+	}
+	// </editor-fold>
+
+	private void setGlobalResponseMessages(Docket docket) {
+		docket.useDefaultResponseMessages(false)
+				.globalResponses(HttpMethod.GET, globalGetResponseMessages())
+				.globalResponses(HttpMethod.POST, globalPostResponseMessages())
+				.globalResponses(HttpMethod.PUT, globalPutResponseMessages())
+				.globalResponses(HttpMethod.PATCH, globalPatchResponseMessages())
+				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages());
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Global response messages">
