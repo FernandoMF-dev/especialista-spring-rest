@@ -33,7 +33,6 @@ public class CityController implements CityControllerDocumentation {
 	private final CityHateoas cityHateoas;
 
 	@Override
-	@Deprecated(since = "2.0.0", forRemoval = true)
 	@GetMapping()
 	public CollectionModel<CityDto> findAll() {
 		log.debug("REST V1 request to find all cities");
@@ -42,7 +41,6 @@ public class CityController implements CityControllerDocumentation {
 	}
 
 	@Override
-	@Deprecated(since = "2.0.0", forRemoval = true)
 	@GetMapping("/{id}")
 	public ResponseEntity<CityDto> findById(@PathVariable Long id) {
 		log.debug("REST V1 request to find the city with ID: {}", id);
@@ -51,7 +49,6 @@ public class CityController implements CityControllerDocumentation {
 	}
 
 	@Override
-	@Deprecated(since = "2.0.0", forRemoval = true)
 	@PostMapping()
 	public ResponseEntity<CityDto> insert(@Valid @RequestBody CityDto dto) {
 		log.debug("REST V1 request to insert a new city: {}", dto);
@@ -61,7 +58,6 @@ public class CityController implements CityControllerDocumentation {
 	}
 
 	@Override
-	@Deprecated(since = "2.0.0", forRemoval = true)
 	@PutMapping("/{id}")
 	public ResponseEntity<CityDto> update(@PathVariable Long id, @Valid @RequestBody CityDto dto) {
 		log.debug("REST V1 request to update city with id {}: {}", id, dto);
@@ -70,7 +66,6 @@ public class CityController implements CityControllerDocumentation {
 	}
 
 	@Override
-	@Deprecated(since = "2.0.0", forRemoval = true)
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST V1 request to delete city with id {}", id);

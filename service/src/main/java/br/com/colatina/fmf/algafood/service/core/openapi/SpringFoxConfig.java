@@ -142,8 +142,7 @@ public class SpringFoxConfig {
 	private void setApiInfoV1(Docket docket) {
 		var apiInfo = new ApiInfoBuilder()
 				.title("Algafood API")
-				.description("Open API for customers and restaurants<br>" +
-						"<strong>This version of the API is deprecated and will be removed in the future. Please use the most recent version.</strong>")
+				.description("Open API for customers and restaurants")
 				.version("1.0.0")
 				.build();
 
@@ -152,7 +151,7 @@ public class SpringFoxConfig {
 
 	private void setControllerTagsV1(Docket docket) {
 		docket.tags(
-				new Tag(SpringFoxControllerTags.CITIES, "(DEPRECATED) Operations related to the register of addresses cities"),
+				new Tag(SpringFoxControllerTags.CITIES, "Operations related to the register of addresses cities"),
 				new Tag(SpringFoxControllerTags.CUISINES, "Operations related to the register of cuisines"),
 				new Tag(SpringFoxControllerTags.ORDERS, "Operations related to the emission and management of customer orders"),
 				new Tag(SpringFoxControllerTags.PAYMENT_METHODS, "Operations related to the register of payment methods"),
