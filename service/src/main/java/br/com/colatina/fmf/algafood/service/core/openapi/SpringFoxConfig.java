@@ -75,7 +75,7 @@ public class SpringFoxConfig {
 	}
 
 	// <editor-fold desc="API version 1">
-	@Bean
+//	@Bean
 	public Docket apiDocketV1() {
 		var docket = startDocketBuildV1();
 
