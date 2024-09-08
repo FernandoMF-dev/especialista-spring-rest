@@ -21,7 +21,7 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/users/{userId}/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/users/{userId}/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserProfileController implements UserProfileControllerDocumentation {
 	private final UserCrudService userCrudService;
 	private final UserHateoas userHateoas;

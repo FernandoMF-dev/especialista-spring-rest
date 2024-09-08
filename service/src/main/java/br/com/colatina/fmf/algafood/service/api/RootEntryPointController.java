@@ -11,6 +11,7 @@ import br.com.colatina.fmf.algafood.service.api.v1.controller.StatisticsControll
 import br.com.colatina.fmf.algafood.service.api.v1.controller.UserController;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.RootEntryPointControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.model.HypermediaModel;
+import br.com.colatina.fmf.algafood.service.api.v2.controller.CityControllerV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -45,6 +46,18 @@ public class RootEntryPointController implements RootEntryPointControllerDocumen
 		log.debug("REST request to get root entry point of the API");
 		HypermediaModel root = new HypermediaModel();
 
+		root.add(linkTo(methodOn(RootEntryPointController.class).rootApiV1()).withRel("v1"));
+		root.add(linkTo(methodOn(RootEntryPointController.class).rootApiV2()).withRel("v2"));
+
+		return root;
+	}
+
+	@GetMapping("/api/v1")
+	@Override
+	public HypermediaModel rootApiV1() {
+		log.debug("REST request to get root entry point of the API (v1)");
+		HypermediaModel root = new HypermediaModel();
+
 		root.add(linkTo(CityController.class).withRel("cities"));
 		root.add(linkTo(CuisineController.class).withRel("cuisines"));
 		root.add(linkTo(OrderController.class).withRel("orders"));
@@ -54,6 +67,17 @@ public class RootEntryPointController implements RootEntryPointControllerDocumen
 		root.add(linkTo(StatisticsController.class).withRel("statistics"));
 		root.add(linkTo(StateController.class).withRel("states"));
 		root.add(linkTo(UserController.class).withRel("users"));
+
+		return root;
+	}
+
+	@GetMapping("/api/v2")
+	@Override
+	public HypermediaModel rootApiV2() {
+		log.debug("REST request to get root entry point of the API (v2)");
+		HypermediaModel root = new HypermediaModel();
+
+		root.add(linkTo(CityControllerV2.class).withRel("cities"));
 
 		return root;
 	}

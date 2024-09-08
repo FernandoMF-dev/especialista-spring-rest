@@ -33,7 +33,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController implements OrderControllerDocumentation {
 	private final OrderCrudService orderCrudService;
 	private final OrderHateoas orderHateoas;

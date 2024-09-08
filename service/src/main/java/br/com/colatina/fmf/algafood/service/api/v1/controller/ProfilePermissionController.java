@@ -21,7 +21,7 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/profiles/{profileId}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/profiles/{profileId}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfilePermissionController implements ProfilePermissionControllerDocumentation {
 	private final ProfileCrudService profileCrudService;
 	private final ProfileHateoas profileHateoas;

@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StatisticsController implements StatisticsControllerDocumentation {
 	private final SalesQueryService salesQueryService;
 	private final SalesReportService salesReportService;

@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController implements ProfileControllerDocumentation {
 	private final ProfileCrudService profileCrudService;
 	private final ProfileHateoas profileHateoas;

@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/restaurants/{restaurantId}/products", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/restaurants/{restaurantId}/products", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantProductController implements RestaurantProductControllerDocumentation {
 	private final ProductCrudService productCrudService;
 	private final ProductHateoas productHateoas;

@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PaymentMethodController implements PaymentMethodControllerDocumentation {
 	private final PaymentMethodCrudService paymentMethodCrudService;
 	private final PaymentMethodHateoas paymentMethodHateoas;

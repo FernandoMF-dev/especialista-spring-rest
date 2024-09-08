@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/orders/{orderUuid}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/orders/{orderUuid}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderFlowController implements OrderFlowControllerDocumentation {
 	private final OrderFlowService orderFlowService;
 

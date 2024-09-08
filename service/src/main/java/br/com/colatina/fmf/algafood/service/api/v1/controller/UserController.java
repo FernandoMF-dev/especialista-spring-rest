@@ -29,7 +29,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController implements UserControllerDocumentation {
 	private final UserCrudService userCrudService;
 	private final UserHateoas userHateoas;

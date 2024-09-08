@@ -21,7 +21,7 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/restaurants/{restaurantId}/responsible", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/restaurants/{restaurantId}/responsible", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantResponsibleController implements RestaurantResponsibleControllerDocumentation {
 	private final RestaurantCrudService restaurantCrudService;
 	private final RestaurantHateoas restaurantHateoas;

@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/api/restaurants/{restaurantId}/products/{productId}/pictures", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/restaurants/{restaurantId}/products/{productId}/pictures", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantProductPictureController implements RestaurantProductPictureControllerDocumentation {
 	private final ProductPictureCrudService productPictureCrudService;
 	private final ProductHateoas productHateoas;
