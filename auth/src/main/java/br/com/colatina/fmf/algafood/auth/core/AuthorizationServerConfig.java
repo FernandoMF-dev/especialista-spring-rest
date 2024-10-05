@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.auth.core;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -16,15 +17,16 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
+	private final UserDetailsService userDetailsService;
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
 				.withClient("fmf-algafood-web")
 				.secret(passwordEncoder.encode("1234567890"))
-				.authorizedGrantTypes("password")
+				.authorizedGrantTypes("password", "refresh_token")
 				.scopes("write", "read")
-				.accessTokenValiditySeconds(60 * 60 * 6)
+				.accessTokenValiditySeconds(60 * 60 * 6) // 6 horas. O padrão é 12 horas.
 				.and()
 				.withClient("check-token")
 				.secret(passwordEncoder.encode("check123"));
@@ -38,6 +40,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-		endpoints.authenticationManager(authenticationManager);
+		endpoints
+				.authenticationManager(authenticationManager)
+				.userDetailsService(userDetailsService);
 	}
 }
