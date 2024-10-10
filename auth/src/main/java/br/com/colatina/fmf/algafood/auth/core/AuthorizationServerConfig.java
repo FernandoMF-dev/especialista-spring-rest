@@ -28,6 +28,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.scopes("write", "read")
 				.accessTokenValiditySeconds(6 * 60 * 60) // 6 horas. O padrão é 12 horas.
 				.refreshTokenValiditySeconds(60 * 24 * 60 * 60) // 60 dias.
+
+				.and()
+				.withClient("fmf-algafood-faturamento")
+				.secret(passwordEncoder.encode("faturamento123"))
+				.authorizedGrantTypes("client_credentials")
+				.scopes("read")
+
 				.and()
 				.withClient("check-token")
 				.secret(passwordEncoder.encode("check123"));
