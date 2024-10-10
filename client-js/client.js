@@ -1,3 +1,5 @@
+const apiUrl = "http://localhost:8080/api/v1/payment-methods";
+
 function tratarErroDeRequisicao(error, mensagemPadrao) {
 	if (error.status >= 400 && error.status <= 499) {
 		var problem = JSON.parse(error.responseText);
@@ -9,7 +11,7 @@ function tratarErroDeRequisicao(error, mensagemPadrao) {
 
 function consultar() {
 	$.ajax({
-		url: "http://localhost:8080/api/payment-methods",
+		url: apiUrl,
 		type: "GET",
 
 		success: function (response) {
@@ -26,7 +28,7 @@ function cadastrar() {
 	console.log(formaPagamentoJson);
 
 	$.ajax({
-		url: "http://localhost:8080/api/payment-methods",
+		url: apiUrl,
 		type: "POST",
 		data: formaPagamentoJson,
 		contentType: "application/json",
@@ -43,7 +45,7 @@ function cadastrar() {
 }
 
 function excluir(formaPagamento) {
-	const url = "http://localhost:8080/api/payment-methods/" + formaPagamento.id;
+	const url = `${apiUrl}/${formaPagamento.id}`;
 
 	$.ajax({
 		url: url,

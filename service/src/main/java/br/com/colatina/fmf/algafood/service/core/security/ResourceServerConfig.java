@@ -15,6 +15,8 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", "api", "api/v1", "api/v2", "swagger-ui/index.html#", "v3/api-docs").permitAll()
 				.anyRequest().authenticated()
 				.and()
+				.cors()
+				.and()
 				.oauth2ResourceServer()
 				.opaqueToken()
 		;

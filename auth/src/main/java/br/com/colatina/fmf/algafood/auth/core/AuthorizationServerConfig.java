@@ -40,7 +40,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.secret(passwordEncoder.encode("analytics123"))
 				.authorizedGrantTypes("authorization_code")
 				.scopes("write", "read")
-				.redirectUris("http://www.fmf-algafood-analytics.com.br")
+				.redirectUris("http://www.fmf-algafood-analytics.com.br", "http://localhost:63342")
 
 				.and()
 				.withClient("check-token")
