@@ -36,6 +36,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.scopes("read")
 
 				.and()
+				.withClient("fmf-algafood-analytics")
+				.secret(passwordEncoder.encode("analytics123"))
+				.authorizedGrantTypes("authorization_code")
+				.scopes("write", "read")
+				.redirectUris("http://www.fmf-algafood-analytics.com.br")
+
+				.and()
 				.withClient("check-token")
 				.secret(passwordEncoder.encode("check123"));
 	}
