@@ -43,6 +43,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.redirectUris("http://www.fmf-algafood-analytics.com.br", "http://localhost:63342")
 
 				.and()
+				.withClient("fmf-algafood-webadmin")
+				.authorizedGrantTypes("implicit")
+				.scopes("write", "read")
+				.redirectUris("http://www.fmf-algafood-webadmin.com.br", "http://localhost:63342")
+
+				.and()
 				.withClient("check-token")
 				.secret(passwordEncoder.encode("check123"));
 	}
