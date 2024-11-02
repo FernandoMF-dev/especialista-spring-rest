@@ -6,8 +6,3 @@ services:
       file: containers/postgresql.yaml
       service: database-postgresql
     container_name: database-postgresql
-  redis-server:
-    extends:
-      file: containers/redis.yaml
-      service: redis-server
-    container_name: redis-server
