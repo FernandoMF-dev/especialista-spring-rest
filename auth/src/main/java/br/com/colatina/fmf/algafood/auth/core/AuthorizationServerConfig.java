@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.auth.core;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import java.util.Arrays;
 
@@ -77,7 +79,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter jwtAccessTokenConverter() {
 		var jwtAccessTokenConverter = new JwtAccessTokenConverter();
-		jwtAccessTokenConverter.setSigningKey("fmf-algafood-jwt-access-token-secret-key");
+//		jwtAccessTokenConverter.setSigningKey("fmf-algafood-jwt-access-token-secret-key");
+
+		var jksResource = new ClassPathResource("keystores/fmf-algafood.jks");
+		var keyStorePass = "123456";
+		var keyStoreAlias = "fmf-algafood";
+
+		var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
+		var keyPair = keyStoreKeyFactory.getKeyPair(keyStoreAlias);
+
+		jwtAccessTokenConverter.setKeyPair(keyPair);
+
 		return jwtAccessTokenConverter;
 	}
 
