@@ -13,12 +13,12 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.UserInsertDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,6 +30,8 @@ public class UserCrudService {
 	private final UserMapper userMapper;
 
 	private final ProfileCrudService profileCrudService;
+
+	private final PasswordEncoder passwordEncoder;
 
 	public List<UserDto> findAll() {
 		return userRepository.findAllDto();
@@ -59,7 +61,7 @@ public class UserCrudService {
 
 	public void changePassword(PasswordChangeDto dto, Long userId) {
 		User user = findEntityById(userId);
-		if (!Objects.equals(user.getPassword(), dto.getCurrentPassword())) {
+		if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
 			throw new PasswordMismatchException("password_change.current.mismatch");
 		}
 		user.setPassword(dto.getNewPassword());
@@ -94,6 +96,7 @@ public class UserCrudService {
 	private UserDto save(User entity) {
 		userRepository.detach(entity);
 		validateSave(entity);
+		encodePassword(entity);
 		entity = userRepository.save(entity);
 		return userMapper.toDto(entity);
 	}
@@ -102,6 +105,12 @@ public class UserCrudService {
 		Optional<User> existingUser = userRepository.findByEmailAndExcludedIsFalse(entity.getEmail());
 		if (existingUser.isPresent() && !existingUser.get().equals(entity)) {
 			throw new DuplicateResourceException("user.email.duplicate", entity.getEmail());
+		}
+	}
+
+	private void encodePassword(User entity) {
+		if (entity.isNew()) {
+			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,10 +23,12 @@ import java.util.Set;
 
 @Getter
 @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "tb_user")
 @Entity
 public class User {
 	@Id
+	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
 	@SequenceGenerator(name = "seq_user", allocationSize = 1, sequenceName = "seq_user")
 	@Column(name = "id", nullable = false)
@@ -53,21 +56,8 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "id"))
 	private Set<Profile> profiles = new HashSet<>();
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (!(o instanceof User)) {
-			return false;
-		}
-		User that = (User) o;
-		return id.equals(that.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
+	public boolean isNew() {
+		return Objects.isNull(this.getId());
 	}
 
 	public void addProfile(Profile profile) {
