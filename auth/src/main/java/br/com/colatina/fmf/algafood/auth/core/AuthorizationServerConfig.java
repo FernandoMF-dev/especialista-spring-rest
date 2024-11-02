@@ -26,6 +26,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
+	private final JwtKeystoreProperties jwtKeystoreProperties;
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -78,18 +79,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Bean
 	public JwtAccessTokenConverter jwtAccessTokenConverter() {
+		var jksResource = new ClassPathResource(jwtKeystoreProperties.getJksLocation());
+		var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, jwtKeystoreProperties.getJksPassword().toCharArray());
+		var keyPair = keyStoreKeyFactory.getKeyPair(jwtKeystoreProperties.getKeyPairAlias(), jwtKeystoreProperties.getKeyPairPassword().toCharArray());
+
 		var jwtAccessTokenConverter = new JwtAccessTokenConverter();
-//		jwtAccessTokenConverter.setSigningKey("fmf-algafood-jwt-access-token-secret-key");
-
-		var jksResource = new ClassPathResource("keystores/fmf-algafood.jks");
-		var keyStorePass = "123456";
-		var keyStoreAlias = "fmf-algafood";
-
-		var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
-		var keyPair = keyStoreKeyFactory.getKeyPair(keyStoreAlias);
-
 		jwtAccessTokenConverter.setKeyPair(keyPair);
-
 		return jwtAccessTokenConverter;
 	}
 
