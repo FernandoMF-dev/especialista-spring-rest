@@ -21,31 +21,25 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "tb_user")
+@Table(name = "tb_profile")
 @Entity
-public class ApiUser {
+public class Profile {
 	@Id
 	@EqualsAndHashCode.Include
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
-	@SequenceGenerator(name = "seq_user", allocationSize = 1, sequenceName = "seq_user")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_profile")
+	@SequenceGenerator(name = "seq_profile", allocationSize = 1, sequenceName = "seq_profile")
 	@Column(name = "id", nullable = false)
 	private Long id;
 
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "email", nullable = false)
-	private String email;
-
-	@Column(name = "password", nullable = false)
-	private String password;
-
 	@Column(name = "excluded", nullable = false)
 	private Boolean excluded = Boolean.FALSE;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "rel_user_profile",
-			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "id"))
-	private Set<Profile> profiles = new HashSet<>();
+	@JoinTable(name = "rel_profile_permission",
+			joinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
+	private Set<Permission> permissions = new HashSet<>();
 }

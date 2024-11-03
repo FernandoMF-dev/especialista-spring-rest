@@ -1,6 +1,5 @@
 package br.com.colatina.fmf.algafood.auth.core;
 
-import br.com.colatina.fmf.algafood.auth.domain.AuthUser;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
