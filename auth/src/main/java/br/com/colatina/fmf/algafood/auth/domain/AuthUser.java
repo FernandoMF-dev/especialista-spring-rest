@@ -11,11 +11,13 @@ import java.util.Collections;
 public class AuthUser extends User {
 	private static final long serialVersionUID = 1L;
 
+	private final Long userId;
 	private final String fullName;
 
 	public AuthUser(ApiUser apiUser) {
 		super(apiUser.getEmail(), apiUser.getPassword(), Collections.emptyList());
 
+		this.userId = apiUser.getId();
 		this.fullName = apiUser.getName();
 	}
 }
