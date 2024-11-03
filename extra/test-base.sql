@@ -22,9 +22,9 @@ VALUES (nextval('seq_city'), 'UBE', 'Uberlândia', 1),
 INSERT INTO tb_restaurant (id, name, open, freight_fee, registration_date, update_date, cuisine_id, address_city_id,
 						   address_cep, address_public_space, address_street_number, address_district, address_complement)
 VALUES (nextval('seq_restaurant'), 'Thai Gourmet', TRUE, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1,
-        '38400-999', 'Rua João Pinheiro', '1000', 'Centro', ''),
+		'38400-999', 'Rua João Pinheiro', '1000', 'Centro', ''),
 	   (nextval('seq_restaurant'), 'Thai Delivery', FALSE, 9.50, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2,
-	    '40567-387','Av. Carvalho Pedro', '154', 'Centro', '4ª Andar');
+		'40567-387','Av. Carvalho Pedro', '154', 'Centro', '4ª Andar');
 
 INSERT INTO tb_restaurant (id, name, open, freight_fee, registration_date, update_date, cuisine_id)
 VALUES (nextval('seq_restaurant'), 'Tuk Tuk Comida Indiana', TRUE, 15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2),
@@ -67,16 +67,32 @@ VALUES (nextval('seq_profile'), 'Gerente'),
 	   (nextval('seq_profile'), 'Secretária'),
 	   (nextval('seq_profile'), 'Cadastrador');
 
-INSERT INTO tb_permission (id, name, description)
-VALUES (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas'),
-	   (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas');
+-- Adiciona todas as permissoes no grupo do gerente
+INSERT INTO rel_profile_permission (profile_id, permission_id)
+SELECT 1, id
+FROM tb_permission;
+
+-- Adiciona permissoes no grupo do vendedor
+INSERT INTO rel_profile_permission (profile_id, permission_id)
+SELECT 2, id
+FROM tb_permission
+WHERE tb_permission.name LIKE 'READ_%';
 
 INSERT INTO rel_profile_permission (profile_id, permission_id)
-VALUES (1, 1),
-	   (1, 2),
-	   (2, 1),
-	   (2, 2),
-	   (3, 1);
+VALUES (2, 34), (2, 36);
+
+-- Adiciona permissoes no grupo do auxiliar
+INSERT INTO rel_profile_permission (profile_id, permission_id)
+SELECT 3, id
+FROM tb_permission
+WHERE tb_permission.name LIKE 'READ_%';
+
+-- Adiciona permissoes no grupo cadastrador
+INSERT INTO rel_profile_permission (profile_id, permission_id)
+SELECT 4, id
+FROM tb_permission
+WHERE tb_permission.name LIKE '%_RESTAURANT'
+   OR tb_permission.name LIKE '%_PRODUCT';
 
 INSERT INTO tb_user (id, name, email, password, registration_date)
 VALUES (nextval('seq_user'), 'João da Silva', 'joao.ger@algafood.com', '$2a$12$z3to9rfSUPyGfepMLECYAOYZNBDvcfiqJUr1hEGPpZUXA.Xpi3U2u', CURRENT_TIMESTAMP), -- senha: nMNSF%17C69:

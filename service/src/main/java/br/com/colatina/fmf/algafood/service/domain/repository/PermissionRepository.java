@@ -11,7 +11,7 @@ import java.util.Set;
 @Repository
 public interface PermissionRepository extends CustomJpaRepository<Permission, Long> {
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.PermissionDto" +
-			"(per.id, per.name, per.description) " +
+			"(per.id, per.name) " +
 			" FROM Profile pro " +
 			" INNER JOIN pro.permissions per " +
 			" WHERE pro.id = :profileId " +

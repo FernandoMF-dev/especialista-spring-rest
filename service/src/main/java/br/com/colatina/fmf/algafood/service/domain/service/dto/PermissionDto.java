@@ -28,7 +28,4 @@ public class PermissionDto extends RepresentationModel<PermissionDto> implements
 
 	@ApiModelProperty(value = "Name of the permission", example = "CREATE_CUISINE", required = true)
 	private String name;
-
-	@ApiModelProperty(value = "Description of the permission", example = "Permission to create a new cuisine", required = true)
-	private String description;
 }

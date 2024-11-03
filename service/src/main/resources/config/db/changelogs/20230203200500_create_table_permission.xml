@@ -15,10 +15,6 @@
 				<constraints nullable="false"/>
 			</column>
 
-			<column name="description" type="VARCHAR" remarks="Description of what the permission allows">
-				<constraints nullable="false"/>
-			</column>
-
 			<column name="excluded" type="BOOLEAN" defaultValueBoolean="false" remarks="Logical exclusion field">
 				<constraints nullable="false"/>
 			</column>

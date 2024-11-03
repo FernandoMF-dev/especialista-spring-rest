@@ -29,4 +29,5 @@
 	<include file="/config/db/changelogs/20240619101000_create_table_product_picture.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240718144500_add_columns_payment_method.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240728174500_rename_columns_order.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20241103144000_insert_permission.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
