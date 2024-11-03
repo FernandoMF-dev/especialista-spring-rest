@@ -22,8 +22,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderInsertDto implements Serializable {
-	@ApiModelProperty(value = "ID of the customer placing the order", example = "1", required = true)
-	@NotNull(message = "order_insert.user_id.not_null")
+	@ApiModelProperty(hidden = true)
+//	@ApiModelProperty(value = "ID of the customer placing the order", example = "1", required = true)
+//	@NotNull(message = "order_insert.user_id.not_null")
 	private Long customerId;
 
 	@ApiModelProperty(value = "ID of the restaurant receiving the order", example = "1", required = true)

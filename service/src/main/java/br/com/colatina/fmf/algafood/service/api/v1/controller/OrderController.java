@@ -5,6 +5,7 @@ import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.Orde
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.OrderHateoas;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.OrderListHateoas;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
+import br.com.colatina.fmf.algafood.service.core.security.AppSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
@@ -39,6 +40,8 @@ public class OrderController implements OrderControllerDocumentation {
 	private final OrderHateoas orderHateoas;
 	private final OrderListHateoas orderListHateoas;
 
+	private final AppSecurity appSecurity;
+
 	@Override
 	@GetMapping()
 	public CollectionModel<OrderListDto> findAll() {
@@ -69,6 +72,7 @@ public class OrderController implements OrderControllerDocumentation {
 	@PostMapping()
 	public ResponseEntity<OrderDto> insert(@Valid @RequestBody OrderInsertDto dto) {
 		log.debug("REST request to insert a new order: {}", dto);
+		dto.setCustomerId(appSecurity.getUserId());
 		OrderDto order = orderCrudService.insert(dto);
 		ResourceUriUtils.addLocationUriInResponseHeader(order.getCode());
 		return new ResponseEntity<>(orderHateoas.mapModel(order), HttpStatus.CREATED);
