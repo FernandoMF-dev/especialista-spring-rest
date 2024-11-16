@@ -74,8 +74,25 @@ public @interface CheckSecurity {
 	}
 
 	@interface Order {
+		@PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('READ_ORDER') or hasAuthority('ADMINISTRATOR'))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface ListAll {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and " +
+				"(hasAuthority('READ_ORDER') or hasAuthority('ADMINISTRATOR') " +
+				" or @appSecurity.getUserId() == #filter.customerId " +
+				" or @appSecurity.managesRestaurant(#filter.restaurantId))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface List {
+		}
+
 		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
-		@PostAuthorize("hasAuthority('READ_ORDER') or @appSecurity.getUserId() == returnObject.body.customer.id or @appSecurity.managesRestaurant(returnObject.body.restaurant.id)")
+		@PostAuthorize("hasAuthority('READ_ORDER') or hasAuthority('ADMINISTRATOR') " +
+				" or @appSecurity.getUserId() == returnObject.body.customer.id " +
+				" or @appSecurity.managesRestaurant(returnObject.body.restaurant.id)")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Read {

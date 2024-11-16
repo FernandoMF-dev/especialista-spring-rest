@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class AppSecurity {
@@ -22,6 +24,9 @@ public class AppSecurity {
 	}
 
 	public boolean managesRestaurant(Long restaurantId) {
+		if (Objects.isNull(restaurantId)) {
+			return false;
+		}
 		return restaurantRepository.existsResponsable(restaurantId, getUserId());
 	}
 }
