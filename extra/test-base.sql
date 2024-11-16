@@ -79,7 +79,7 @@ FROM tb_permission
 WHERE tb_permission.name LIKE 'READ_%';
 
 INSERT INTO rel_profile_permission (profile_id, permission_id)
-VALUES (2, 34), (2, 36);
+VALUES (2, 28), (2, 29);
 
 -- Adiciona permissoes no grupo do auxiliar
 INSERT INTO rel_profile_permission (profile_id, permission_id)
