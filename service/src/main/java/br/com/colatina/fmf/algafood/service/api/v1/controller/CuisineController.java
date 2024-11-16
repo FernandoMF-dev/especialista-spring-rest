@@ -35,7 +35,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@CheckSecurity.Public
+	@CheckSecurity.Cuisine.Read
 	public CollectionModel<CuisineDto> findAll() {
 		log.debug("REST request to find all cuisines");
 		List<CuisineDto> cuisines = cuisineCrudService.findAll();
@@ -44,7 +44,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-	@CheckSecurity.Public
+	@CheckSecurity.Cuisine.Read
 	public ResponseEntity<CuisinesXmlWrapper> findAllXml() {
 		log.debug("REST request to find all cuisines with the response on the XML format");
 		return new ResponseEntity<>(cuisineCrudService.findAllXml(), HttpStatus.OK);
@@ -52,7 +52,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping("/{id}")
-	@CheckSecurity.Public
+	@CheckSecurity.Cuisine.Read
 	public ResponseEntity<CuisineDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the cuisine with ID: {}", id);
 		CuisineDto cuisine = cuisineCrudService.findDtoById(id);
@@ -61,7 +61,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping("/first")
-	@CheckSecurity.Public
+	@CheckSecurity.Cuisine.Read
 	public ResponseEntity<CuisineDto> findFirst() {
 		log.debug("REST request to find the first cuisine it can");
 		CuisineDto cuisine = cuisineCrudService.findFirst();
