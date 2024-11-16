@@ -4,6 +4,7 @@ import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.CuisineControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.CuisineHateoas;
 import br.com.colatina.fmf.algafood.service.api.v1.model.CuisinesXmlWrapper;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.CuisineCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +35,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Public
 	public CollectionModel<CuisineDto> findAll() {
 		log.debug("REST request to find all cuisines");
 		List<CuisineDto> cuisines = cuisineCrudService.findAll();
@@ -44,6 +44,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
+	@CheckSecurity.Public
 	public ResponseEntity<CuisinesXmlWrapper> findAllXml() {
 		log.debug("REST request to find all cuisines with the response on the XML format");
 		return new ResponseEntity<>(cuisineCrudService.findAllXml(), HttpStatus.OK);
@@ -51,6 +52,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping("/{id}")
+	@CheckSecurity.Public
 	public ResponseEntity<CuisineDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the cuisine with ID: {}", id);
 		CuisineDto cuisine = cuisineCrudService.findDtoById(id);
@@ -59,6 +61,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping("/first")
+	@CheckSecurity.Public
 	public ResponseEntity<CuisineDto> findFirst() {
 		log.debug("REST request to find the first cuisine it can");
 		CuisineDto cuisine = cuisineCrudService.findFirst();
@@ -67,7 +70,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@PostMapping()
-	@PreAuthorize("hasAuthority('CREATE_CUISINE') or hasAuthority('ADMINISTRATOR')")
+	@CheckSecurity.Cuisine.Create
 	public ResponseEntity<CuisineDto> insert(@Valid @RequestBody CuisineDto dto) {
 		log.debug("REST request to insert a new cuisine: {}", dto);
 		CuisineDto cuisine = cuisineCrudService.insert(dto);
@@ -77,6 +80,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@PutMapping("/{id}")
+	@CheckSecurity.Cuisine.Update
 	public ResponseEntity<CuisineDto> update(@PathVariable Long id, @Valid @RequestBody CuisineDto dto) {
 		log.debug("REST request to update cuisine with id {}: {}", id, dto);
 		CuisineDto cuisine = cuisineCrudService.update(dto, id);
@@ -85,6 +89,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@DeleteMapping("/{id}")
+	@CheckSecurity.Cuisine.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete cuisine with id {}", id);
 		cuisineCrudService.delete(id);
