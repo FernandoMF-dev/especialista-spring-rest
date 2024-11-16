@@ -19,5 +19,8 @@ public interface RestaurantRepository extends CustomJpaRepository<Restaurant, Lo
 			" WHERE r.excluded = FALSE ")
 	List<RestaurantListDto> findAllDto();
 
+	// Query implementada no arquivo `orm.xml`
+	boolean existsResponsable(Long restaurantId, Long responsibleId);
+
 	Optional<Restaurant> findByIdAndExcludedIsFalse(Long id);
 }

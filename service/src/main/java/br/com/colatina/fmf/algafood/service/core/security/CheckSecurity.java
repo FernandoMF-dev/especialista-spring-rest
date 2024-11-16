@@ -47,19 +47,19 @@ public @interface CheckSecurity {
 		@interface Create {
 		}
 
-		@PreAuthorize("(hasAuthority('UPDATE_RESTAURANT') or hasAuthority('ADMINISTRATOR'))  and hasAuthority('SCOPE_WRITE')")
+		@PreAuthorize("(hasAuthority('UPDATE_RESTAURANT') or hasAuthority('ADMINISTRATOR') or @appSecurity.managesRestaurant(#id)) and hasAuthority('SCOPE_WRITE')")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Update {
 		}
 
-		@PreAuthorize("(hasAuthority('OPEN_RESTAURANT') or hasAuthority('ADMINISTRATOR'))  and hasAuthority('SCOPE_WRITE')")
+		@PreAuthorize("(hasAuthority('OPEN_RESTAURANT') or hasAuthority('ADMINISTRATOR') or @appSecurity.managesRestaurant(#id))  and hasAuthority('SCOPE_WRITE')")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Open {
 		}
 
-		@PreAuthorize("(hasAuthority('ACTIVATE_RESTAURANT') or hasAuthority('ADMINISTRATOR'))  and hasAuthority('SCOPE_WRITE')")
+		@PreAuthorize("(hasAuthority('ACTIVATE_RESTAURANT') or hasAuthority('ADMINISTRATOR') or @appSecurity.managesRestaurant(#id)) and hasAuthority('SCOPE_WRITE')")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Activate {

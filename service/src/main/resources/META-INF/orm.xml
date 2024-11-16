@@ -13,4 +13,15 @@
 		</query>
 	</named-query>
 
+	<named-query name="Restaurant.existsResponsable">
+		<query>
+			SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END
+			FROM Restaurant r
+			INNER JOIN r.responsible u
+			WHERE r.id = :restaurantId
+			AND u.id = :responsibleId
+			AND r.excluded = FALSE
+		</query>
+	</named-query>
+
 </entity-mappings>

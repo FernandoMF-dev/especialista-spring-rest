@@ -26,6 +26,7 @@ public interface CuisineRepository extends CustomJpaRepository<Cuisine, Long> {
 
 	Optional<Cuisine> findByIdAndExcludedIsFalse(Long id);
 
+	// Query implementada no arquivo `orm.xml`
 	boolean isCuisineInUse(Long cuisineId);
 
 }
