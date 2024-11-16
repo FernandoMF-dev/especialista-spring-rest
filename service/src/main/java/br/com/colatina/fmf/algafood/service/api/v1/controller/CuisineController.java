@@ -12,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("isAuthenticated()")
 	public CollectionModel<CuisineDto> findAll() {
 		log.debug("REST request to find all cuisines");
 		List<CuisineDto> cuisines = cuisineCrudService.findAll();
@@ -65,6 +67,7 @@ public class CuisineController implements CuisineControllerDocumentation {
 
 	@Override
 	@PostMapping()
+	@PreAuthorize("hasAuthority('CREATE_CUISINE') or hasAuthority('ADMINISTRATOR')")
 	public ResponseEntity<CuisineDto> insert(@Valid @RequestBody CuisineDto dto) {
 		log.debug("REST request to insert a new cuisine: {}", dto);
 		CuisineDto cuisine = cuisineCrudService.insert(dto);
