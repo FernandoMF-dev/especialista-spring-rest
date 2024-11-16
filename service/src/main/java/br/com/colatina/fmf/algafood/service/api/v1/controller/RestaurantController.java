@@ -5,6 +5,7 @@ import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.Rest
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.RestaurantHateoas;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.RestaurantListHateoas;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
@@ -45,6 +46,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@GetMapping()
+	@CheckSecurity.Restaurant.Read
 	public CollectionModel<RestaurantListDto> findAll() {
 		log.debug("REST request to find all restaurants");
 		List<RestaurantListDto> restaurants = restaurantCrudService.findAll();
@@ -53,6 +55,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@GetMapping("/freight-fee")
+	@CheckSecurity.Restaurant.Read
 	public CollectionModel<RestaurantListDto> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
 																 @RequestParam(value = "min", required = false) Double min,
 																 @RequestParam(value = "max", required = false) Double max) {
@@ -64,6 +67,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@GetMapping("/page")
+	@CheckSecurity.Restaurant.Read
 	public PagedModel<RestaurantListDto> page(RestaurantPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of restaurants with filters {} and with the page configuration {}", filter, pageable);
 		pageable = PageableTranslator.translate(pageable, RestaurantListDto.class);
@@ -73,6 +77,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@GetMapping("/first")
+	@CheckSecurity.Restaurant.Read
 	public ResponseEntity<RestaurantDto> findFirst() {
 		log.debug("REST request to find the first restaurant it can");
 		RestaurantDto restaurant = restaurantCrudService.findFirst();
@@ -81,6 +86,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@GetMapping("/{id}")
+	@CheckSecurity.Restaurant.Read
 	public ResponseEntity<RestaurantDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the restaurant with ID: {}", id);
 		RestaurantDto restaurant = restaurantCrudService.findDtoById(id);
@@ -89,6 +95,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@PostMapping()
+	@CheckSecurity.Restaurant.Create
 	public ResponseEntity<RestaurantDto> insert(@Valid @RequestBody RestaurantFormDto dto) {
 		log.debug("REST request to insert a new restaurant: {}", dto);
 		RestaurantDto restaurant = restaurantCrudService.insert(dto);
@@ -98,6 +105,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@PutMapping("/{id}")
+	@CheckSecurity.Restaurant.Update
 	public ResponseEntity<RestaurantDto> update(@Valid @RequestBody RestaurantFormDto dto, @PathVariable Long id) {
 		log.debug("REST request to update restaurant with id {}: {}", id, dto);
 		RestaurantDto restaurant = restaurantCrudService.update(dto, id);
@@ -106,6 +114,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@PatchMapping("/{id}/active")
+	@CheckSecurity.Restaurant.Activate
 	public ResponseEntity<Void> toggleActive(@PathVariable Long id, @RequestParam(value = "value") Boolean active) {
 		log.debug("REST request to toggle the active status of restaurant {} with the value: {}", id, active);
 		restaurantCrudService.toggleActive(id, active);
@@ -114,6 +123,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@PatchMapping("/active")
+	@CheckSecurity.Restaurant.Activate
 	public ResponseEntity<Void> toggleAllActive(@RequestParam(value = "value") Boolean active, @RequestBody List<Long> restaurantIds) {
 		log.debug("REST request to toggle the active status of all restaurants {} with the value: {}", restaurantIds, active);
 		restaurantCrudService.toggleActive(restaurantIds, active);
@@ -122,6 +132,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@PatchMapping("/{id}/open")
+	@CheckSecurity.Restaurant.Open
 	public ResponseEntity<Void> toggleOpen(@PathVariable Long id, @RequestParam(value = "value") Boolean open) {
 		log.debug("REST request to toggle the open status of restaurant {} with the value: {}", id, open);
 		restaurantCrudService.toggleOpen(id, open);
@@ -130,6 +141,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@DeleteMapping("/{id}")
+	@CheckSecurity.Restaurant.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete restaurant with id {}", id);
 		restaurantCrudService.delete(id);
