@@ -6,6 +6,7 @@ import br.com.colatina.fmf.algafood.service.api.v1.hateoas.OrderHateoas;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.OrderListHateoas;
 import br.com.colatina.fmf.algafood.service.core.pageable.PageableTranslator;
 import br.com.colatina.fmf.algafood.service.core.security.AppSecurity;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderInsertDto;
@@ -52,6 +53,7 @@ public class OrderController implements OrderControllerDocumentation {
 
 	@Override
 	@GetMapping("/{uuid}")
+	@CheckSecurity.Order.Read
 	public ResponseEntity<OrderDto> findByUuid(@PathVariable String uuid) {
 		log.debug("REST request to find the order with UUID code {}", uuid);
 		OrderDto order = orderCrudService.findDtoByUuid(uuid);

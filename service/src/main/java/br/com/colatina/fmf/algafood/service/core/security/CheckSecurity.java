@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.core.security;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.ElementType;
@@ -69,6 +70,15 @@ public @interface CheckSecurity {
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Delete {
+		}
+	}
+
+	@interface Order {
+		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
+		@PostAuthorize("hasAuthority('READ_ORDER') or @appSecurity.getUserId() == returnObject.body.customer.id or @appSecurity.managesRestaurant(returnObject.body.restaurant.id)")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Read {
 		}
 	}
 }
