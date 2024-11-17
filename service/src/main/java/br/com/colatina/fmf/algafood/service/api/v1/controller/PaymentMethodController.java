@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.controller;
 import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.PaymentMethodControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.PaymentMethodHateoas;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.PaymentMethodCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 
 	@Override
 	@GetMapping()
+	@CheckSecurity.PaymentMethod.Read
 	public ResponseEntity<CollectionModel<PaymentMethodDto>> findAll(ServletWebRequest request) {
 		log.debug("REST request to find all payment methods");
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -58,6 +60,7 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 
 	@Override
 	@GetMapping("/{id}")
+	@CheckSecurity.PaymentMethod.Read
 	public ResponseEntity<PaymentMethodDto> findById(@PathVariable Long id, ServletWebRequest request) {
 		log.debug("REST request to find the payment method with ID: {}", id);
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -76,6 +79,7 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 
 	@Override
 	@PostMapping()
+	@CheckSecurity.PaymentMethod.Create
 	public ResponseEntity<PaymentMethodDto> insert(@Valid @RequestBody PaymentMethodDto dto) {
 		log.debug("REST request to insert a new payment method: {}", dto);
 		PaymentMethodDto paymentMethod = paymentMethodCrudService.insert(dto);
@@ -85,6 +89,7 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 
 	@Override
 	@PutMapping("/{id}")
+	@CheckSecurity.PaymentMethod.Update
 	public ResponseEntity<PaymentMethodDto> update(@PathVariable Long id, @Valid @RequestBody PaymentMethodDto dto) {
 		log.debug("REST request to update payment method with id {}: {}", id, dto);
 		PaymentMethodDto paymentMethod = paymentMethodCrudService.update(dto, id);
@@ -93,6 +98,7 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 
 	@Override
 	@DeleteMapping("/{id}")
+	@CheckSecurity.PaymentMethod.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete payment method with id {}", id);
 		paymentMethodCrudService.delete(id);

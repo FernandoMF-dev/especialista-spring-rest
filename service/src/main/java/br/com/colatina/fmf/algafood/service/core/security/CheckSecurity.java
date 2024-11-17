@@ -113,4 +113,30 @@ public @interface CheckSecurity {
 		@interface Manage {
 		}
 	}
+
+	@interface PaymentMethod {
+		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Read {
+		}
+
+		@PreAuthorize("(hasAuthority('CREATE_PAYMENT_METHOD') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_WRITE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Create {
+		}
+
+		@PreAuthorize("(hasAuthority('UPDATE_PAYMENT_METHOD') or hasAuthority('ADMINISTRATOR'))  and hasAuthority('SCOPE_WRITE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Update {
+		}
+
+		@PreAuthorize("(hasAuthority('DELETE_PAYMENT_METHOD') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_DELETE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Delete {
+		}
+	}
 }
