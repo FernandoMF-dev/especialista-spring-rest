@@ -74,6 +74,7 @@ public class OrderController implements OrderControllerDocumentation {
 
 	@Override
 	@PostMapping()
+	@CheckSecurity.Order.Create
 	public ResponseEntity<OrderDto> insert(@Valid @RequestBody OrderInsertDto dto) {
 		log.debug("REST request to insert a new order: {}", dto);
 		dto.setCustomerId(appSecurity.getUserId());

@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.core.security;
 
+import br.com.colatina.fmf.algafood.service.domain.repository.OrderRepository;
 import br.com.colatina.fmf.algafood.service.domain.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AppSecurity {
 	private final RestaurantRepository restaurantRepository;
+	private final OrderRepository orderRepository;
 
 	public Authentication getAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
@@ -27,6 +29,13 @@ public class AppSecurity {
 		if (Objects.isNull(restaurantId)) {
 			return false;
 		}
-		return restaurantRepository.existsResponsable(restaurantId, getUserId());
+		return restaurantRepository.existsResponsible(restaurantId, getUserId());
+	}
+
+	public boolean managesOrderRestaurant(String orderUuid) {
+		if (Objects.isNull(orderUuid)) {
+			return false;
+		}
+		return orderRepository.existsResponsibleByUuid(orderUuid, getUserId());
 	}
 }

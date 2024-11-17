@@ -23,4 +23,7 @@ public interface OrderRepository extends CustomJpaRepository<Order, Long>, JpaSp
 			" FROM Order o " +
 			" WHERE CAST(o.uuidCode as string) = :uuid ")
 	Optional<Order> findByUuid(@Param("uuid") String uuid);
+
+	// Query implementada no arquivo `orm.xml`
+	boolean existsResponsibleByUuid(String uuid, Long responsibleId);
 }

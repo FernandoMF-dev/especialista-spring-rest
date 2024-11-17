@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderInsertDto implements Serializable {
 	@ApiModelProperty(hidden = true)
-//	@ApiModelProperty(value = "ID of the customer placing the order", example = "1", required = true)
-//	@NotNull(message = "order_insert.user_id.not_null")
+	@JsonIgnore
 	private Long customerId;
 
 	@ApiModelProperty(value = "ID of the restaurant receiving the order", example = "1", required = true)

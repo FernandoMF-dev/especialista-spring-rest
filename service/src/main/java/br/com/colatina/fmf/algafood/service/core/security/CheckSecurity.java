@@ -81,7 +81,7 @@ public @interface CheckSecurity {
 		}
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and " +
-				"(hasAuthority('READ_ORDER') or hasAuthority('ADMINISTRATOR') " +
+				" (hasAuthority('READ_ORDER') or hasAuthority('ADMINISTRATOR') " +
 				" or @appSecurity.getUserId() == #filter.customerId " +
 				" or @appSecurity.managesRestaurant(#filter.restaurantId))")
 		@Retention(RetentionPolicy.RUNTIME)
@@ -96,6 +96,21 @@ public @interface CheckSecurity {
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Read {
+		}
+
+		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_WRITE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Create {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+				" (hasAuthority('MANAGE_ORDER') " +
+				" or hasAuthority('ADMINISTRATOR') " +
+				" or @appSecurity.managesOrderRestaurant(#orderUuid))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Manage {
 		}
 	}
 }

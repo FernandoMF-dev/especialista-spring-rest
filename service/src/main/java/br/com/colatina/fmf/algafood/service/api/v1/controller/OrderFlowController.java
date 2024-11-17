@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.v1.controller;
 
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.OrderFlowControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.OrderFlowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class OrderFlowController implements OrderFlowControllerDocumentation {
 
 	@Override
 	@PutMapping("/confirm")
+	@CheckSecurity.Order.Manage
 	public ResponseEntity<Void> confirm(@PathVariable String orderUuid) {
 		log.debug("REST request to set order {} as confirmed", orderUuid);
 		orderFlowService.confirm(orderUuid);
@@ -28,6 +30,7 @@ public class OrderFlowController implements OrderFlowControllerDocumentation {
 
 	@Override
 	@PutMapping("/deliver")
+	@CheckSecurity.Order.Manage
 	public ResponseEntity<Void> deliver(@PathVariable String orderUuid) {
 		log.debug("REST request to set order {} as delivered", orderUuid);
 		orderFlowService.deliver(orderUuid);
@@ -36,6 +39,7 @@ public class OrderFlowController implements OrderFlowControllerDocumentation {
 
 	@Override
 	@PutMapping("/cancel")
+	@CheckSecurity.Order.Manage
 	public ResponseEntity<Void> cancel(@PathVariable String orderUuid) {
 		log.debug("REST request to set order {} as cancelled", orderUuid);
 		orderFlowService.cancel(orderUuid);
