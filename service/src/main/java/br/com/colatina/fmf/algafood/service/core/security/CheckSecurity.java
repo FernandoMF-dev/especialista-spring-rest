@@ -191,4 +191,14 @@ public @interface CheckSecurity {
 		@interface Delete {
 		}
 	}
+
+	@interface Statistics {
+		@PreAuthorize("hasAuthority('SCOPE_READ') and " +
+				" (hasAuthority('EMIT_SALES_REPORT') or hasAuthority('ADMINISTRATOR') or " +
+				" @appSecurity.managesRestaurant(#filter.restaurantId))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface EmitSalesReport {
+		}
+	}
 }
