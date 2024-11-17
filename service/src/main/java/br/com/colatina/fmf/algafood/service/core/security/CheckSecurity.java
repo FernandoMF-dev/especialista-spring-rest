@@ -103,6 +103,38 @@ public @interface CheckSecurity {
 			@interface Disassociate {
 			}
 		}
+
+		@interface Product {
+			@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
+			@Retention(RetentionPolicy.RUNTIME)
+			@Target(ElementType.METHOD)
+			@interface Read {
+			}
+
+			@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+					" (hasAuthority('CREATE_RESTAURANT_PRODUCT') or hasAuthority('ADMINISTRATOR') " +
+					" or @appSecurity.managesRestaurant(#restaurantId))")
+			@Retention(RetentionPolicy.RUNTIME)
+			@Target(ElementType.METHOD)
+			@interface Create {
+			}
+
+			@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+					" (hasAuthority('UPDATE_RESTAURANT_PRODUCT') or hasAuthority('ADMINISTRATOR') " +
+					" or @appSecurity.managesRestaurant(#restaurantId))")
+			@Retention(RetentionPolicy.RUNTIME)
+			@Target(ElementType.METHOD)
+			@interface Update {
+			}
+
+			@PreAuthorize("hasAuthority('SCOPE_DELETE') and " +
+					" (hasAuthority('DELETE_RESTAURANT_PRODUCT') or hasAuthority('ADMINISTRATOR') " +
+					" or @appSecurity.managesRestaurant(#restaurantId))")
+			@Retention(RetentionPolicy.RUNTIME)
+			@Target(ElementType.METHOD)
+			@interface Delete {
+			}
+		}
 	}
 
 	@interface Order {

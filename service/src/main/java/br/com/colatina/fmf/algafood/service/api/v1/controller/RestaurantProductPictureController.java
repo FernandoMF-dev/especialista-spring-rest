@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.controller;
 
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.RestaurantProductPictureControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.ProductHateoas;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
 import br.com.colatina.fmf.algafood.service.domain.service.FileStorageService;
 import br.com.colatina.fmf.algafood.service.domain.service.ProductPictureCrudService;
@@ -38,6 +39,7 @@ public class RestaurantProductPictureController implements RestaurantProductPict
 
 	@Override
 	@GetMapping
+	@CheckSecurity.Restaurant.Product.Read
 	public ResponseEntity<ProductPictureDto> findPicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to get the data of the picture for the product {} from the restaurant {}", productId, restaurantId);
 		ProductPictureDto result = productPictureCrudService.findPictureDto(restaurantId, productId);
@@ -47,6 +49,7 @@ public class RestaurantProductPictureController implements RestaurantProductPict
 
 	@Override
 	@GetMapping(produces = MediaType.ALL_VALUE)
+	@CheckSecurity.Restaurant.Product.Read
 	public ResponseEntity<InputStreamResource> getPictureFile(@PathVariable Long restaurantId, @PathVariable Long productId,
 															  @RequestHeader("accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		log.debug("REST request to the picture file for the product {} from the restaurant {}", productId, restaurantId);
@@ -64,6 +67,7 @@ public class RestaurantProductPictureController implements RestaurantProductPict
 
 	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@CheckSecurity.Restaurant.Product.Update
 	public ResponseEntity<ProductPictureDto> updatePicture(@PathVariable Long restaurantId, @PathVariable Long productId,
 														   @Valid ProductPictureInsertDto picture) throws IOException {
 		log.debug("REST request to upload a picture for the product {} from the restaurant {}", productId, restaurantId);
@@ -73,6 +77,7 @@ public class RestaurantProductPictureController implements RestaurantProductPict
 
 	@Override
 	@DeleteMapping
+	@CheckSecurity.Restaurant.Product.Update
 	public ResponseEntity<Void> deletePicture(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		log.debug("REST request to delete the picture for the product {} from the restaurant {}", productId, restaurantId);
 		productPictureCrudService.delete(restaurantId, productId);
