@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.controller;
 import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.StateControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.StateHateoas;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.StateCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.StateDto;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class StateController implements StateControllerDocumentation {
 
 	@Override
 	@GetMapping()
+	@CheckSecurity.State.Read
 	public CollectionModel<StateDto> findAll() {
 		log.debug("REST request to find all states");
 		List<StateDto> states = stateCrudService.findAll();
@@ -41,6 +43,7 @@ public class StateController implements StateControllerDocumentation {
 
 	@Override
 	@GetMapping("/{id}")
+	@CheckSecurity.State.Read
 	public ResponseEntity<StateDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the state with ID: {}", id);
 		StateDto state = stateCrudService.findDtoById(id);
@@ -49,6 +52,7 @@ public class StateController implements StateControllerDocumentation {
 
 	@Override
 	@PostMapping()
+	@CheckSecurity.State.Create
 	public ResponseEntity<StateDto> insert(@Valid @RequestBody StateDto dto) {
 		log.debug("REST request to insert a new state: {}", dto);
 		StateDto state = stateCrudService.insert(dto);
@@ -58,6 +62,7 @@ public class StateController implements StateControllerDocumentation {
 
 	@Override
 	@PutMapping("/{id}")
+	@CheckSecurity.State.Update
 	public ResponseEntity<StateDto> update(@PathVariable Long id, @Valid @RequestBody StateDto dto) {
 		log.debug("REST request to update state with id {}: {}", id, dto);
 		StateDto state = stateCrudService.update(dto, id);
@@ -67,6 +72,7 @@ public class StateController implements StateControllerDocumentation {
 
 	@Override
 	@DeleteMapping("/{id}")
+	@CheckSecurity.State.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete state with id {}", id);
 		stateCrudService.delete(id);

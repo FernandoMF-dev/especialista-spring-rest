@@ -139,4 +139,30 @@ public @interface CheckSecurity {
 		@interface Delete {
 		}
 	}
+
+	@interface State {
+		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Read {
+		}
+
+		@PreAuthorize("(hasAuthority('CREATE_STATE') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_WRITE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Create {
+		}
+
+		@PreAuthorize("(hasAuthority('UPDATE_STATE') or hasAuthority('ADMINISTRATOR'))  and hasAuthority('SCOPE_WRITE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Update {
+		}
+
+		@PreAuthorize("(hasAuthority('DELETE_STATE') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_DELETE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Delete {
+		}
+	}
 }
