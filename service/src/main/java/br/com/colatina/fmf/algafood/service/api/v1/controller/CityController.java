@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.controller;
 import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.CityControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.CityHateoas;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class CityController implements CityControllerDocumentation {
 
 	@Override
 	@GetMapping()
+	@CheckSecurity.City.Read
 	public CollectionModel<CityDto> findAll() {
 		log.debug("REST V1 request to find all cities");
 		List<CityDto> cities = cityCrudService.findAll();
@@ -42,6 +44,7 @@ public class CityController implements CityControllerDocumentation {
 
 	@Override
 	@GetMapping("/{id}")
+	@CheckSecurity.City.Read
 	public ResponseEntity<CityDto> findById(@PathVariable Long id) {
 		log.debug("REST V1 request to find the city with ID: {}", id);
 		CityDto city = cityCrudService.findDtoById(id);
@@ -50,6 +53,7 @@ public class CityController implements CityControllerDocumentation {
 
 	@Override
 	@PostMapping()
+	@CheckSecurity.City.Create
 	public ResponseEntity<CityDto> insert(@Valid @RequestBody CityDto dto) {
 		log.debug("REST V1 request to insert a new city: {}", dto);
 		CityDto city = cityCrudService.insert(dto);
@@ -59,6 +63,7 @@ public class CityController implements CityControllerDocumentation {
 
 	@Override
 	@PutMapping("/{id}")
+	@CheckSecurity.City.Update
 	public ResponseEntity<CityDto> update(@PathVariable Long id, @Valid @RequestBody CityDto dto) {
 		log.debug("REST V1 request to update city with id {}: {}", id, dto);
 		CityDto city = cityCrudService.update(dto, id);
@@ -67,6 +72,7 @@ public class CityController implements CityControllerDocumentation {
 
 	@Override
 	@DeleteMapping("/{id}")
+	@CheckSecurity.City.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST V1 request to delete city with id {}", id);
 		cityCrudService.delete(id);

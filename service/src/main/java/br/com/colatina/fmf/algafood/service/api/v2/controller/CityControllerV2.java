@@ -6,6 +6,7 @@ import br.com.colatina.fmf.algafood.service.api.v2.assembler.CityModelDisassembl
 import br.com.colatina.fmf.algafood.service.api.v2.documentation.controller.CityControllerV2Documentation;
 import br.com.colatina.fmf.algafood.service.api.v2.model.CityModelV2;
 import br.com.colatina.fmf.algafood.service.api.v2.model.input.CityInputV2;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class CityControllerV2 implements CityControllerV2Documentation {
 
 	@GetMapping()
 	@Override
+	@CheckSecurity.City.Read
 	public CollectionModel<CityModelV2> findAll() {
 		log.debug("REST V2 request to find all cities");
 		List<CityDto> cities = cityCrudService.findAll();
@@ -47,6 +49,7 @@ public class CityControllerV2 implements CityControllerV2Documentation {
 
 	@GetMapping("/{id}")
 	@Override
+	@CheckSecurity.City.Read
 	public ResponseEntity<CityModelV2> findById(@PathVariable Long id) {
 		log.debug("REST V2 request to find the city with ID: {}", id);
 		CityDto dto = cityCrudService.findDtoById(id);
@@ -55,6 +58,7 @@ public class CityControllerV2 implements CityControllerV2Documentation {
 
 	@PostMapping()
 	@Override
+	@CheckSecurity.City.Create
 	public ResponseEntity<CityModelV2> insert(@Valid @RequestBody CityInputV2 input) {
 		log.debug("REST V2 request to insert a new city: {}", input);
 		CityDto dto = cityModelDisassemblerV2.toDomainObject(input);
@@ -65,6 +69,7 @@ public class CityControllerV2 implements CityControllerV2Documentation {
 
 	@PutMapping("/{id}")
 	@Override
+	@CheckSecurity.City.Update
 	public ResponseEntity<CityModelV2> update(@PathVariable Long id, @Valid @RequestBody CityInputV2 input) {
 		log.debug("REST V2 request to update city with id {}: {}", id, input);
 		CityDto dto = cityModelDisassemblerV2.toDomainObject(input);
@@ -74,6 +79,7 @@ public class CityControllerV2 implements CityControllerV2Documentation {
 
 	@DeleteMapping("/{id}")
 	@Override
+	@CheckSecurity.City.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST V2 request to delete city with id {}", id);
 		cityCrudService.delete(id);
