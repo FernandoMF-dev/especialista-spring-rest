@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.controller;
 import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.UserControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.UserHateoas;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PasswordChangeDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
@@ -36,6 +37,7 @@ public class UserController implements UserControllerDocumentation {
 
 	@Override
 	@GetMapping()
+	@CheckSecurity.User.List
 	public CollectionModel<UserDto> findAll() {
 		log.debug("REST request to find all users");
 		List<UserDto> users = userCrudService.findAll();
@@ -44,6 +46,7 @@ public class UserController implements UserControllerDocumentation {
 
 	@Override
 	@GetMapping("/{id}")
+	@CheckSecurity.User.Read
 	public ResponseEntity<UserDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the user with ID: {}", id);
 		UserDto user = userCrudService.findDtoById(id);
@@ -52,6 +55,7 @@ public class UserController implements UserControllerDocumentation {
 
 	@Override
 	@PostMapping()
+	@CheckSecurity.Public
 	public ResponseEntity<UserDto> insert(@Valid @RequestBody UserInsertDto dto) {
 		log.debug("REST request to insert a new user: {}", dto);
 		UserDto user = userCrudService.insert(dto);
@@ -61,6 +65,7 @@ public class UserController implements UserControllerDocumentation {
 
 	@Override
 	@PutMapping("/{id}")
+	@CheckSecurity.User.Update
 	public ResponseEntity<UserDto> update(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
 		log.debug("REST request to update user with id {}: {}", id, dto);
 		UserDto user = userCrudService.update(dto, id);
@@ -69,6 +74,7 @@ public class UserController implements UserControllerDocumentation {
 
 	@Override
 	@PatchMapping("/{id}/password")
+	@CheckSecurity.User.ChangePassword
 	public ResponseEntity<Void> changePassword(@PathVariable Long id, @Valid @RequestBody PasswordChangeDto dto) {
 		log.debug("REST request to change the password of user with id {}: {}", id, dto);
 		userCrudService.changePassword(dto, id);
@@ -77,6 +83,7 @@ public class UserController implements UserControllerDocumentation {
 
 	@Override
 	@DeleteMapping("/{id}")
+	@CheckSecurity.User.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete user with id {}", id);
 		userCrudService.delete(id);

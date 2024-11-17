@@ -9,6 +9,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 public @interface CheckSecurity {
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.METHOD)
+	@interface Public {
+		// No security check
+	}
+
 	@interface Cuisine {
 		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
 		@Retention(RetentionPolicy.RUNTIME)
@@ -189,6 +195,46 @@ public @interface CheckSecurity {
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Delete {
+		}
+	}
+
+	@interface User {
+		@PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('READ_USER') or hasAuthority('ADMINISTRATOR'))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface List {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and " +
+				" (hasAuthority('READ_USER') or hasAuthority('ADMINISTRATOR') " +
+				" or @appSecurity.getUserId() == #id)")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Read {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+				" (hasAuthority('UPDATE_USER') or hasAuthority('ADMINISTRATOR') " +
+				" or @appSecurity.getUserId() == #id)")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Update {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_DELETE') and " +
+				" (hasAuthority('DELETE_USER') or hasAuthority('ADMINISTRATOR') " +
+				" or @appSecurity.getUserId() == #id)")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Delete {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+				" (hasAuthority('CHANGE_USER_PASSWORD') or hasAuthority('ADMINISTRATOR') " +
+				" or @appSecurity.getUserId() == #id)")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface ChangePassword {
 		}
 	}
 
