@@ -77,6 +77,32 @@ public @interface CheckSecurity {
 		@Target(ElementType.METHOD)
 		@interface Delete {
 		}
+
+		@interface Responsible {
+			@PreAuthorize("hasAuthority('SCOPE_READ') and " +
+					" (hasAuthority('READ_RESTAURANT_RESPONSIBLE') or hasAuthority('ADMINISTRATOR') " +
+					" or @appSecurity.managesRestaurant(#restaurantId))")
+			@Retention(RetentionPolicy.RUNTIME)
+			@Target(ElementType.METHOD)
+			@interface Read {
+			}
+
+			@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+					" (hasAuthority('ASSOCIATE_RESTAURANT_RESPONSIBLE') or hasAuthority('ADMINISTRATOR') " +
+					" or @appSecurity.managesRestaurant(#restaurantId))")
+			@Retention(RetentionPolicy.RUNTIME)
+			@Target(ElementType.METHOD)
+			@interface Associate {
+			}
+
+			@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+					" (hasAuthority('DISASSOCIATE_RESTAURANT_RESPONSIBLE') or hasAuthority('ADMINISTRATOR') " +
+					" or (@appSecurity.managesRestaurant(#restaurantId) and @appSecurity.getUserId() != #responsibleId))")
+			@Retention(RetentionPolicy.RUNTIME)
+			@Target(ElementType.METHOD)
+			@interface Disassociate {
+			}
+		}
 	}
 
 	@interface Order {
