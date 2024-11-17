@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.controller;
 import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.ProfileControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.ProfileHateoas;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.ProfileCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class ProfileController implements ProfileControllerDocumentation {
 
 	@Override
 	@GetMapping()
+	@CheckSecurity.Profile.Read
 	public CollectionModel<ProfileDto> findAll() {
 		log.debug("REST request to find all profiles");
 		List<ProfileDto> profiles = profileCrudService.findAll();
@@ -41,6 +43,7 @@ public class ProfileController implements ProfileControllerDocumentation {
 
 	@Override
 	@GetMapping("/{id}")
+	@CheckSecurity.Profile.Read
 	public ResponseEntity<ProfileDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the profile with ID: {}", id);
 		ProfileDto profile = profileCrudService.findDtoById(id);
@@ -49,6 +52,7 @@ public class ProfileController implements ProfileControllerDocumentation {
 
 	@Override
 	@PostMapping()
+	@CheckSecurity.Profile.Create
 	public ResponseEntity<ProfileDto> insert(@Valid @RequestBody ProfileDto dto) {
 		log.debug("REST request to insert a new profile: {}", dto);
 		ProfileDto profile = profileCrudService.insert(dto);
@@ -58,6 +62,7 @@ public class ProfileController implements ProfileControllerDocumentation {
 
 	@Override
 	@PutMapping("/{id}")
+	@CheckSecurity.Profile.Update
 	public ResponseEntity<ProfileDto> update(@PathVariable Long id, @Valid @RequestBody ProfileDto dto) {
 		log.debug("REST request to update profile with id {}: {}", id, dto);
 		ProfileDto profile = profileCrudService.update(dto, id);
@@ -66,6 +71,7 @@ public class ProfileController implements ProfileControllerDocumentation {
 
 	@Override
 	@DeleteMapping("/{id}")
+	@CheckSecurity.Profile.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete profile with id {}", id);
 		profileCrudService.delete(id);

@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.controller;
 
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.UserProfileControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.UserHateoas;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class UserProfileController implements UserProfileControllerDocumentation
 
 	@Override
 	@GetMapping()
+	@CheckSecurity.Profile.Read
 	public CollectionModel<ProfileDto> findAll(@PathVariable Long userId) {
 		log.debug("REST request to find all profiles associated with the user {}", userId);
 		Set<ProfileDto> permissions = userCrudService.findAllProfilesByUser(userId);
@@ -36,6 +38,7 @@ public class UserProfileController implements UserProfileControllerDocumentation
 
 	@Override
 	@PutMapping("/{profileId}")
+	@CheckSecurity.Profile.AssociateUser
 	public ResponseEntity<Void> associate(@PathVariable Long userId, @PathVariable Long profileId) {
 		log.debug("REST request to associate the profile {} with the user {}", profileId, userId);
 		userCrudService.addProfileToUser(userId, profileId);
@@ -44,6 +47,7 @@ public class UserProfileController implements UserProfileControllerDocumentation
 
 	@Override
 	@DeleteMapping("/{profileId}")
+	@CheckSecurity.Profile.DisassociateUser
 	public ResponseEntity<Void> disassociate(@PathVariable Long userId, @PathVariable Long profileId) {
 		log.debug("REST request to disassociate the profile {} from the user {}", profileId, userId);
 		userCrudService.removeProfileFromUser(userId, profileId);

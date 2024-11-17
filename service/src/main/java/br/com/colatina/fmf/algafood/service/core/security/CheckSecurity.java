@@ -238,6 +238,56 @@ public @interface CheckSecurity {
 		}
 	}
 
+	@interface Profile {
+		@PreAuthorize("(hasAuthority('READ_PROFILE') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_READ')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Read {
+		}
+
+		@PreAuthorize("(hasAuthority('CREATE_PROFILE') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_WRITE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Create {
+		}
+
+		@PreAuthorize("(hasAuthority('UPDATE_PROFILE') or hasAuthority('ADMINISTRATOR'))  and hasAuthority('SCOPE_WRITE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Update {
+		}
+
+		@PreAuthorize("(hasAuthority('DELETE_PROFILE') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_DELETE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface Delete {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('ASSOCIATE_PROFILE_PERMISSION') or hasAuthority('ADMINISTRATOR'))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface AssociatePermission {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('DISASSOCIATE_PROFILE_PERMISSION') or hasAuthority('ADMINISTRATOR'))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface DisassociatePermission {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('ASSOCIATE_USER_PROFILE') or hasAuthority('ADMINISTRATOR'))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface AssociateUser {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('DISASSOCIATE_USER_PROFILE') or hasAuthority('ADMINISTRATOR'))")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface DisassociateUser {
+		}
+	}
+
 	@interface Statistics {
 		@PreAuthorize("hasAuthority('SCOPE_READ') and " +
 				" (hasAuthority('EMIT_SALES_REPORT') or hasAuthority('ADMINISTRATOR') or " +
