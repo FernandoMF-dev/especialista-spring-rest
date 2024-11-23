@@ -137,7 +137,6 @@ VALUES (nextval('seq_order'), 1, 1, 1, 1, '38400-222', 'Rua Natal', '200', null,
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 3, 2, 1, 110, 110, null);
 
-
 INSERT INTO tb_order (id, restaurant_id, customer_id, payment_method_id, address_city_id, address_cep, address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date,
 					  confirmation_date, delivery_date, subtotal, freight_fee, total_value, uuid_code)
@@ -147,7 +146,6 @@ VALUES (nextval('seq_order'), 1, 2, 1, 1, '38400-800', 'Rua Fortaleza', '900', '
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 4, 3, 2, 87.2, 174.4, null);
 
-
 INSERT INTO tb_order (id, restaurant_id, customer_id, payment_method_id, address_city_id, address_cep, address_public_space,
 					  address_street_number, address_complement, address_district, status, registration_date,
 					  confirmation_date, delivery_date, subtotal, freight_fee, total_value, uuid_code)
@@ -156,3 +154,21 @@ VALUES (nextval('seq_order'), 1, 3, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20
 
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 5, 3, 1, 87.2, 87.2, null);
+
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
+								  web_server_redirect_uri, authorities, access_token_validity,
+								  refresh_token_validity, autoapprove)
+VALUES ('fmf-algafood-web', null, '$2a$12$AencjSwCNC1cPF.fPiYHzOyVhjZvKSkhVUI9cjD6WaGmqEfwDgIqO', 'READ,WRITE,DELETE', -- senha: 1234567890
+		'password', null, null, 60 * 60 * 6, 60 * 24 * 60 * 60, null);
+
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
+								  web_server_redirect_uri, authorities, access_token_validity,
+								  refresh_token_validity, autoapprove)
+VALUES ('fmf-algafood-analytics', null, '$2a$12$E6JJsB.Bid.2jXDQBCei.uYrJK9Lu7HRRbdA68nt9dplQkX8irfii', 'READ,WRITE', -- senha: analytics123
+		'authorization_code', 'http://www.fmf-algafood-analytics.com.br', null, null, null, null);
+
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
+								  web_server_redirect_uri, authorities, access_token_validity,
+								  refresh_token_validity, autoapprove)
+VALUES ('fmf-algafood-faturamento', null, '$2a$12$nx6wZbTXA4hxPxg/ImbfRO2Eq2067Jt6SW8fFnpd1PgZJ8bfXmmpe', 'READ', -- senha: faturamento123
+		'client_credentials', null, 'READ_ORDER,EMIT_SALES_REPORT', null, null, null);
