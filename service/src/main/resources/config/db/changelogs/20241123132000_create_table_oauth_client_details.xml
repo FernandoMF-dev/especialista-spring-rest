@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="20241123132000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="oauth_client_details">
+			<column name="client_id" type="VARCHAR(256)">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="resource_ids" type="VARCHAR(256)"/>
+
+			<column name="client_secret" type="VARCHAR(256)"/>
+
+			<column name="scope" type="VARCHAR(256)"/>
+
+			<column name="authorized_grant_types" type="VARCHAR(256)"/>
+
+			<column name="web_server_redirect_uri" type="VARCHAR(256)"/>
+
+			<column name="authorities" type="VARCHAR(256)"/>
+
+			<column name="access_token_validity" type="INTEGER"/>
+
+			<column name="refresh_token_validity" type="INTEGER"/>
+
+			<column name="additional_information" type="VARCHAR(4096)"/>
+
+			<column name="autoapprove" type="VARCHAR(256)"/>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="oauth_client_details"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20241123132000-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="oauth_client_details" columnNames="client_id" constraintName="pk_oauth_client_details"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="oauth_client_details" constraintName="pk_oauth_client_details"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

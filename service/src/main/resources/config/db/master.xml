@@ -30,4 +30,5 @@
 	<include file="/config/db/changelogs/20240718144500_add_columns_payment_method.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20240728174500_rename_columns_order.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20241103144000_insert_permission.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20241123132000_create_table_oauth_client_details.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
