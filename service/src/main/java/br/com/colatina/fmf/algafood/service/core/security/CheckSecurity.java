@@ -97,7 +97,7 @@ public @interface CheckSecurity {
 
 			@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
 					" (hasAuthority('DISASSOCIATE_RESTAURANT_RESPONSIBLE') or hasAuthority('ADMINISTRATOR') " +
-					" or (@appSecurity.managesRestaurant(#restaurantId) and @appSecurity.getUserId() != #responsibleId))")
+					" or (@appSecurity.managesRestaurant(#restaurantId) and !@appSecurity.isAuthenticatedUser(#responsibleId)))")
 			@Retention(RetentionPolicy.RUNTIME)
 			@Target(ElementType.METHOD)
 			@interface Disassociate {
@@ -146,7 +146,7 @@ public @interface CheckSecurity {
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and " +
 				" (hasAuthority('READ_ORDER') or hasAuthority('ADMINISTRATOR') " +
-				" or @appSecurity.getUserId() == #filter.customerId " +
+				" or @appSecurity.isAuthenticatedUser(#filter.customerId) " +
 				" or @appSecurity.managesRestaurant(#filter.restaurantId))")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
@@ -155,7 +155,7 @@ public @interface CheckSecurity {
 
 		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
 		@PostAuthorize("hasAuthority('READ_ORDER') or hasAuthority('ADMINISTRATOR') " +
-				" or @appSecurity.getUserId() == returnObject.body.customer.id " +
+				" or @appSecurity.isAuthenticatedUser(returnObject.body.customer.id) " +
 				" or @appSecurity.managesRestaurant(returnObject.body.restaurant.id)")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
@@ -265,7 +265,7 @@ public @interface CheckSecurity {
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and " +
 				" (hasAuthority('READ_USER') or hasAuthority('ADMINISTRATOR') " +
-				" or @appSecurity.getUserId() == #id)")
+				" or @appSecurity.isAuthenticatedUser(#id))")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Read {
@@ -273,7 +273,7 @@ public @interface CheckSecurity {
 
 		@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
 				" (hasAuthority('UPDATE_USER') or hasAuthority('ADMINISTRATOR') " +
-				" or @appSecurity.getUserId() == #id)")
+				" or @appSecurity.isAuthenticatedUser(#id))")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Update {
@@ -281,7 +281,7 @@ public @interface CheckSecurity {
 
 		@PreAuthorize("hasAuthority('SCOPE_DELETE') and " +
 				" (hasAuthority('DELETE_USER') or hasAuthority('ADMINISTRATOR') " +
-				" or @appSecurity.getUserId() == #id)")
+				" or @appSecurity.isAuthenticatedUser(#id))")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Delete {
@@ -289,7 +289,7 @@ public @interface CheckSecurity {
 
 		@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
 				" (hasAuthority('CHANGE_USER_PASSWORD') or hasAuthority('ADMINISTRATOR') " +
-				" or @appSecurity.getUserId() == #id)")
+				" or @appSecurity.isAuthenticatedUser(#id))")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface ChangePassword {

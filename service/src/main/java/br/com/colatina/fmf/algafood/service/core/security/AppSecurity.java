@@ -25,6 +25,13 @@ public class AppSecurity {
 		return jwt.getClaim("user_id");
 	}
 
+	public boolean isAuthenticatedUser(Long userId) {
+		if (Objects.isNull(userId) || Objects.isNull(getUserId())) {
+			return false;
+		}
+		return userId.equals(getUserId());
+	}
+
 	public boolean managesRestaurant(Long restaurantId) {
 		if (Objects.isNull(restaurantId)) {
 			return false;
