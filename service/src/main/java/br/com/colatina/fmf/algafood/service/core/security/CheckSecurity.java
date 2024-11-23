@@ -168,10 +168,7 @@ public @interface CheckSecurity {
 		@interface Create {
 		}
 
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
-				" (hasAuthority('MANAGE_ORDER') " +
-				" or hasAuthority('ADMINISTRATOR') " +
-				" or @appSecurity.managesOrderRestaurant(#orderUuid))")
+		@PreAuthorize("@appSecurity.managesOrderFlow(#orderUuid)")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		@interface Manage {

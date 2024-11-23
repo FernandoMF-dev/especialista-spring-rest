@@ -25,6 +25,11 @@ public class AppSecurity {
 		return jwt.getClaim("user_id");
 	}
 
+	public boolean hasAuthority(String authority) {
+		return getAuthentication().getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals(authority));
+	}
+
 	public boolean isAuthenticatedUser(Long userId) {
 		if (Objects.isNull(userId) || Objects.isNull(getUserId())) {
 			return false;
@@ -45,4 +50,16 @@ public class AppSecurity {
 		}
 		return orderRepository.existsResponsibleByUuid(orderUuid, getUserId());
 	}
+
+	public boolean managesOrderFlow(String orderUuid) {
+		if (Objects.isNull(orderUuid)) {
+			return false;
+		}
+		return hasAuthority("SCOPE_WRITE") && ((hasAuthority("MANAGE_ORDER") || hasAuthority("ADMINISTRATOR")) || managesOrderRestaurant(orderUuid));
+	}
 }
+
+//@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+//		" (hasAuthority('MANAGE_ORDER') " +
+//		" or hasAuthority('ADMINISTRATOR') " +
+//		" or @appSecurity.managesOrderRestaurant(#orderUuid))")

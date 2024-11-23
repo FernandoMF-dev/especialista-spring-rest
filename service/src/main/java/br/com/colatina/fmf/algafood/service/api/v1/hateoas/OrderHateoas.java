@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.hateoas;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.OrderController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.OrderFlowController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.RestaurantProductController;
+import br.com.colatina.fmf.algafood.service.core.security.AppSecurity;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderDto;
 import org.springframework.hateoas.CollectionModel;
@@ -21,11 +22,14 @@ public class OrderHateoas extends EntityHateoas<OrderDto> {
 	private final UserHateoas userHateoas;
 	private final PaymentMethodHateoas paymentMethodHateoas;
 
-	public OrderHateoas(RestaurantHateoas restaurantHateoas, UserHateoas userHateoas, PaymentMethodHateoas paymentMethodHateoas) {
+	private final AppSecurity appSecurity;
+
+	public OrderHateoas(RestaurantHateoas restaurantHateoas, UserHateoas userHateoas, PaymentMethodHateoas paymentMethodHateoas, AppSecurity appSecurity) {
 		super(OrderDto.class);
 		this.restaurantHateoas = restaurantHateoas;
 		this.userHateoas = userHateoas;
 		this.paymentMethodHateoas = paymentMethodHateoas;
+		this.appSecurity = appSecurity;
 	}
 
 	@Override
@@ -66,6 +70,10 @@ public class OrderHateoas extends EntityHateoas<OrderDto> {
 	}
 
 	private void addOrderFlowHypermediaLinks(OrderDto model) {
+		if (!appSecurity.managesOrderFlow(model.getCode())) {
+			return;
+		}
+
 		if (model.getStatus().canStatusChangeTo(OrderStatusEnum.CONFIRMED)) {
 			model.add(linkTo(methodOn(OrderFlowController.class).confirm(model.getCode())).withRel("confirm"));
 		}
