@@ -2,7 +2,7 @@ package br.com.colatina.fmf.algafood.service.api.v1.documentation.controller;
 
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringFoxControllerTags;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,7 +17,7 @@ public interface RestaurantResponsibleControllerDocumentation {
 	@ApiOperation("Find all users responsible for a restaurant")
 	@ApiResponse(responseCode = "200", description = "List of users responsible for the restaurant")
 	@ApiResponse(responseCode = "404", description = "Restaurant not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-	CollectionModel<UserDto> findAll(@ApiParam(value = "ID of the restaurant", example = "1", required = true) Long restaurantId);
+	CollectionModel<AppUserDto> findAll(@ApiParam(value = "ID of the restaurant", example = "1", required = true) Long restaurantId);
 
 	@ApiOperation("Associate a user as a responsible for a restaurant")
 	@ApiResponse(responseCode = "204", description = "Responsible associated")

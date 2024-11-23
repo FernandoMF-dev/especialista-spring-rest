@@ -19,15 +19,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class OrderHateoas extends EntityHateoas<OrderDto> {
 	private final RestaurantHateoas restaurantHateoas;
-	private final UserHateoas userHateoas;
+	private final AppUserHateoas appUserHateoas;
 	private final PaymentMethodHateoas paymentMethodHateoas;
 
 	private final AppSecurity appSecurity;
 
-	public OrderHateoas(RestaurantHateoas restaurantHateoas, UserHateoas userHateoas, PaymentMethodHateoas paymentMethodHateoas, AppSecurity appSecurity) {
+	public OrderHateoas(RestaurantHateoas restaurantHateoas, AppUserHateoas appUserHateoas, PaymentMethodHateoas paymentMethodHateoas, AppSecurity appSecurity) {
 		super(OrderDto.class);
 		this.restaurantHateoas = restaurantHateoas;
-		this.userHateoas = userHateoas;
+		this.appUserHateoas = appUserHateoas;
 		this.paymentMethodHateoas = paymentMethodHateoas;
 		this.appSecurity = appSecurity;
 	}
@@ -40,7 +40,7 @@ public class OrderHateoas extends EntityHateoas<OrderDto> {
 		addOrderFlowHypermediaLinks(model);
 
 		this.restaurantHateoas.mapGenericModel(model.getRestaurant());
-		this.userHateoas.mapGenericModel(model.getCustomer());
+		this.appUserHateoas.mapGenericModel(model.getCustomer());
 		this.paymentMethodHateoas.mapGenericModel(model.getPaymentMethod());
 
 		model.getOrderProducts().forEach(orderProduct -> {

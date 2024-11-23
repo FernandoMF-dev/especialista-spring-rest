@@ -1,9 +1,9 @@
 package br.com.colatina.fmf.algafood.service.api.v1.controller;
 
-import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.UserProfileControllerDocumentation;
-import br.com.colatina.fmf.algafood.service.api.v1.hateoas.UserHateoas;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.AppUserProfileControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.v1.hateoas.AppUserHateoas;
 import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
-import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
+import br.com.colatina.fmf.algafood.service.domain.service.AppUserCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +23,17 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/v1/users/{userId}/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserProfileController implements UserProfileControllerDocumentation {
-	private final UserCrudService userCrudService;
-	private final UserHateoas userHateoas;
+public class AppUserProfileController implements AppUserProfileControllerDocumentation {
+	private final AppUserCrudService appUserCrudService;
+	private final AppUserHateoas appUserHateoas;
 
 	@Override
 	@GetMapping()
 	@CheckSecurity.Profile.Read
 	public CollectionModel<ProfileDto> findAll(@PathVariable Long userId) {
 		log.debug("REST request to find all profiles associated with the user {}", userId);
-		Set<ProfileDto> permissions = userCrudService.findAllProfilesByUser(userId);
-		return userHateoas.mapProfilesCollectionModel(permissions, userId);
+		Set<ProfileDto> permissions = appUserCrudService.findAllProfilesByUser(userId);
+		return appUserHateoas.mapProfilesCollectionModel(permissions, userId);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class UserProfileController implements UserProfileControllerDocumentation
 	@CheckSecurity.Profile.AssociateUser
 	public ResponseEntity<Void> associate(@PathVariable Long userId, @PathVariable Long profileId) {
 		log.debug("REST request to associate the profile {} with the user {}", profileId, userId);
-		userCrudService.addProfileToUser(userId, profileId);
+		appUserCrudService.addProfileToUser(userId, profileId);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -50,7 +50,7 @@ public class UserProfileController implements UserProfileControllerDocumentation
 	@CheckSecurity.Profile.DisassociateUser
 	public ResponseEntity<Void> disassociate(@PathVariable Long userId, @PathVariable Long profileId) {
 		log.debug("REST request to disassociate the profile {} from the user {}", profileId, userId);
-		userCrudService.removeProfileFromUser(userId, profileId);
+		appUserCrudService.removeProfileFromUser(userId, profileId);
 		return ResponseEntity.noContent().build();
 	}
 }

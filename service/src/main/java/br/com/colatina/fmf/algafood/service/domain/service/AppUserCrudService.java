@@ -3,14 +3,14 @@ package br.com.colatina.fmf.algafood.service.domain.service;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.DuplicateResourceException;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.PasswordMismatchException;
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
+import br.com.colatina.fmf.algafood.service.domain.model.AppUser;
 import br.com.colatina.fmf.algafood.service.domain.model.Profile;
-import br.com.colatina.fmf.algafood.service.domain.model.User;
-import br.com.colatina.fmf.algafood.service.domain.repository.UserRepository;
+import br.com.colatina.fmf.algafood.service.domain.repository.AppUserRepository;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserInsertDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PasswordChangeDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserInsertDto;
-import br.com.colatina.fmf.algafood.service.domain.service.mapper.UserMapper;
+import br.com.colatina.fmf.algafood.service.domain.service.mapper.AppUserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,53 +25,53 @@ import java.util.Set;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserCrudService {
-	private final UserRepository userRepository;
-	private final UserMapper userMapper;
+public class AppUserCrudService {
+	private final AppUserRepository appUserRepository;
+	private final AppUserMapper appUserMapper;
 
 	private final ProfileCrudService profileCrudService;
 
 	private final PasswordEncoder passwordEncoder;
 
-	public List<UserDto> findAll() {
-		return userRepository.findAllDto();
+	public List<AppUserDto> findAll() {
+		return appUserRepository.findAllDto();
 	}
 
-	public UserDto findDtoById(Long id) {
-		return userRepository.findDtoById(id)
+	public AppUserDto findDtoById(Long id) {
+		return appUserRepository.findDtoById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("user.not_found", id));
 	}
 
-	public User findEntityById(Long id) {
-		return userRepository.findByIdAndExcludedIsFalse(id)
+	public AppUser findEntityById(Long id) {
+		return appUserRepository.findByIdAndExcludedIsFalse(id)
 				.orElseThrow(() -> new ResourceNotFoundException("user.not_found", id));
 	}
 
-	public UserDto insert(UserInsertDto dto) {
+	public AppUserDto insert(AppUserInsertDto dto) {
 		dto.setId(null);
-		User entity = userMapper.toEntity(dto);
+		AppUser entity = appUserMapper.toEntity(dto);
 		return save(entity);
 	}
 
-	public UserDto update(UserDto dto, @PathVariable Long id) {
-		User saved = findEntityById(id);
+	public AppUserDto update(AppUserDto dto, @PathVariable Long id) {
+		AppUser saved = findEntityById(id);
 		BeanUtils.copyProperties(dto, saved, "id", "password");
 		return save(saved);
 	}
 
 	public void changePassword(PasswordChangeDto dto, Long userId) {
-		User user = findEntityById(userId);
-		if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+		AppUser appUser = findEntityById(userId);
+		if (!passwordEncoder.matches(dto.getCurrentPassword(), appUser.getPassword())) {
 			throw new PasswordMismatchException("password_change.current.mismatch");
 		}
-		user.setPassword(dto.getNewPassword());
-		userRepository.save(user);
+		appUser.setPassword(dto.getNewPassword());
+		appUserRepository.save(appUser);
 	}
 
 	public void delete(Long id) {
-		User saved = findEntityById(id);
+		AppUser saved = findEntityById(id);
 		saved.setExcluded(true);
-		userRepository.save(saved);
+		appUserRepository.save(saved);
 	}
 
 	public Set<ProfileDto> findAllProfilesByUser(Long userId) {
@@ -80,35 +80,35 @@ public class UserCrudService {
 	}
 
 	public void addProfileToUser(Long userId, Long profileId) {
-		User user = findEntityById(userId);
+		AppUser appUser = findEntityById(userId);
 		Profile profile = profileCrudService.findEntityById(profileId);
-		user.addProfile(profile);
-		userRepository.save(user);
+		appUser.addProfile(profile);
+		appUserRepository.save(appUser);
 	}
 
 	public void removeProfileFromUser(Long userId, Long profileId) {
-		User user = findEntityById(userId);
+		AppUser appUser = findEntityById(userId);
 		Profile profile = profileCrudService.findEntityById(profileId);
-		user.removeProfile(profile);
-		userRepository.save(user);
+		appUser.removeProfile(profile);
+		appUserRepository.save(appUser);
 	}
 
-	private UserDto save(User entity) {
-		userRepository.detach(entity);
+	private AppUserDto save(AppUser entity) {
+		appUserRepository.detach(entity);
 		validateSave(entity);
 		encodePassword(entity);
-		entity = userRepository.save(entity);
-		return userMapper.toDto(entity);
+		entity = appUserRepository.save(entity);
+		return appUserMapper.toDto(entity);
 	}
 
-	private void validateSave(User entity) {
-		Optional<User> existingUser = userRepository.findByEmailAndExcludedIsFalse(entity.getEmail());
+	private void validateSave(AppUser entity) {
+		Optional<AppUser> existingUser = appUserRepository.findByEmailAndExcludedIsFalse(entity.getEmail());
 		if (existingUser.isPresent() && !existingUser.get().equals(entity)) {
 			throw new DuplicateResourceException("user.email.duplicate", entity.getEmail());
 		}
 	}
 
-	private void encodePassword(User entity) {
+	private void encodePassword(AppUser entity) {
 		if (entity.isNew()) {
 			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 		}

@@ -253,7 +253,7 @@ public @interface CheckSecurity {
 		}
 	}
 
-	@interface User {
+	@interface AppUser {
 		@PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('READ_USER') or hasAuthority('ADMINISTRATOR'))")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)

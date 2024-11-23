@@ -4,7 +4,7 @@ import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.Rest
 import br.com.colatina.fmf.algafood.service.api.v1.hateoas.RestaurantHateoas;
 import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
@@ -30,9 +30,9 @@ public class RestaurantResponsibleController implements RestaurantResponsibleCon
 	@Override
 	@GetMapping()
 	@CheckSecurity.Restaurant.Responsible.Read
-	public CollectionModel<UserDto> findAll(@PathVariable Long restaurantId) {
+	public CollectionModel<AppUserDto> findAll(@PathVariable Long restaurantId) {
 		log.debug("REST request to find all user responsible for the restaurant {}", restaurantId);
-		Set<UserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurant(restaurantId);
+		Set<AppUserDto> responsibles = restaurantCrudService.findAllResponsiblesByRestaurant(restaurantId);
 		return restaurantHateoas.mapResponsiblesCollectionModel(responsibles, restaurantId);
 	}
 

@@ -15,12 +15,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class OrderListHateoas extends EntityHateoas<OrderListDto> {
 	private final RestaurantHateoas restaurantHateoas;
-	private final UserHateoas userHateoas;
+	private final AppUserHateoas appUserHateoas;
 
-	public OrderListHateoas(RestaurantHateoas restaurantHateoas, UserHateoas userHateoas) {
+	public OrderListHateoas(RestaurantHateoas restaurantHateoas, AppUserHateoas appUserHateoas) {
 		super(OrderListDto.class);
 		this.restaurantHateoas = restaurantHateoas;
-		this.userHateoas = userHateoas;
+		this.appUserHateoas = appUserHateoas;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class OrderListHateoas extends EntityHateoas<OrderListDto> {
 		model.add(getPageLink());
 
 		this.restaurantHateoas.mapGenericModel(model.getRestaurant());
-		this.userHateoas.mapGenericModel(model.getCustomer());
+		this.appUserHateoas.mapGenericModel(model.getCustomer());
 	}
 
 	@Override

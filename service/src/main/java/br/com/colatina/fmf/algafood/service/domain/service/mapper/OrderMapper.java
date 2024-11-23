@@ -6,7 +6,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, RestaurantMapper.class, PaymentMethodMapper.class, OrderProductMapper.class, AddressMapper.class})
+@Mapper(componentModel = "spring", uses = {AppUserMapper.class, RestaurantMapper.class, PaymentMethodMapper.class, OrderProductMapper.class, AddressMapper.class})
 public interface OrderMapper extends EntityMapper<OrderDto, Order> {
 	@Override
 	@Mapping(target = "status", ignore = true)

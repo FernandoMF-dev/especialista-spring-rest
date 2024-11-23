@@ -13,7 +13,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 @Api(tags = SpringFoxControllerTags.USERS)
-public interface UserProfileControllerDocumentation {
+public interface AppUserProfileControllerDocumentation {
 	@ApiOperation("Find all profiles associated with a user")
 	@ApiResponse(responseCode = "200", description = "Profiles retrieved")
 	CollectionModel<ProfileDto> findAll(@ApiParam(value = "ID of the user", example = "1", required = true) Long userId);

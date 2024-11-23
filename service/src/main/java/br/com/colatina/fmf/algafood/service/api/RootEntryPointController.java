@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.api;
 
+import br.com.colatina.fmf.algafood.service.api.v1.controller.AppUserController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.CityController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.CuisineController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.OrderController;
@@ -8,7 +9,6 @@ import br.com.colatina.fmf.algafood.service.api.v1.controller.ProfileController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.RestaurantController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.StateController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.StatisticsController;
-import br.com.colatina.fmf.algafood.service.api.v1.controller.UserController;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.RootEntryPointControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.model.HypermediaModel;
 import br.com.colatina.fmf.algafood.service.api.v2.controller.CityControllerV2;
@@ -66,7 +66,7 @@ public class RootEntryPointController implements RootEntryPointControllerDocumen
 		root.add(linkTo(RestaurantController.class).withRel("restaurants"));
 		root.add(linkTo(StatisticsController.class).withRel("statistics"));
 		root.add(linkTo(StateController.class).withRel("states"));
-		root.add(linkTo(UserController.class).withRel("users"));
+		root.add(linkTo(AppUserController.class).withRel("users"));
 
 		return root;
 	}

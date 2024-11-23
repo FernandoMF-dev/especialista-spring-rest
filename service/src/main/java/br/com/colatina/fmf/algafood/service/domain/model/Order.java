@@ -75,7 +75,7 @@ public class Order extends AbstractAggregateRoot<Order> {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
-	private User customer;
+	private AppUser customer;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)

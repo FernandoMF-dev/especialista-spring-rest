@@ -3,9 +3,9 @@ package br.com.colatina.fmf.algafood.service.api.v1.hateoas;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.RestaurantController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.RestaurantProductController;
 import br.com.colatina.fmf.algafood.service.api.v1.controller.RestaurantResponsibleController;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.GenericObjectDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
@@ -18,12 +18,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
-	private final UserHateoas userHateoas;
+	private final AppUserHateoas appUserHateoas;
 
-	public RestaurantHateoas(AddressHateoas addressHateoas, UserHateoas userHateoas, CuisineHateoas cuisineHateoas,
+	public RestaurantHateoas(AddressHateoas addressHateoas, AppUserHateoas appUserHateoas, CuisineHateoas cuisineHateoas,
 							 PaymentMethodHateoas paymentMethodHateoas, ProductHateoas productHateoas) {
-		super(RestaurantDto.class, addressHateoas, userHateoas, cuisineHateoas, paymentMethodHateoas, productHateoas);
-		this.userHateoas = userHateoas;
+		super(RestaurantDto.class, addressHateoas, appUserHateoas, cuisineHateoas, paymentMethodHateoas, productHateoas);
+		this.appUserHateoas = appUserHateoas;
 	}
 
 	@Override
@@ -50,8 +50,8 @@ public class RestaurantHateoas extends EntityHateoas<RestaurantDto> {
 		model.add(linkTo(methodOn(RestaurantController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
 	}
 
-	public CollectionModel<UserDto> mapResponsiblesCollectionModel(Iterable<UserDto> users, Long restaurantId) {
-		CollectionModel<UserDto> collection = userHateoas.mapCollectionModel(users);
+	public CollectionModel<AppUserDto> mapResponsiblesCollectionModel(Iterable<AppUserDto> users, Long restaurantId) {
+		CollectionModel<AppUserDto> collection = appUserHateoas.mapCollectionModel(users);
 		collection.removeLinks();
 		collection.add(linkTo(methodOn(RestaurantResponsibleController.class).findAll(restaurantId)).withSelfRel());
 		collection.add(linkTo(methodOn(RestaurantResponsibleController.class).associate(restaurantId, null)).withRel("associate"));

@@ -77,7 +77,7 @@ public class Restaurant {
 	@JoinTable(name = "rel_restaurant_responsible",
 			joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-	private Set<User> responsible = new HashSet<>();
+	private Set<AppUser> responsible = new HashSet<>();
 
 	@Embedded
 	private Address address;
@@ -107,11 +107,11 @@ public class Restaurant {
 		return this.getPaymentMethods().contains(paymentMethod);
 	}
 
-	public void addResponsible(User user) {
-		this.getResponsible().add(user);
+	public void addResponsible(AppUser appUser) {
+		this.getResponsible().add(appUser);
 	}
 
-	public void removeResponsible(User user) {
-		this.getResponsible().remove(user);
+	public void removeResponsible(AppUser appUser) {
+		this.getResponsible().remove(appUser);
 	}
 }

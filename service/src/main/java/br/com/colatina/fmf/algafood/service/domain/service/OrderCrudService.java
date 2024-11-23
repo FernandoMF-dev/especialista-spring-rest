@@ -33,7 +33,7 @@ public class OrderCrudService {
 	private final OrderInsertMapper orderInsertMapper;
 	private final OrderSpecs orderSpecs;
 
-	private final UserCrudService userCrudService;
+	private final AppUserCrudService appUserCrudService;
 	private final RestaurantCrudService restaurantCrudService;
 	private final PaymentMethodCrudService paymentMethodCrudService;
 	private final CityCrudService cityCrudService;
@@ -77,7 +77,7 @@ public class OrderCrudService {
 
 	private void validateInsertEntities(OrderInsertDto insertDto, Order entity) {
 		try {
-			entity.setCustomer(userCrudService.findEntityById(insertDto.getCustomerId()));
+			entity.setCustomer(appUserCrudService.findEntityById(insertDto.getCustomerId()));
 			entity.setRestaurant(restaurantCrudService.findEntityById(insertDto.getRestaurantId()));
 			entity.setPaymentMethod(paymentMethodCrudService.findEntityById(insertDto.getPaymentMethodId()));
 			entity.getAddress().setCity(cityCrudService.findEntityById(insertDto.getAddress().getCity().getId()));

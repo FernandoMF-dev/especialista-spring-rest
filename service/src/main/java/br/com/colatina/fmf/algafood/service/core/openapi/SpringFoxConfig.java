@@ -3,6 +3,7 @@ package br.com.colatina.fmf.algafood.service.core.openapi;
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorResponse;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.LinksModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.PageableModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.AppUserCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.CityCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.CuisineCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.OrderCollectionModelOpenApi;
@@ -13,11 +14,11 @@ import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collectio
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.RestaurantCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.SalesPerPeriodCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.StateCollectionModelOpenApi;
-import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.UserCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.page.OrderPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.page.RestaurantPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v2.documentation.model.CityCollectionModelOpenApiV2;
 import br.com.colatina.fmf.algafood.service.api.v2.model.CityModelV2;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
@@ -27,7 +28,6 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.StateDto;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import br.com.colatina.fmf.algafood.service.domain.service.statistics.SalesPerPeriod;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -133,7 +133,7 @@ public class SpringFoxConfig {
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, RestaurantListDto.class), RestaurantCollectionModelOpenApi.class));
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, SalesPerPeriod.class), SalesPerPeriodCollectionModelOpenApi.class));
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, StateDto.class), StateCollectionModelOpenApi.class));
-		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, UserDto.class), UserCollectionModelOpenApi.class));
+		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, AppUserDto.class), AppUserCollectionModelOpenApi.class));
 
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, OrderListDto.class), OrderPageModelOpenApi.class));
 		docket.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, RestaurantListDto.class), RestaurantPageModelOpenApi.class));

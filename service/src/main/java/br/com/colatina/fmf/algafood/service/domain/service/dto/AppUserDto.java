@@ -23,7 +23,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto extends RepresentationModel<UserDto> implements Serializable {
+public class AppUserDto extends RepresentationModel<AppUserDto> implements Serializable {
 	@ApiModelProperty(value = "ID of the user", example = "1")
 	@EqualsAndHashCode.Include
 	private Long id;

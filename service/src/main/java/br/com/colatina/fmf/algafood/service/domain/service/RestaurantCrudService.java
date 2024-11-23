@@ -1,14 +1,14 @@
 package br.com.colatina.fmf.algafood.service.domain.service;
 
 import br.com.colatina.fmf.algafood.service.domain.exceptions.ResourceNotFoundException;
+import br.com.colatina.fmf.algafood.service.domain.model.AppUser;
 import br.com.colatina.fmf.algafood.service.domain.model.PaymentMethod;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
-import br.com.colatina.fmf.algafood.service.domain.model.User;
 import br.com.colatina.fmf.algafood.service.domain.repository.RestaurantRepository;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantFormMapper;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantMapper;
@@ -39,7 +39,7 @@ public class RestaurantCrudService {
 
 	private final CuisineCrudService cuisineCrudService;
 	private final PaymentMethodCrudService paymentMethodCrudService;
-	private final UserCrudService userCrudService;
+	private final AppUserCrudService appUserCrudService;
 
 	public List<RestaurantListDto> findAll() {
 		return restaurantRepository.findAllDto();
@@ -144,21 +144,21 @@ public class RestaurantCrudService {
 		restaurantRepository.save(saved);
 	}
 
-	public Set<UserDto> findAllResponsiblesByRestaurant(Long restaurantId) {
+	public Set<AppUserDto> findAllResponsiblesByRestaurant(Long restaurantId) {
 		RestaurantDto dto = findDtoById(restaurantId);
 		return dto.getResponsible();
 	}
 
 	public void addResponsibleToRestaurant(Long restaurantId, Long responsibleId) {
 		Restaurant restaurant = findEntityById(restaurantId);
-		User responsible = userCrudService.findEntityById(responsibleId);
+		AppUser responsible = appUserCrudService.findEntityById(responsibleId);
 		restaurant.addResponsible(responsible);
 		restaurantRepository.save(restaurant);
 	}
 
 	public void removeResponsibleFromRestaurant(Long restaurantId, Long responsibleId) {
 		Restaurant restaurant = findEntityById(restaurantId);
-		User responsible = userCrudService.findEntityById(responsibleId);
+		AppUser responsible = appUserCrudService.findEntityById(responsibleId);
 		restaurant.removeResponsible(responsible);
 		restaurantRepository.save(restaurant);
 	}

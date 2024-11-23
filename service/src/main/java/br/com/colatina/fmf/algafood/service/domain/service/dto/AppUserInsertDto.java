@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Setter
 @ToString
 @NoArgsConstructor
-public class UserInsertDto extends UserDto implements Serializable {
+public class AppUserInsertDto extends AppUserDto implements Serializable {
 	@ApiModelProperty(value = "Password of the user", required = true)
 	@NotBlank(message = "user.password.not_blank")
 	@Password(message = "user.password.invalid")

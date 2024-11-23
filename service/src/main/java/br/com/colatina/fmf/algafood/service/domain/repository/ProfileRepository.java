@@ -26,7 +26,7 @@ public interface ProfileRepository extends CustomJpaRepository<Profile, Long> {
 
 	@Query("SELECT new br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto" +
 			"(pro.id, pro.name) " +
-			" FROM User u " +
+			" FROM AppUser u " +
 			" INNER JOIN u.profiles pro " +
 			" WHERE u.id = :userId " +
 			" AND pro.excluded = FALSE ")

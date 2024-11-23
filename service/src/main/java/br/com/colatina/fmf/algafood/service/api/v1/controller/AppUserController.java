@@ -1,13 +1,13 @@
 package br.com.colatina.fmf.algafood.service.api.v1.controller;
 
 import br.com.colatina.fmf.algafood.service.api.utils.ResourceUriUtils;
-import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.UserControllerDocumentation;
-import br.com.colatina.fmf.algafood.service.api.v1.hateoas.UserHateoas;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.AppUserControllerDocumentation;
+import br.com.colatina.fmf.algafood.service.api.v1.hateoas.AppUserHateoas;
 import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
-import br.com.colatina.fmf.algafood.service.domain.service.UserCrudService;
+import br.com.colatina.fmf.algafood.service.domain.service.AppUserCrudService;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserDto;
+import br.com.colatina.fmf.algafood.service.domain.service.dto.AppUserInsertDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PasswordChangeDto;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserDto;
-import br.com.colatina.fmf.algafood.service.domain.service.dto.UserInsertDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
@@ -31,62 +31,62 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserController implements UserControllerDocumentation {
-	private final UserCrudService userCrudService;
-	private final UserHateoas userHateoas;
+public class AppUserController implements AppUserControllerDocumentation {
+	private final AppUserCrudService appUserCrudService;
+	private final AppUserHateoas appUserHateoas;
 
 	@Override
 	@GetMapping()
-	@CheckSecurity.User.List
-	public CollectionModel<UserDto> findAll() {
+	@CheckSecurity.AppUser.List
+	public CollectionModel<AppUserDto> findAll() {
 		log.debug("REST request to find all users");
-		List<UserDto> users = userCrudService.findAll();
-		return userHateoas.mapCollectionModel(users);
+		List<AppUserDto> users = appUserCrudService.findAll();
+		return appUserHateoas.mapCollectionModel(users);
 	}
 
 	@Override
 	@GetMapping("/{id}")
-	@CheckSecurity.User.Read
-	public ResponseEntity<UserDto> findById(@PathVariable Long id) {
+	@CheckSecurity.AppUser.Read
+	public ResponseEntity<AppUserDto> findById(@PathVariable Long id) {
 		log.debug("REST request to find the user with ID: {}", id);
-		UserDto user = userCrudService.findDtoById(id);
-		return new ResponseEntity<>(userHateoas.mapModel(user), HttpStatus.OK);
+		AppUserDto user = appUserCrudService.findDtoById(id);
+		return new ResponseEntity<>(appUserHateoas.mapModel(user), HttpStatus.OK);
 	}
 
 	@Override
 	@PostMapping()
 	@CheckSecurity.Public
-	public ResponseEntity<UserDto> insert(@Valid @RequestBody UserInsertDto dto) {
+	public ResponseEntity<AppUserDto> insert(@Valid @RequestBody AppUserInsertDto dto) {
 		log.debug("REST request to insert a new user: {}", dto);
-		UserDto user = userCrudService.insert(dto);
+		AppUserDto user = appUserCrudService.insert(dto);
 		ResourceUriUtils.addLocationUriInResponseHeader(user.getId());
-		return new ResponseEntity<>(userHateoas.mapModel(user), HttpStatus.CREATED);
+		return new ResponseEntity<>(appUserHateoas.mapModel(user), HttpStatus.CREATED);
 	}
 
 	@Override
 	@PutMapping("/{id}")
-	@CheckSecurity.User.Update
-	public ResponseEntity<UserDto> update(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
+	@CheckSecurity.AppUser.Update
+	public ResponseEntity<AppUserDto> update(@PathVariable Long id, @Valid @RequestBody AppUserDto dto) {
 		log.debug("REST request to update user with id {}: {}", id, dto);
-		UserDto user = userCrudService.update(dto, id);
-		return new ResponseEntity<>(userHateoas.mapModel(user), HttpStatus.OK);
+		AppUserDto user = appUserCrudService.update(dto, id);
+		return new ResponseEntity<>(appUserHateoas.mapModel(user), HttpStatus.OK);
 	}
 
 	@Override
 	@PatchMapping("/{id}/password")
-	@CheckSecurity.User.ChangePassword
+	@CheckSecurity.AppUser.ChangePassword
 	public ResponseEntity<Void> changePassword(@PathVariable Long id, @Valid @RequestBody PasswordChangeDto dto) {
 		log.debug("REST request to change the password of user with id {}: {}", id, dto);
-		userCrudService.changePassword(dto, id);
+		appUserCrudService.changePassword(dto, id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	@DeleteMapping("/{id}")
-	@CheckSecurity.User.Delete
+	@CheckSecurity.AppUser.Delete
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		log.debug("REST request to delete user with id {}", id);
-		userCrudService.delete(id);
+		appUserCrudService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 }

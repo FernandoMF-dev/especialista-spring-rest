@@ -55,7 +55,7 @@ public class RestaurantDto extends RepresentationModel<RestaurantDto> implements
 	private Set<PaymentMethodDto> paymentMethods = new HashSet<>();
 
 	@ApiModelProperty(value = "Set of users responsible for the restaurant")
-	private Set<UserDto> responsible = new HashSet<>();
+	private Set<AppUserDto> responsible = new HashSet<>();
 
 	@ApiModelProperty(value = "Address of the restaurant")
 	private AddressDto address;

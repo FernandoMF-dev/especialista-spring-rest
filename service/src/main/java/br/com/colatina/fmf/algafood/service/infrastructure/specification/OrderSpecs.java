@@ -1,9 +1,9 @@
 package br.com.colatina.fmf.algafood.service.infrastructure.specification;
 
+import br.com.colatina.fmf.algafood.service.domain.model.AppUser;
 import br.com.colatina.fmf.algafood.service.domain.model.Order;
 import br.com.colatina.fmf.algafood.service.domain.model.Order_;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
-import br.com.colatina.fmf.algafood.service.domain.model.User;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
@@ -51,7 +51,7 @@ public class OrderSpecs extends BaseSpecs<Order> {
 			fetch(root, query, Order_.customer);
 
 			if (Objects.nonNull(client)) {
-				Join<Order, User> orderUserJoin = root.join(Order_.customer);
+				Join<Order, AppUser> orderUserJoin = root.join(Order_.customer);
 				return criteriaBuilder.equal(orderUserJoin.get("id"), client);
 			}
 

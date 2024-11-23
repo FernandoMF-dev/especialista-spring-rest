@@ -7,7 +7,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {CuisineMapper.class, PaymentMethodMapper.class, AddressMapper.class, ProductMapper.class, UserMapper.class})
+@Mapper(componentModel = "spring", uses = {CuisineMapper.class, PaymentMethodMapper.class, AddressMapper.class, ProductMapper.class, AppUserMapper.class})
 public interface RestaurantMapper extends EntityMapper<RestaurantDto, Restaurant> {
 
 	@Mapping(source = "cuisine.id", target = "cuisineId")
