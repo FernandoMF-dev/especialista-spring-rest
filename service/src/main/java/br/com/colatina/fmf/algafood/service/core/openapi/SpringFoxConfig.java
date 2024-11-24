@@ -44,6 +44,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.ServletWebRequest;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -52,10 +53,16 @@ import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ScalarType;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.GrantType;
 import springfox.documentation.service.ParameterType;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.Response;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -84,6 +91,7 @@ public class SpringFoxConfig {
 		setRepresentationModelsConfigV1(docket);
 		setApiInfoV1(docket);
 		setControllerTagsV1(docket);
+		setSecurityInfo(docket);
 
 		return docket;
 	}
@@ -162,6 +170,44 @@ public class SpringFoxConfig {
 				new Tag(SpringFoxControllerTags.STATES, "Operations related to the register of addresses states"),
 				new Tag(SpringFoxControllerTags.STATISTICS, "Operations related to the generation of statistics and reports"),
 				new Tag(SpringFoxControllerTags.USERS, "Operations related to the register and management of users accounts")
+		);
+	}
+
+	private void setSecurityInfo(Docket docket) {
+		String securitySchemeName = "Algafood";
+
+		SecurityScheme securityScheme = new OAuthBuilder()
+				.name(securitySchemeName)
+				.grantTypes(grantTypes())
+				.scopes(scopes())
+				.build();
+
+		docket.securitySchemes(List.of(securityScheme));
+
+		var securityReference = SecurityReference.builder()
+				.reference(securitySchemeName)
+				.scopes(scopes().toArray(new AuthorizationScope[0]))
+				.build();
+
+		var securityContext = SecurityContext.builder()
+				.securityReferences(List.of(securityReference))
+				.forPaths(PathSelectors.any())
+				.build();
+
+		docket.securityContexts(List.of(securityContext));
+	}
+
+	private List<GrantType> grantTypes() {
+		// Na verdade a API suporta vários tipos de grant types.
+		// Mas aqui estamos configurando quais grant types queremos disponibilizar para os clientes utilizando a documentação.
+		return List.of(new ResourceOwnerPasswordCredentialsGrant("/oauth/token"));
+	}
+
+	private List<AuthorizationScope> scopes() {
+		return List.of(
+				new AuthorizationScope("READ", "Read access"),
+				new AuthorizationScope("WRITE", "Create and update access"),
+				new AuthorizationScope("DELETE", "Delete access")
 		);
 	}
 	// </editor-fold>
