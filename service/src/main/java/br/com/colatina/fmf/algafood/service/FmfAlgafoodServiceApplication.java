@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service;
 
+import br.com.colatina.fmf.algafood.service.core.io.Base64ProtocolResolver;
 import br.com.colatina.fmf.algafood.service.infrastructure.repository.CustomJpaRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,10 @@ public class FmfAlgafoodServiceApplication {
 
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		SpringApplication.run(FmfAlgafoodServiceApplication.class, args);
+
+		var app = new SpringApplication(FmfAlgafoodServiceApplication.class);
+		app.addListeners(new Base64ProtocolResolver());
+		app.run(args);
 	}
 
 	@PostConstruct
