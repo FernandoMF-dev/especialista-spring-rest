@@ -1,5 +1,9 @@
 package br.com.colatina.fmf.algafood.service.core.security.authorization_server;
 
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +24,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.sql.DataSource;
+import java.security.KeyPair;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,13 +71,26 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	}
 
 	@Bean
-	public JwtAccessTokenConverter jwtAccessTokenConverter() {
-		var keyStoreKeyFactory = new KeyStoreKeyFactory(jwtKeystoreProperties.getJksLocation(), jwtKeystoreProperties.getJksPassword().toCharArray());
-		var keyPair = keyStoreKeyFactory.getKeyPair(jwtKeystoreProperties.getKeyPairAlias(), jwtKeystoreProperties.getKeyPairPassword().toCharArray());
+	public JWKSet jwkSet() {
+		RSAKey.Builder builder = new RSAKey.Builder((RSAPublicKey) keyPair().getPublic())
+				.keyUse(KeyUse.SIGNATURE)
+				.algorithm(JWSAlgorithm.RS256)
+				.keyID("fmf-algafood-key-id");
 
+		return new JWKSet(builder.build());
+	}
+
+	@Bean
+	public JwtAccessTokenConverter jwtAccessTokenConverter() {
+		var keyPair = keyPair();
 		var jwtAccessTokenConverter = new JwtAccessTokenConverter();
 		jwtAccessTokenConverter.setKeyPair(keyPair);
 		return jwtAccessTokenConverter;
+	}
+
+	private KeyPair keyPair() {
+		var keyStoreKeyFactory = new KeyStoreKeyFactory(jwtKeystoreProperties.getJksLocation(), jwtKeystoreProperties.getJksPassword().toCharArray());
+		return keyStoreKeyFactory.getKeyPair(jwtKeystoreProperties.getKeyPairAlias(), jwtKeystoreProperties.getKeyPairPassword().toCharArray());
 	}
 
 	private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
