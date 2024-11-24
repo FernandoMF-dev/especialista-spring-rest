@@ -9,4 +9,9 @@ public class SecurityController {
 	public String login() {
 		return "login.page";
 	}
+
+	@GetMapping("/oauth/confirm_access")
+	public String approval() {
+		return "oauth2_approval.page";
+	}
 }
