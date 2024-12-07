@@ -1,6 +1,7 @@
 services:
   fmf-algafood-api:
     image: fmf-algafood-api:latest
+    command: [ "/wait-for-it.sh", "database-postgresql:5432", "--timeout=30", "--", "java", "-jar", "api.jar" ]
     environment:
       - DB_HOST=database-postgresql
     ports:
