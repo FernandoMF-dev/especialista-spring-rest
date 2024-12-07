@@ -1,0 +1,7 @@
+services:
+  fmf-algafood-api:
+    image: fmf-algafood-api:latest
+    environment:
+      - DB_HOST=database-postgresql
+    ports:
+      - "8080:8080"

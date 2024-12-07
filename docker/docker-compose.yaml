@@ -1,6 +1,20 @@
+networks:
+  fmf-algafood-network:
+    driver: bridge
+
 services:
   database-postgresql:
     extends:
       file: containers/postgresql.yaml
       service: database-postgresql
-    container_name: database-postgresql
+    networks:
+      - fmf-algafood-network
+
+  fmf-algafood-api:
+    extends:
+      file: containers/service-api.yaml
+      service: fmf-algafood-api
+    networks:
+      - fmf-algafood-network
+    depends_on:
+      - database-postgresql
