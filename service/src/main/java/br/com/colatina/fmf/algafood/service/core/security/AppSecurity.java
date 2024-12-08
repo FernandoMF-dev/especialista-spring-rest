@@ -58,8 +58,3 @@ public class AppSecurity {
 		return hasAuthority("SCOPE_WRITE") && ((hasAuthority("MANAGE_ORDER") || hasAuthority("ADMINISTRATOR")) || managesOrderRestaurant(orderUuid));
 	}
 }
-
-//@PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
-//		" (hasAuthority('MANAGE_ORDER') " +
-//		" or hasAuthority('ADMINISTRATOR') " +
-//		" or @appSecurity.managesOrderRestaurant(#orderUuid))")

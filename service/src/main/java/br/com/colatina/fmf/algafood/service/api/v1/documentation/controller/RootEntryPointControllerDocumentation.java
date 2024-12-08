@@ -6,6 +6,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
+import java.net.UnknownHostException;
+
 @Api(tags = SpringFoxControllerTags.ROOT)
 public interface RootEntryPointControllerDocumentation {
 	@ApiOperation("Find root entry point endpoints")
@@ -23,4 +25,8 @@ public interface RootEntryPointControllerDocumentation {
 	@ApiOperation("Find root entry point endpoints of the API (version 2)")
 	@ApiResponse(responseCode = "200", description = "Root entry point endpoints of the API  (version 2) retrieved")
 	HypermediaModel rootApiV2();
+
+	@ApiOperation("Check host address and name")
+	@ApiResponse(responseCode = "200", description = "The host address and name retrieved")
+	String checkHost() throws UnknownHostException;
 }

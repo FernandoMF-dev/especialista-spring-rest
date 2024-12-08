@@ -1,0 +1,6 @@
+services:
+  fmf-algafood-proxy:
+    build: ../../nginx
+    image: fmf-algafood-proxy
+    ports:
+      - "80:80"

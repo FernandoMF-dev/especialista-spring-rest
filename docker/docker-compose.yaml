@@ -18,3 +18,12 @@ services:
       - fmf-algafood-network
     depends_on:
       - database-postgresql
+
+  fmf-algafood-proxy:
+    extends:
+      file: containers/proxy.yaml
+      service: fmf-algafood-proxy
+    networks:
+      - fmf-algafood-network
+    depends_on:
+      - fmf-algafood-api
