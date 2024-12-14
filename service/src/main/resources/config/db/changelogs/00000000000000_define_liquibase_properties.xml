@@ -14,4 +14,8 @@
 	<property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
 	<property name="uuid_function" value="NEWID()" dbms="mssql"/>
 	<property name="uuid_function" value="sys_guid()" dbms="oracle"/>
+
+	<!-- blob_type === Column type to persist BLOB value -->
+	<property name="blob_type" value="bytea" dbms="postgresql"/>
+	<property name="blob_type" value="blob" dbms="oracle"/>
 </databaseChangeLog>

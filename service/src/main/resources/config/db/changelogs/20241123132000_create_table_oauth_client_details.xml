@@ -6,7 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
 	<changeSet id="20241123132000-1" author="Fernando Martins Ferreira">
-		<createTable tableName="oauth_client_details">
+		<createTable tableName="oauth_client_details" remarks="Table to store the OAuth2 client details">
 			<column name="client_id" type="VARCHAR(256)">
 				<constraints nullable="false"/>
 			</column>

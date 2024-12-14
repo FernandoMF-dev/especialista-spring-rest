@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+	<changeSet id="20241214154000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="oauth_code" remarks="Table used to store authorization codes issued by the authorization server">
+			<column name="code" type="VARCHAR(256)"/>
+
+			<column name="authentication" type="${blob_type}"/>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="oauth_code"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
