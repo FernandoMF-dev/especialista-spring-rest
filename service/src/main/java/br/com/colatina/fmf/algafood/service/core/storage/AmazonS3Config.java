@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 public class AmazonS3Config {
 	@Bean
 	public AmazonS3 amazonS3(StorageProperties storageProperties) {
+		if (storageProperties.getType() != StorageProperties.StorageType.AWS_S3) {
+			return null;
+		}
 		var accessKey = storageProperties.getAwsS3().getAccessKey();
 		var credentials = new BasicAWSCredentials(accessKey.getId(), accessKey.getSecret());
 

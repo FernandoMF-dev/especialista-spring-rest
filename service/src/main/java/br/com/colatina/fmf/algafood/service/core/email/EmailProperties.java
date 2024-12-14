@@ -14,11 +14,10 @@ import javax.validation.constraints.NotNull;
 @Configuration
 @ConfigurationProperties(prefix = "algafood.email")
 public class EmailProperties {
-	@NotNull
 	private String sender;
-	@NotNull
 	private String encoding;
 	private Sandbox sandbox = new Sandbox();
+	@NotNull
 	private EmailType type = EmailType.FAKE;
 
 	public enum EmailType {
