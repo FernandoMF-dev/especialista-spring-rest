@@ -4,3 +4,5 @@ services:
     command: [ "/wait-for-it.sh", "database-postgresql:5432", "--timeout=30", "--", "java", "-jar", "api.jar" ]
     environment:
       - DB_HOST=database-postgresql
+      - SPRING_SESSION_STORE_TYPE=redis
+      - SPRING_REDIS_HOST=fmf-algafood-redis
