@@ -1,0 +1,3 @@
+services:
+  fmf-algafood-redis:
+    image: redis:6.2.16-alpine

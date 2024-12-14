@@ -27,3 +27,10 @@ services:
       - fmf-algafood-network
     depends_on:
       - fmf-algafood-api
+
+  fmf-algafood-redis:
+    extends:
+      file: containers/redis.yaml
+      service: fmf-algafood-redis
+    networks:
+      - fmf-algafood-network
