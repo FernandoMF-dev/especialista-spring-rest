@@ -172,3 +172,11 @@ INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope,
 								  refresh_token_validity, autoapprove)
 VALUES ('fmf-algafood-faturamento', null, '$2a$12$nx6wZbTXA4hxPxg/ImbfRO2Eq2067Jt6SW8fFnpd1PgZJ8bfXmmpe', 'READ', -- senha: faturamento123
 		'client_credentials', null, 'READ_ORDER,EMIT_SALES_REPORT', null, null, null);
+
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
+								  web_server_redirect_uri, authorities, access_token_validity,
+								  refresh_token_validity, autoapprove)
+VALUES ('fmf-algafood-docs', null, '$2a$12$md25hBY7pYAJAGfCsDl5IuiQtSs6YOja.3SYlhyiHjT1ta85EdQb2',
+		'READ,WRITE,DELETE', -- senha: documentacao123
+		'authorization_code', 'http://localhost:8080,http://localhost:8080/swagger-ui/oauth2-redirect.html', null,
+		60 * 60 * 6, 60 * 24 * 60 * 60, null);
