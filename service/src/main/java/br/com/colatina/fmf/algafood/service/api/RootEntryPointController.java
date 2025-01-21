@@ -37,8 +37,6 @@ public class RootEntryPointController implements RootEntryPointControllerDocumen
 		HypermediaModel root = new HypermediaModel();
 
 		root.add(linkTo(methodOn(RootEntryPointController.class).rootApi()).withRel("api"));
-		root.add(linkTo(RootEntryPointController.class).slash("swagger-ui/index.html#").withRel("documentation_swagger"));
-		root.add(linkTo(RootEntryPointController.class).slash("v3/api-docs").withRel("documentation_openapi"));
 
 		return root;
 	}
