@@ -20,7 +20,7 @@ Esta API é desenvolvida em Java com Spring Boot seguindo os princípios do REST
 - Spring Framework
 	- Spring Boot v2.5.3
 	- Spring Data JPA
-- Swagger UI / OpenAPI 3
+- Swagger UI / SpringDoc
 - PostgreSQL
 - Docker
 - Amazon AWS
