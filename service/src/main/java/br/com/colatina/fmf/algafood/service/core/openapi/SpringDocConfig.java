@@ -80,6 +80,7 @@ public class SpringDocConfig {
 	private List<Tag> tags() {
 		return List.of(
 				new Tag().name(SpringDocControllerTags.CITIES).description("Operations related to the register of addresses cities"),
+				new Tag().name(SpringDocControllerTags.PROFILES).description("Operations related to the register of users profiles"),
 				new Tag().name(SpringDocControllerTags.ROOT).description("Operations related to the root entry point of the API")
 		);
 	}

@@ -21,13 +21,15 @@ public interface CityControllerDocumentation {
 	@Operation(summary = "Find a city by its ID")
 	ResponseEntity<CityDto> findById(@Parameter(description = "ID of a city", example = "1", required = true) Long id);
 
-	@Operation(summary = "Insert a new city", responses = {@ApiResponse(responseCode = "201")})
+	@Operation(summary = "Insert a new city")
+	@ApiResponse(responseCode = "201")
 	ResponseEntity<CityDto> insert(@RequestBody(description = "City data to create", required = true) CityDto dto);
 
 	@Operation(summary = "Update a city by its ID")
 	ResponseEntity<CityDto> update(@Parameter(description = "ID of a city to update", example = "1", required = true) Long id,
 								   @RequestBody(description = "City data to update", required = true) CityDto dto);
 
-	@Operation(summary = "Delete a city by its ID", responses = {@ApiResponse(responseCode = "204")})
+	@Operation(summary = "Delete a city by its ID")
+	@ApiResponse(responseCode = "204")
 	ResponseEntity<Void> delete(@Parameter(description = "ID of a city to delete", example = "1", required = true) Long id);
 }
