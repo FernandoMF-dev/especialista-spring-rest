@@ -9,8 +9,11 @@ import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 @SecurityScheme(name = SpringDocUtils.SECURITY_SCHEME_NAME, type = SecuritySchemeType.OAUTH2,
@@ -28,7 +31,8 @@ public class SpringDocConfig {
 	public OpenAPI openAPI() {
 		return new OpenAPI()
 				.info(apiInfo())
-				.externalDocs(externalDocs());
+				.externalDocs(externalDocs())
+				.tags(tags());
 	}
 
 	private Info apiInfo() {
@@ -49,5 +53,11 @@ public class SpringDocConfig {
 		return new ExternalDocumentation()
 				.description("Algafood Docs")
 				.url("https://algafood-fmf.com/docs");
+	}
+
+	private List<Tag> tags() {
+		return List.of(
+				new Tag().name(SpringDocControllerTags.CITIES).description("Operations related to the register of addresses cities")
+		);
 	}
 }
