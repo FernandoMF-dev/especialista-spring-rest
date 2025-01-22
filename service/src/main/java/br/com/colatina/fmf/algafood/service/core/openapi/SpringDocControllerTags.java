@@ -5,4 +5,5 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class SpringDocControllerTags {
 	public static final String CITIES = "Cities";
+	public static final String ROOT = "Root";
 }
