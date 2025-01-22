@@ -9,9 +9,13 @@ import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.tags.Tag;
+import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -33,6 +37,20 @@ public class SpringDocConfig {
 				.info(apiInfo())
 				.externalDocs(externalDocs())
 				.tags(tags());
+	}
+
+	@Bean
+	public OpenApiCustomiser openApiCustomiser() {
+		return openApi -> openApi.getPaths()
+				.values()
+				.stream()
+				.flatMap(pathItem -> pathItem.readOperations().stream())
+				.forEach(operation -> {
+					ApiResponses responses = operation.getResponses();
+					addGlobalApiResponse(HttpStatus.NOT_FOUND, responses);
+					addGlobalApiResponse(HttpStatus.NOT_ACCEPTABLE, responses);
+					addGlobalApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, responses);
+				});
 	}
 
 	private Info apiInfo() {
@@ -59,5 +77,11 @@ public class SpringDocConfig {
 		return List.of(
 				new Tag().name(SpringDocControllerTags.CITIES).description("Operations related to the register of addresses cities")
 		);
+	}
+
+	private void addGlobalApiResponse(HttpStatus httpStatus, ApiResponses responses) {
+		ApiResponse internalServerError = new ApiResponse().description(httpStatus.getReasonPhrase());
+		String status = String.valueOf(httpStatus.value());
+		responses.addApiResponse(status, internalServerError);
 	}
 }
