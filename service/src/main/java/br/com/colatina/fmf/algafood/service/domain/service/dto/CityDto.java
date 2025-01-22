@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
 import br.com.colatina.fmf.algafood.service.core.validation.ValidationGroups;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import javax.validation.constraints.Size;
 import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
 
+@Schema(name = "Model <City>", description = "Representation model for city")
 @Relation(collectionRelation = "cities")
 @Getter
 @Setter
@@ -23,17 +25,21 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 public class CityDto extends RepresentationModel<CityDto> implements Serializable {
+	@Schema(description = "ID of the city", example = "1")
 	@NotNull(message = "city.id.not_null", groups = ValidationGroups.RequiredCity.class)
 	@EqualsAndHashCode.Include
 	private Long id;
 
+	@Schema(description = "Acronym of the city", example = "VIX")
 	@NotNull(message = "city.acronym.not_null")
 	@Size(max = 5, message = "city.acronym.max_size")
 	private String acronym;
 
+	@Schema(description = "Full name of the city", example = "Vitória")
 	@NotBlank(message = "city.name.not_blank")
 	private String name;
 
+	@Schema(description = "State on which the city is located")
 	@NotNull(message = "city.state.not_null")
 	@ConvertGroup(to = ValidationGroups.RequiredState.class)
 	@Valid
