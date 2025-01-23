@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import org.springframework.hateoas.server.core.Relation;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
+@Schema(name = "Model <PaymentMethod>", description = "Representation model for payment method")
 @Relation(collectionRelation = "payment_methods")
 @Getter
 @Setter
@@ -20,9 +22,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentMethodDto extends RepresentationModel<PaymentMethodDto> implements Serializable {
+	@Schema(description = "ID of the payment method", example = "1")
 	@EqualsAndHashCode.Include
 	private Long id;
 
+	@Schema(description = "Description of the payment method", example = "Credit Card")
 	@NotBlank(message = "payment_method.description.not_blank")
 	private String description;
 }

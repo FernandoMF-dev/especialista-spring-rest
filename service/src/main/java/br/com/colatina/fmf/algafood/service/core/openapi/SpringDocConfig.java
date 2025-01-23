@@ -81,6 +81,7 @@ public class SpringDocConfig {
 		return List.of(
 				new Tag().name(SpringDocControllerTags.CITIES).description("Operations related to the register of addresses cities"),
 				new Tag().name(SpringDocControllerTags.CUISINES).description("Operations related to the register of cuisines"),
+				new Tag().name(SpringDocControllerTags.PAYMENT_METHODS).description("Operations related to the register of payment methods"),
 				new Tag().name(SpringDocControllerTags.PROFILES).description("Operations related to the register of users profiles"),
 				new Tag().name(SpringDocControllerTags.ROOT).description("Operations related to the root entry point of the API")
 		);
