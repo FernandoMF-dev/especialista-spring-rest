@@ -83,6 +83,7 @@ public class SpringDocConfig {
 				new Tag().name(SpringDocControllerTags.CUISINES).description("Operations related to the register of cuisines"),
 				new Tag().name(SpringDocControllerTags.ORDERS).description("Operations related to the emission and management of customer orders"),
 				new Tag().name(SpringDocControllerTags.PAYMENT_METHODS).description("Operations related to the register of payment methods"),
+				new Tag().name(SpringDocControllerTags.PRODUCTS).description("Operations related to the register and management of the products offered by restaurants"),
 				new Tag().name(SpringDocControllerTags.PROFILES).description("Operations related to the register of users profiles"),
 				new Tag().name(SpringDocControllerTags.ROOT).description("Operations related to the root entry point of the API"),
 				new Tag().name(SpringDocControllerTags.STATES).description("Operations related to the register of addresses states")
