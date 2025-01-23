@@ -87,10 +87,9 @@ public class Restaurant {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof Restaurant)) {
+		if (!(o instanceof Restaurant that)) {
 			return false;
 		}
-		Restaurant that = (Restaurant) o;
 		return id.equals(that.id);
 	}
 

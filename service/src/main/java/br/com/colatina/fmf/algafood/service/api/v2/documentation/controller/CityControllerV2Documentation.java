@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface CityControllerV2Documentation {
-    CollectionModel<CityModelV2> findAll();
+	CollectionModel<CityModelV2> findAll();
 
-    ResponseEntity<CityModelV2> findById(Long id);
+	ResponseEntity<CityModelV2> findById(Long id);
 
-    ResponseEntity<CityModelV2> insert(CityInputV2 input);
+	ResponseEntity<CityModelV2> insert(CityInputV2 input);
 
-    ResponseEntity<CityModelV2> update(Long id, CityInputV2 input);
+	ResponseEntity<CityModelV2> update(Long id, CityInputV2 input);
 
-    ResponseEntity<Void> delete(Long id);
+	ResponseEntity<Void> delete(Long id);
 }

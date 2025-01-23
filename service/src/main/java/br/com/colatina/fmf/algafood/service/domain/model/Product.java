@@ -50,10 +50,9 @@ public class Product {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof Product)) {
+		if (!(o instanceof Product that)) {
 			return false;
 		}
-		Product that = (Product) o;
 		return id.equals(that.id);
 	}
 

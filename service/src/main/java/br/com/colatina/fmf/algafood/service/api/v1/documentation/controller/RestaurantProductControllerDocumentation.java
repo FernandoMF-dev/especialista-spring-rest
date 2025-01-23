@@ -8,13 +8,13 @@ import org.springframework.http.ResponseEntity;
 
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface RestaurantProductControllerDocumentation {
-    CollectionModel<ProductDto> findAll(Long restaurantId);
+	CollectionModel<ProductDto> findAll(Long restaurantId);
 
-    ResponseEntity<ProductDto> findById(Long restaurantId, Long productId);
+	ResponseEntity<ProductDto> findById(Long restaurantId, Long productId);
 
-    ResponseEntity<ProductDto> insert(Long restaurantId, ProductDto dto);
+	ResponseEntity<ProductDto> insert(Long restaurantId, ProductDto dto);
 
-    ResponseEntity<ProductDto> update(Long restaurantId, Long productId, ProductDto dto);
+	ResponseEntity<ProductDto> update(Long restaurantId, Long productId, ProductDto dto);
 
-    ResponseEntity<Void> delete(Long restaurantId, Long productId);
+	ResponseEntity<Void> delete(Long restaurantId, Long productId);
 }

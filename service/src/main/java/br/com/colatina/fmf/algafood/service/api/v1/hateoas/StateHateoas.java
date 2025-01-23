@@ -11,18 +11,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class StateHateoas extends EntityHateoas<StateDto> {
-    public StateHateoas() {
-        super(StateDto.class);
-    }
+	public StateHateoas() {
+		super(StateDto.class);
+	}
 
-    @Override
-    protected void addModelHypermediaLinks(StateDto model) {
-        model.add(linkTo(methodOn(StateController.class).findById(model.getId())).withSelfRel());
-        model.add(linkTo(methodOn(StateController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
-    }
+	@Override
+	protected void addModelHypermediaLinks(StateDto model) {
+		model.add(linkTo(methodOn(StateController.class).findById(model.getId())).withSelfRel());
+		model.add(linkTo(methodOn(StateController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+	}
 
-    @Override
-    protected void addCollectionHypermediaLinks(CollectionModel<StateDto> collection) {
-        collection.add(linkTo(methodOn(StateController.class).findAll()).withSelfRel());
-    }
+	@Override
+	protected void addCollectionHypermediaLinks(CollectionModel<StateDto> collection) {
+		collection.add(linkTo(methodOn(StateController.class).findAll()).withSelfRel());
+	}
 }

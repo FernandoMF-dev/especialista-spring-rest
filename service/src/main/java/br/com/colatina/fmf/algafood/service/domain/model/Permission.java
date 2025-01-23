@@ -30,10 +30,9 @@ public class Permission implements Serializable {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof Permission)) {
+		if (!(o instanceof Permission that)) {
 			return false;
 		}
-		Permission that = (Permission) o;
 		return id.equals(that.id);
 	}
 

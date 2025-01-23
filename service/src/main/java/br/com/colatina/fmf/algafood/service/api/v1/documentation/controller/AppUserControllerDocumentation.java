@@ -10,15 +10,15 @@ import org.springframework.http.ResponseEntity;
 
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface AppUserControllerDocumentation {
-    CollectionModel<AppUserDto> findAll();
+	CollectionModel<AppUserDto> findAll();
 
-    ResponseEntity<AppUserDto> findById(Long id);
+	ResponseEntity<AppUserDto> findById(Long id);
 
-    ResponseEntity<AppUserDto> insert(AppUserInsertDto dto);
+	ResponseEntity<AppUserDto> insert(AppUserInsertDto dto);
 
-    ResponseEntity<AppUserDto> update(Long id, AppUserDto dto);
+	ResponseEntity<AppUserDto> update(Long id, AppUserDto dto);
 
-    ResponseEntity<Void> changePassword(Long id, PasswordChangeDto dto);
+	ResponseEntity<Void> changePassword(Long id, PasswordChangeDto dto);
 
-    ResponseEntity<Void> delete(Long id);
+	ResponseEntity<Void> delete(Long id);
 }

@@ -35,10 +35,9 @@ public class Cuisine implements Serializable {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof Cuisine)) {
+		if (!(o instanceof Cuisine cuisine)) {
 			return false;
 		}
-		Cuisine cuisine = (Cuisine) o;
 		return getId().equals(cuisine.getId());
 	}
 

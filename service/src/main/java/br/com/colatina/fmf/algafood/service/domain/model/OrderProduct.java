@@ -51,10 +51,9 @@ public class OrderProduct {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof OrderProduct)) {
+		if (!(o instanceof OrderProduct that)) {
 			return false;
 		}
-		OrderProduct that = (OrderProduct) o;
 		return id.equals(that.id);
 	}
 

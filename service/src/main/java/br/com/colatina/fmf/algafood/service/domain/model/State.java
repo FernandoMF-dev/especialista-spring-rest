@@ -38,10 +38,9 @@ public class State implements Serializable {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof State)) {
+		if (!(o instanceof State state)) {
 			return false;
 		}
-		State state = (State) o;
 		return id.equals(state.id);
 	}
 

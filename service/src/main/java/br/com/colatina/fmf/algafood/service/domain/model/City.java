@@ -45,10 +45,9 @@ public class City {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof City)) {
+		if (!(o instanceof City city)) {
 			return false;
 		}
-		City city = (City) o;
 		return id.equals(city.id);
 	}
 

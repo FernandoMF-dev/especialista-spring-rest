@@ -10,8 +10,7 @@ import java.util.HashMap;
 public class JwtCustomClaimsTokenEnhancer implements TokenEnhancer {
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-		if (authentication.getPrincipal() instanceof AuthUser) {
-			var authUser = (AuthUser) authentication.getPrincipal();
+		if (authentication.getPrincipal() instanceof AuthUser authUser) {
 			var info = new HashMap<String, Object>();
 
 			info.put("user_id", authUser.getUserId());

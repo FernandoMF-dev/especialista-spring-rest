@@ -9,17 +9,17 @@ import org.springframework.http.ResponseEntity;
 
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface CuisineControllerDocumentation {
-    CollectionModel<CuisineDto> findAll();
+	CollectionModel<CuisineDto> findAll();
 
-    ResponseEntity<CuisinesXmlWrapper> findAllXml();
+	ResponseEntity<CuisinesXmlWrapper> findAllXml();
 
-    ResponseEntity<CuisineDto> findById(Long id);
+	ResponseEntity<CuisineDto> findById(Long id);
 
-    ResponseEntity<CuisineDto> findFirst();
+	ResponseEntity<CuisineDto> findFirst();
 
-    ResponseEntity<CuisineDto> insert(CuisineDto dto);
+	ResponseEntity<CuisineDto> insert(CuisineDto dto);
 
-    ResponseEntity<CuisineDto> update(Long id, CuisineDto dto);
+	ResponseEntity<CuisineDto> update(Long id, CuisineDto dto);
 
-    ResponseEntity<Void> delete(Long id);
+	ResponseEntity<Void> delete(Long id);
 }

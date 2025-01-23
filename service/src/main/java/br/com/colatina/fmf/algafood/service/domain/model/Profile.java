@@ -46,10 +46,9 @@ public class Profile {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof Profile)) {
+		if (!(o instanceof Profile that)) {
 			return false;
 		}
-		Profile that = (Profile) o;
 		return id.equals(that.id);
 	}
 

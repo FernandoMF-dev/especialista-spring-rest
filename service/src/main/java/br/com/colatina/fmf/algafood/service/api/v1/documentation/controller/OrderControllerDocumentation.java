@@ -13,11 +13,11 @@ import org.springframework.http.ResponseEntity;
 
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface OrderControllerDocumentation {
-    CollectionModel<OrderListDto> findAll();
+	CollectionModel<OrderListDto> findAll();
 
-    ResponseEntity<OrderDto> findByUuid(String uuid);
+	ResponseEntity<OrderDto> findByUuid(String uuid);
 
-    PagedModel<OrderListDto> page(OrderPageFilter filter, Pageable pageable);
+	PagedModel<OrderListDto> page(OrderPageFilter filter, Pageable pageable);
 
-    ResponseEntity<OrderDto> insert(OrderInsertDto dto);
+	ResponseEntity<OrderDto> insert(OrderInsertDto dto);
 }

@@ -47,10 +47,9 @@ public class PaymentMethod implements Serializable {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof PaymentMethod)) {
+		if (!(o instanceof PaymentMethod that)) {
 			return false;
 		}
-		PaymentMethod that = (PaymentMethod) o;
 		return id.equals(that.id);
 	}
 
