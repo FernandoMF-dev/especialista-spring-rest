@@ -1,10 +1,13 @@
 package br.com.colatina.fmf.algafood.service.api.v1.documentation.controller;
 
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocUtils;
+import br.com.colatina.fmf.algafood.service.core.openapi.annotations.PageableParameterDocs;
+import br.com.colatina.fmf.algafood.service.core.openapi.annotations.RestaurantPageFilterParameterDocs;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -15,12 +18,13 @@ import java.util.List;
 
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface RestaurantControllerDocumentation {
-
 	CollectionModel<RestaurantListDto> findAll();
 
 	CollectionModel<RestaurantListDto> filterByFreightFee(String name, Double min, Double max);
 
-	PagedModel<RestaurantListDto> page(RestaurantPageFilter filter, Pageable pageable);
+	@PageableParameterDocs
+	@RestaurantPageFilterParameterDocs
+	PagedModel<RestaurantListDto> page(@Parameter(hidden = true) RestaurantPageFilter filter, @Parameter(hidden = true) Pageable pageable);
 
 	ResponseEntity<RestaurantDto> findFirst();
 
