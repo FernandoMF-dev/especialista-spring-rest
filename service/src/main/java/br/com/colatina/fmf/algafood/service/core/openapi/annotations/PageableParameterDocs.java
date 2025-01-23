@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Parameter(in = ParameterIn.QUERY, name = "page", description = "PAGE: Page number (0..N)", schema = @Schema(type = "integer", defaultValue = "0"))
 @Parameter(in = ParameterIn.QUERY, name = "size", description = "PAGE: Number of elements per page", schema = @Schema(type = "integer", defaultValue = "10"))
-@Parameter(in = ParameterIn.QUERY, name = "sort", description = "PAGE: Sorting criteria: property(asc|desc)", schema = @Schema(type = "string", defaultValue = "name,DESC"))
+@Parameter(in = ParameterIn.QUERY, name = "sort", description = "PAGE: Sorting criteria: property(asc|desc)", example = "name,DESC", schema = @Schema(type = "string"))
 public @interface PageableParameterDocs {
 }
