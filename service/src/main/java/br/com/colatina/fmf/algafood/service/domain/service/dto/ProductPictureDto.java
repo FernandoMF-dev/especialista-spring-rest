@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.http.MediaType;
 
 import java.io.Serializable;
 
@@ -28,7 +29,7 @@ public class ProductPictureDto extends RepresentationModel<ProductPictureDto> im
 	@Schema(description = "Description of the product picture", example = "A picture of the product")
 	private String description;
 
-	@Schema(description = "Content type of the product picture", example = "image/jpeg")
+	@Schema(description = "Content type of the product picture", example = MediaType.IMAGE_JPEG_VALUE)
 	private String contentType;
 
 	@Schema(description = "Size of the product picture in bytes", example = "204800")

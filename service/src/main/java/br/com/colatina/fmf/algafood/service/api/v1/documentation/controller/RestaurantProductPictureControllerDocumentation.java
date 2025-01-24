@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
@@ -23,9 +24,9 @@ import java.io.IOException;
 public interface RestaurantProductPictureControllerDocumentation {
 	@Operation(summary = "Find the picture of a product from a restaurant")
 	@ApiResponse(responseCode = "200", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = ProductPictureDto.class)),
-			@Content(mediaType = "image/jpeg", schema = @Schema(type = "string", format = "binary")),
-			@Content(mediaType = "image/png", schema = @Schema(type = "string", format = "binary"))
+			@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductPictureDto.class)),
+			@Content(mediaType = MediaType.IMAGE_JPEG_VALUE, schema = @Schema(type = "string", format = "binary")),
+			@Content(mediaType = MediaType.IMAGE_PNG_VALUE, schema = @Schema(type = "string", format = "binary"))
 	})
 	@ApiResponse(responseCode = "302", description = "Picture saved in external storage (only when returning a binary)")
 	ResponseEntity<ProductPictureDto> findPicture(@Parameter(description = "ID of the restaurant", example = "1", required = true) Long restaurantId,
