@@ -15,4 +15,6 @@ public class SpringDocControllerTags {
 	public static final String STATES = "States";
 	public static final String STATISTICS = "Statistics";
 	public static final String USERS = "Users";
+
+	public static final String CITIES_V2 = "Cities (v2)";
 }
