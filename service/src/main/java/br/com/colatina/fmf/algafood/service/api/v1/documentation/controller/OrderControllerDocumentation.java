@@ -31,7 +31,8 @@ public interface OrderControllerDocumentation {
 	@Operation(summary = "Find a paginated list of orders with filters")
 	@PageableParameterDocs
 	@OrderPageFilterParameterDocs
-	PagedModel<OrderListDto> page(@Parameter(hidden = true) OrderPageFilter filter, @Parameter(hidden = true) Pageable pageable);
+	PagedModel<OrderListDto> page(@Parameter(hidden = true) OrderPageFilter filter,
+								  @Parameter(hidden = true) Pageable pageable);
 
 	@Operation(summary = "Emits a new order")
 	@ApiResponse(responseCode = "201")
