@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import org.springframework.hateoas.server.core.Relation;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
+@Schema(name = "Model <Profile>", description = "Representation model for profile")
 @Relation(collectionRelation = "profiles")
 @Getter
 @Setter
@@ -20,9 +22,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileDto extends RepresentationModel<ProfileDto> implements Serializable {
+	@Schema(description = "ID of the profile", example = "1")
 	@EqualsAndHashCode.Include
 	private Long id;
 
+	@Schema(description = "Name of the profile", example = "Admin")
 	@NotBlank(message = "profile.name.not_blank")
 	private String name;
 }

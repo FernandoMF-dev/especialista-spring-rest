@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.domain.service.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 
+@Schema(name = "Model <Permission>", description = "Representation model for a permission")
 @Relation(collectionRelation = "permissions")
 @Getter
 @Setter
@@ -19,8 +21,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PermissionDto extends RepresentationModel<PermissionDto> implements Serializable {
+	@Schema(description = "ID of the permission", example = "1")
 	@EqualsAndHashCode.Include
 	private Long id;
 
+	@Schema(description = "Name of the permission", example = "CREATE_CUISINE")
 	private String name;
 }
