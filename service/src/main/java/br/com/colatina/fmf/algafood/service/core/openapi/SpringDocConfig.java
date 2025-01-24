@@ -87,7 +87,8 @@ public class SpringDocConfig {
 				new Tag().name(SpringDocControllerTags.PROFILES).description("Operations related to the register of users profiles"),
 				new Tag().name(SpringDocControllerTags.ROOT).description("Operations related to the root entry point of the API"),
 				new Tag().name(SpringDocControllerTags.RESTAURANTS).description("Operations related to the register and management of restaurants"),
-				new Tag().name(SpringDocControllerTags.STATES).description("Operations related to the register of addresses states")
+				new Tag().name(SpringDocControllerTags.STATES).description("Operations related to the register of addresses states"),
+				new Tag().name(SpringDocControllerTags.USERS).description("Operations related to the register and management of user accounts")
 		);
 	}
 
