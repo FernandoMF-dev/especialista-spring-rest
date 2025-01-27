@@ -47,32 +47,32 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 	@Override
 	@GetMapping()
 	@CheckSecurity.Restaurant.Read
-	public CollectionModel<RestaurantListDto> findAll() {
+	public ResponseEntity<CollectionModel<RestaurantListDto>> findAll() {
 		log.debug("REST request to find all restaurants");
 		List<RestaurantListDto> restaurants = restaurantCrudService.findAll();
-		return restaurantListHateoas.mapCollectionModel(restaurants);
+		return new ResponseEntity<>(restaurantListHateoas.mapCollectionModel(restaurants), HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping("/freight-fee")
 	@CheckSecurity.Restaurant.Read
-	public CollectionModel<RestaurantListDto> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
-																 @RequestParam(value = "min", required = false) Double min,
-																 @RequestParam(value = "max", required = false) Double max) {
+	public ResponseEntity<CollectionModel<RestaurantListDto>> filterByFreightFee(@RequestParam(value = "name", required = false) String name,
+																				 @RequestParam(value = "min", required = false) Double min,
+																				 @RequestParam(value = "max", required = false) Double max) {
 		if (Strings.isEmpty(name)) {
-			return _filterByFreightFee(min, max);
+			return new ResponseEntity<>(_filterByFreightFee(min, max), HttpStatus.OK);
 		}
-		return _filterByFreightFee(name, min, max);
+		return new ResponseEntity<>(_filterByFreightFee(name, min, max), HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping("/page")
 	@CheckSecurity.Restaurant.Read
-	public PagedModel<RestaurantListDto> page(RestaurantPageFilter filter, Pageable pageable) {
+	public ResponseEntity<PagedModel<RestaurantListDto>> page(RestaurantPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of restaurants with filters {} and with the page configuration {}", filter, pageable);
 		pageable = PageableTranslator.translate(pageable, RestaurantListDto.class);
 		Page<RestaurantListDto> page = restaurantCrudService.page(filter, pageable);
-		return restaurantListHateoas.mapPagedModel(page);
+		return new ResponseEntity<>(restaurantListHateoas.mapPagedModel(page), HttpStatus.OK);
 	}
 
 	@Override

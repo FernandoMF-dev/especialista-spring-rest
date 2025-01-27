@@ -8,6 +8,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.PermissionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,10 +31,10 @@ public class ProfilePermissionController implements ProfilePermissionControllerD
 	@Override
 	@GetMapping()
 	@CheckSecurity.Profile.Read
-	public CollectionModel<PermissionDto> findAll(@PathVariable Long profileId) {
+	public ResponseEntity<CollectionModel<PermissionDto>> findAll(@PathVariable Long profileId) {
 		log.debug("REST request to find all permissions associated with the profile {}", profileId);
 		Set<PermissionDto> permissions = profileCrudService.findAllPermissionsByProfile(profileId);
-		return profileHateoas.mapPermissionsCollectionModel(permissions, profileId);
+		return new ResponseEntity<>(profileHateoas.mapPermissionsCollectionModel(permissions, profileId), HttpStatus.OK);
 	}
 
 	@Override

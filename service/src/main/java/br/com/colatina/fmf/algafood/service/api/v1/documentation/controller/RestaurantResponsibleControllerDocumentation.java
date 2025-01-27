@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface RestaurantResponsibleControllerDocumentation {
 	@Operation(summary = "Find all users responsible for a restaurant")
-	CollectionModel<AppUserDto> findAll(@Parameter(description = "ID of the restaurant", example = "1", required = true) Long restaurantId);
+	ResponseEntity<CollectionModel<AppUserDto>> findAll(@Parameter(description = "ID of the restaurant", example = "1", required = true) Long restaurantId);
 
 	@Operation(summary = "Associate a user as a responsible for a restaurant")
 	@ApiResponse(responseCode = "204")

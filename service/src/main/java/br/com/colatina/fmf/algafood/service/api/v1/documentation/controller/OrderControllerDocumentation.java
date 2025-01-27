@@ -1,5 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.v1.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.OrderCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.page.OrderPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocControllerTags;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocUtils;
 import br.com.colatina.fmf.algafood.service.core.openapi.annotations.OrderPageFilterParameterDocs;
@@ -10,6 +12,8 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.OrderListDto;
 import br.com.colatina.fmf.algafood.service.domain.service.filter.OrderPageFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -23,15 +27,17 @@ import org.springframework.http.ResponseEntity;
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface OrderControllerDocumentation {
 	@Operation(summary = "Find a list of all registered orders")
-	CollectionModel<OrderListDto> findAll();
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = OrderCollectionModelOpenApi.class)))
+	ResponseEntity<CollectionModel<OrderListDto>> findAll();
 
 	@Operation(summary = "Find an order by its unique identifier code")
 	ResponseEntity<OrderDto> findByUuid(@Parameter(description = "UUID of an order", example = "123e4567-e89b-12d3-a456-426614174000", required = true) String uuid);
 
 	@Operation(summary = "Find a paginated list of orders with filters")
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = OrderPageModelOpenApi.class)))
 	@PageableParameterDocs
 	@OrderPageFilterParameterDocs
-	PagedModel<OrderListDto> page(@Parameter(hidden = true) OrderPageFilter filter,
+	ResponseEntity<PagedModel<OrderListDto>> page(@Parameter(hidden = true) OrderPageFilter filter,
 								  @Parameter(hidden = true) Pageable pageable);
 
 	@Operation(summary = "Emits a new order")

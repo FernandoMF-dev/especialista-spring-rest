@@ -35,12 +35,12 @@ public class RestaurantProductController implements RestaurantProductControllerD
 	@Override
 	@GetMapping()
 	@CheckSecurity.Restaurant.Product.Read
-	public CollectionModel<ProductDto> findAll(@PathVariable Long restaurantId) {
+	public ResponseEntity<CollectionModel<ProductDto>> findAll(@PathVariable Long restaurantId) {
 		log.debug("REST request to find all products from restaurant {}", restaurantId);
 		List<ProductDto> products = productCrudService.findAll(restaurantId);
 		CollectionModel<ProductDto> collection = productHateoas.mapCollectionModel(products);
 		collection.removeLinks().add(productHateoas.createCollectionSelfLink(restaurantId));
-		return collection;
+		return new ResponseEntity<>(collection, HttpStatus.OK);
 	}
 
 	@Override

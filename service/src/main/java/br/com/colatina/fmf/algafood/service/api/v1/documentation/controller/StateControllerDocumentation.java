@@ -1,10 +1,13 @@
 package br.com.colatina.fmf.algafood.service.api.v1.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.StateCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocControllerTags;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.StateDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,7 +19,8 @@ import org.springframework.http.ResponseEntity;
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface StateControllerDocumentation {
 	@Operation(summary = "Find a list of all available states")
-	CollectionModel<StateDto> findAll();
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = StateCollectionModelOpenApi.class)))
+	ResponseEntity<CollectionModel<StateDto>> findAll();
 
 	@Operation(summary = "Find a state by its ID")
 	ResponseEntity<StateDto> findById(@Parameter(description = "ID of a state", example = "1", required = true) Long id);

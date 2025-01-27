@@ -35,10 +35,10 @@ public class ProfileController implements ProfileControllerDocumentation {
 	@Override
 	@GetMapping()
 	@CheckSecurity.Profile.Read
-	public CollectionModel<ProfileDto> findAll() {
+	public ResponseEntity<CollectionModel<ProfileDto>> findAll() {
 		log.debug("REST request to find all profiles");
 		List<ProfileDto> profiles = profileCrudService.findAll();
-		return profileHateoas.mapCollectionModel(profiles);
+		return new ResponseEntity<>(profileHateoas.mapCollectionModel(profiles), HttpStatus.OK);
 	}
 
 	@Override

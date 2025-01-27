@@ -1,11 +1,14 @@
 package br.com.colatina.fmf.algafood.service.api.v2.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.v2.documentation.model.CityCollectionModelOpenApiV2;
 import br.com.colatina.fmf.algafood.service.api.v2.model.CityModelV2;
 import br.com.colatina.fmf.algafood.service.api.v2.model.input.CityInputV2;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocControllerTags;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface CityControllerV2Documentation {
 	@Operation(summary = "Find a list of all available cities")
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CityCollectionModelOpenApiV2.class)))
 	CollectionModel<CityModelV2> findAll();
 
 	@Operation(summary = "Find a city by its ID")

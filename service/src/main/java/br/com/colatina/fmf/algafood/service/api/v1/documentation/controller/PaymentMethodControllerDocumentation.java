@@ -1,10 +1,13 @@
 package br.com.colatina.fmf.algafood.service.api.v1.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.PaymentMethodCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocControllerTags;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.PaymentMethodDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,6 +20,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface PaymentMethodControllerDocumentation {
 	@Operation(summary = "Find a list of all available payment methods")
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = PaymentMethodCollectionModelOpenApi.class)))
 	ResponseEntity<CollectionModel<PaymentMethodDto>> findAll(ServletWebRequest request);
 
 	@Operation(summary = "Find a payment method by its ID")

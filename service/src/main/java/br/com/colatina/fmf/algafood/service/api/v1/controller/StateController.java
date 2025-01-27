@@ -35,10 +35,10 @@ public class StateController implements StateControllerDocumentation {
 	@Override
 	@GetMapping()
 	@CheckSecurity.State.Read
-	public CollectionModel<StateDto> findAll() {
+	public ResponseEntity<CollectionModel<StateDto>> findAll() {
 		log.debug("REST request to find all states");
 		List<StateDto> states = stateCrudService.findAll();
-		return stateHateoas.mapCollectionModel(states);
+		return new ResponseEntity<>(stateHateoas.mapCollectionModel(states), HttpStatus.OK);
 	}
 
 	@Override

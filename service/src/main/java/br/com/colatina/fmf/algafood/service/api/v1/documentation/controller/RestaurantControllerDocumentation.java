@@ -1,5 +1,7 @@
 package br.com.colatina.fmf.algafood.service.api.v1.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.RestaurantCollectionModelOpenApi;
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.page.RestaurantPageModelOpenApi;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocControllerTags;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocUtils;
 import br.com.colatina.fmf.algafood.service.core.openapi.annotations.PageableParameterDocs;
@@ -10,6 +12,8 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantListDto
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,16 +30,20 @@ import java.util.List;
 public interface RestaurantControllerDocumentation {
 
 	@Operation(summary = "Find a list of all available restaurants")
-	CollectionModel<RestaurantListDto> findAll();
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RestaurantCollectionModelOpenApi.class)))
+	ResponseEntity<CollectionModel<RestaurantListDto>> findAll();
 
 	@Operation(summary = "Filter restaurants by freight fee")
-	CollectionModel<RestaurantListDto> filterByFreightFee(@Parameter(description = "Name of the restaurant", example = "Burger King") String name,
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RestaurantCollectionModelOpenApi.class)))
+	ResponseEntity<CollectionModel<RestaurantListDto>> filterByFreightFee(@Parameter(description = "Name of the restaurant", example = "Burger King") String name,
 														  @Parameter(description = "Minimum freight fee", example = "5.00") Double min,
 														  @Parameter(description = "Maximum freight fee", example = "15.00") Double max);
 
+	@Operation(summary = "Find a paginated list of restaurants with filters")
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RestaurantPageModelOpenApi.class)))
 	@PageableParameterDocs
 	@RestaurantPageFilterParameterDocs
-	PagedModel<RestaurantListDto> page(@Parameter(hidden = true) RestaurantPageFilter filter,
+	ResponseEntity<PagedModel<RestaurantListDto>> page(@Parameter(hidden = true) RestaurantPageFilter filter,
 									   @Parameter(hidden = true) Pageable pageable);
 
 	@Operation(summary = "Find the first available restaurant")

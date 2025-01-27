@@ -1,11 +1,14 @@
 package br.com.colatina.fmf.algafood.service.api.v1.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.CuisineCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.api.v1.model.CuisinesXmlWrapper;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocControllerTags;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,7 +20,8 @@ import org.springframework.http.ResponseEntity;
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface CuisineControllerDocumentation {
 	@Operation(summary = "Find a list of all available cuisines")
-	CollectionModel<CuisineDto> findAll();
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CuisineCollectionModelOpenApi.class)))
+	ResponseEntity<CollectionModel<CuisineDto>> findAll();
 
 	@Operation(summary = "Find a list of all available cuisines")
 	ResponseEntity<CuisinesXmlWrapper> findAllXml();

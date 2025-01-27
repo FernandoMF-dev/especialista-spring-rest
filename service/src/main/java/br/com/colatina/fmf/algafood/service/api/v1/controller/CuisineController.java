@@ -36,10 +36,10 @@ public class CuisineController implements CuisineControllerDocumentation {
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@CheckSecurity.Cuisine.Read
-	public CollectionModel<CuisineDto> findAll() {
+	public ResponseEntity<CollectionModel<CuisineDto>> findAll() {
 		log.debug("REST request to find all cuisines");
 		List<CuisineDto> cuisines = cuisineCrudService.findAll();
-		return cuisineHateoas.mapCollectionModel(cuisines);
+		return new ResponseEntity<>(cuisineHateoas.mapCollectionModel(cuisines), HttpStatus.OK);
 	}
 
 	@Override

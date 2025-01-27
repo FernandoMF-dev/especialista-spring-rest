@@ -38,10 +38,10 @@ public class AppUserController implements AppUserControllerDocumentation {
 	@Override
 	@GetMapping()
 	@CheckSecurity.AppUser.List
-	public CollectionModel<AppUserDto> findAll() {
+	public ResponseEntity<CollectionModel<AppUserDto>> findAll() {
 		log.debug("REST request to find all users");
 		List<AppUserDto> users = appUserCrudService.findAll();
-		return appUserHateoas.mapCollectionModel(users);
+		return new ResponseEntity<>(appUserHateoas.mapCollectionModel(users), HttpStatus.OK);
 	}
 
 	@Override

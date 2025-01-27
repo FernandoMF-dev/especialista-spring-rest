@@ -46,10 +46,10 @@ public class OrderController implements OrderControllerDocumentation {
 	@Override
 	@GetMapping()
 	@CheckSecurity.Order.ListAll
-	public CollectionModel<OrderListDto> findAll() {
+	public ResponseEntity<CollectionModel<OrderListDto>> findAll() {
 		log.debug("REST request to find all orders");
 		List<OrderListDto> orders = orderCrudService.findAll();
-		return orderListHateoas.mapCollectionModel(orders);
+		return new ResponseEntity<>(orderListHateoas.mapCollectionModel(orders), HttpStatus.OK);
 	}
 
 	@Override
@@ -65,11 +65,11 @@ public class OrderController implements OrderControllerDocumentation {
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	@CheckSecurity.Order.List
-	public PagedModel<OrderListDto> page(OrderPageFilter filter, Pageable pageable) {
+	public ResponseEntity<PagedModel<OrderListDto>> page(OrderPageFilter filter, Pageable pageable) {
 		log.debug("REST request to perform a paged search of orders with filters {} and with the page configuration {}", filter, pageable);
 		pageable = PageableTranslator.translate(pageable, OrderListDto.class);
 		Page<OrderListDto> page = orderCrudService.page(filter, pageable);
-		return orderListHateoas.mapPagedModel(page);
+		return new ResponseEntity<>(orderListHateoas.mapPagedModel(page), HttpStatus.OK);
 	}
 
 	@Override

@@ -1,10 +1,13 @@
 package br.com.colatina.fmf.algafood.service.api.v1.documentation.controller;
 
+import br.com.colatina.fmf.algafood.service.api.v1.documentation.model.collection.ProductCollectionModelOpenApi;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocControllerTags;
 import br.com.colatina.fmf.algafood.service.core.openapi.SpringDocUtils;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.ProductDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,7 +19,8 @@ import org.springframework.http.ResponseEntity;
 @SecurityRequirement(name = SpringDocUtils.SECURITY_SCHEME_NAME)
 public interface RestaurantProductControllerDocumentation {
 	@Operation(summary = "Find all products for a restaurant")
-	CollectionModel<ProductDto> findAll(@Parameter(description = "ID of the restaurant", example = "1", required = true) Long restaurantId);
+	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ProductCollectionModelOpenApi.class)))
+	ResponseEntity<CollectionModel<ProductDto>> findAll(@Parameter(description = "ID of the restaurant", example = "1", required = true) Long restaurantId);
 
 	@Operation(summary = "Find a product by its ID for a restaurant")
 	ResponseEntity<ProductDto> findById(@Parameter(description = "ID of the restaurant", example = "1", required = true) Long restaurantId,

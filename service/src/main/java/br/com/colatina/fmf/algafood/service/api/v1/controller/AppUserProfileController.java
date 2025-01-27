@@ -8,6 +8,7 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,10 +31,10 @@ public class AppUserProfileController implements AppUserProfileControllerDocumen
 	@Override
 	@GetMapping()
 	@CheckSecurity.Profile.Read
-	public CollectionModel<ProfileDto> findAll(@PathVariable Long userId) {
+	public ResponseEntity<CollectionModel<ProfileDto>> findAll(@PathVariable Long userId) {
 		log.debug("REST request to find all profiles associated with the user {}", userId);
 		Set<ProfileDto> permissions = appUserCrudService.findAllProfilesByUser(userId);
-		return appUserHateoas.mapProfilesCollectionModel(permissions, userId);
+		return new ResponseEntity<>(appUserHateoas.mapProfilesCollectionModel(permissions, userId), HttpStatus.OK);
 	}
 
 	@Override
