@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+	<changeSet id="20250128172000-1" author="Fernando Martins Ferreira">
+		<createTable tableName="oauth2_authorization" remarks="Table used to store authorization codes issued by the Spring Authorization Server">
+			<column name="id" type="VARCHAR(100)">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="registered_client_id" type="VARCHAR(100)">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="principal_name" type="VARCHAR(200)">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="authorization_grant_type" type="VARCHAR(100)">
+				<constraints nullable="false"/>
+			</column>
+
+			<column name="authorized_scopes" type="VARCHAR(1000)"/>
+
+			<column name="attributes" type="TEXT"/>
+
+			<column name="state" type="VARCHAR(500)"/>
+
+			<column name="authorization_code_value" type="TEXT"/>
+			<column name="authorization_code_issued_at" type="TIMESTAMP"/>
+			<column name="authorization_code_expires_at" type="TIMESTAMP"/>
+			<column name="authorization_code_metadata" type="TEXT"/>
+
+			<column name="access_token_value" type="TEXT"/>
+			<column name="access_token_issued_at" type="TIMESTAMP"/>
+			<column name="access_token_expires_at" type="TIMESTAMP"/>
+			<column name="access_token_metadata" type="TEXT"/>
+			<column name="access_token_type" type="VARCHAR(100)"/>
+			<column name="access_token_scopes" type="VARCHAR(1000)"/>
+
+			<column name="oidc_id_token_value" type="TEXT"/>
+			<column name="oidc_id_token_issued_at" type="TIMESTAMP"/>
+			<column name="oidc_id_token_expires_at" type="TIMESTAMP"/>
+			<column name="oidc_id_token_metadata" type="TEXT"/>
+
+			<column name="refresh_token_value" type="TEXT"/>
+			<column name="refresh_token_issued_at" type="TIMESTAMP"/>
+			<column name="refresh_token_expires_at" type="TIMESTAMP"/>
+			<column name="refresh_token_metadata" type="TEXT"/>
+
+			<column name="user_code_value" type="TEXT"/>
+			<column name="user_code_issued_at" type="TIMESTAMP"/>
+			<column name="user_code_expires_at" type="TIMESTAMP"/>
+			<column name="user_code_metadata" type="TEXT"/>
+
+			<column name="device_code_value" type="TEXT"/>
+			<column name="device_code_issued_at" type="TIMESTAMP"/>
+			<column name="device_code_expires_at" type="TIMESTAMP"/>
+			<column name="device_code_metadata" type="TEXT"/>
+		</createTable>
+
+		<rollback>
+			<dropTable tableName="oauth2_authorization"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="20250128172000-2" author="Fernando Martins Ferreira">
+		<addPrimaryKey tableName="oauth2_authorization" columnNames="id" constraintName="pk_oauth2_authorization"/>
+
+		<rollback>
+			<dropPrimaryKey tableName="oauth2_authorization" constraintName="pk_oauth2_authorization"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
+
+		<!--
+		This changelog was created based on the Schema SQL present in the documentation of 'Spring Authorization Server'
+
+		https://github.com/spring-projects/spring-authorization-server/blob/main/oauth2-authorization-server/src/main/resources/org/springframework/security/oauth2/server/authorization/oauth2-authorization-schema.sql
+		-->

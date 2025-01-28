@@ -32,4 +32,5 @@
 	<include file="/config/db/changelogs/20241103144000_insert_permission.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20241123132000_create_table_oauth_client_details.xml" relativeToChangelogFile="false"/>
 	<include file="/config/db/changelogs/20241214154000_create_table_oauth_code.xml" relativeToChangelogFile="false"/>
+	<include file="/config/db/changelogs/20250128172000_create_table_oauth2_authorization.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
