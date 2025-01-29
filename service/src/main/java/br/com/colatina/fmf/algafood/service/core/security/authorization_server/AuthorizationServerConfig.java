@@ -1,5 +1,7 @@
 package br.com.colatina.fmf.algafood.service.core.security.authorization_server;
 
+import br.com.colatina.fmf.algafood.service.domain.model.AppUser;
+import br.com.colatina.fmf.algafood.service.domain.repository.AppUserRepository;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -14,6 +16,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -27,6 +32,8 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.IOException;
@@ -36,7 +43,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.time.Duration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Configuration
 public class AuthorizationServerConfig {
@@ -78,6 +87,25 @@ public class AuthorizationServerConfig {
 		RSAKey rsaKey = RSAKey.load(keyStore, properties.getKeyPairAlias(), properties.getKeyPairPassword().toCharArray());
 
 		return new ImmutableJWKSet<>(new JWKSet(rsaKey));
+	}
+
+	@Bean
+	public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(AppUserRepository appUserRepository) {
+		return context -> {
+			Authentication authentication = context.getPrincipal();
+			if (authentication.getPrincipal() instanceof User user) {
+				AppUser appUser = appUserRepository.findByEmailAndExcludedIsFalse(user.getUsername()).orElseThrow();
+
+				Set<String> authorities = new HashSet<>();
+				for (GrantedAuthority authority : user.getAuthorities()) {
+					authorities.add(authority.getAuthority());
+				}
+
+				context.getClaims().claim("userId", appUser.getId().toString());
+				context.getClaims().claim("fullName", appUser.getName());
+				context.getClaims().claim("authorities", authorities);
+			}
+		};
 	}
 
 	private RegisteredClient backendRegisteredClient(PasswordEncoder passwordEncoder) {
