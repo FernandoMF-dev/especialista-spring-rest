@@ -105,6 +105,7 @@ public class AuthorizationServerConfig {
 				.clientSecret(passwordEncoder.encode("web123"))
 				.clientAuthenticationMethods(set -> set.add(ClientAuthenticationMethod.CLIENT_SECRET_BASIC))
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 				.scope("READ").scope("WRITE").scope("DELETE")
 				.tokenSettings(tokenSettings)
 				.redirectUri("http://www.fmf-algafood-web.com.br")
@@ -136,6 +137,8 @@ public class AuthorizationServerConfig {
 		return TokenSettings.builder()
 				.accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
 				.accessTokenTimeToLive(timeToLive)
+				.reuseRefreshTokens(false)
+				.refreshTokenTimeToLive(Duration.ofDays(1))
 				.build();
 	}
 }
