@@ -5,7 +5,7 @@
 		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 	<changeSet id="20250130154000-1" author="Fernando Martins Ferreira">
-		<createTable tableName="oauth2_registered_client" remarks="Table used to store authorization codes issued by the Spring Authorization Server">
+		<createTable tableName="oauth2_registered_client" remarks="Table used to store Oauth2 registered clients">
 			<column name="id" type="VARCHAR(100)">
 				<constraints nullable="false"/>
 			</column>
