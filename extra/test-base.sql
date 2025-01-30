@@ -155,30 +155,6 @@ VALUES (nextval('seq_order'), 1, 3, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20
 INSERT INTO rel_order_product (id, order_id, product_id, quantity, unit_price, total_price, observation)
 VALUES (nextval('seq_order_product'), 5, 3, 1, 87.2, 87.2, null);
 
-INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
-								  web_server_redirect_uri, authorities, access_token_validity,
-								  refresh_token_validity, autoapprove)
-VALUES ('fmf-algafood-web', null, '$2a$12$OO.NN29NsF2W0nldVk.hzOi8bmUcHNq4ku70auZ37/1Ulhfo3uQ16', 'READ,WRITE,DELETE', -- senha: web123
-		'password', null, null, 60 * 60 * 6, 60 * 24 * 60 * 60, null);
-
-INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
-								  web_server_redirect_uri, authorities, access_token_validity,
-								  refresh_token_validity, autoapprove)
-VALUES ('fmf-algafood-analytics', null, '$2a$12$E6JJsB.Bid.2jXDQBCei.uYrJK9Lu7HRRbdA68nt9dplQkX8irfii', 'READ,WRITE', -- senha: analytics123
-		'authorization_code', 'http://www.fmf-algafood-analytics.com.br', null, null, null, null);
-
-INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
-								  web_server_redirect_uri, authorities, access_token_validity,
-								  refresh_token_validity, autoapprove)
-VALUES ('fmf-algafood-faturamento', null, '$2a$12$nx6wZbTXA4hxPxg/ImbfRO2Eq2067Jt6SW8fFnpd1PgZJ8bfXmmpe', 'READ', -- senha: faturamento123
-		'client_credentials', null, 'READ_ORDER,EMIT_SALES_REPORT', null, null, null);
-
-INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
-								  web_server_redirect_uri, authorities, access_token_validity,
-								  refresh_token_validity, autoapprove)
-VALUES ('fmf-algafood-docs', null, '$2a$12$md25hBY7pYAJAGfCsDl5IuiQtSs6YOja.3SYlhyiHjT1ta85EdQb2', 'READ,WRITE,DELETE', -- senha: documentacao123
-		'authorization_code', 'http://localhost:8080,http://localhost:8080/swagger-ui/oauth2-redirect.html', null, 60 * 60 * 6, 60 * 24 * 60 * 60, null);
-
 INSERT INTO oauth2_registered_client (id, client_id, client_id_issued_at, client_secret, client_secret_expires_at,
 									  client_name, client_authentication_methods, authorization_grant_types,
 									  redirect_uris, post_logout_redirect_uris, scopes, client_settings, token_settings)
