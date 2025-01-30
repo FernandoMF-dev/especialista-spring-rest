@@ -19,19 +19,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
-import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
-import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -42,9 +35,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.time.Duration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Configuration
@@ -64,12 +55,8 @@ public class AuthorizationServerConfig {
 	}
 
 	@Bean
-	public RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
-		RegisteredClient algafoodBackend = backendRegisteredClient(passwordEncoder);
-		RegisteredClient algafoodWeb = webRegisteredClient(passwordEncoder);
-		RegisteredClient algafoodAnalytics = analyticsRegisteredClient(passwordEncoder);
-
-		return new InMemoryRegisteredClientRepository(List.of(algafoodBackend, algafoodWeb, algafoodAnalytics));
+	public RegisteredClientRepository registeredClientRepository(JdbcOperations jdbcOperations) {
+		return new JdbcRegisteredClientRepository(jdbcOperations);
 	}
 
 	@Bean
@@ -106,67 +93,5 @@ public class AuthorizationServerConfig {
 				context.getClaims().claim("authorities", authorities);
 			}
 		};
-	}
-
-	private RegisteredClient backendRegisteredClient(PasswordEncoder passwordEncoder) {
-		TokenSettings tokenSettings = buildTokenSettings(Duration.ofMinutes(30));
-
-		return RegisteredClient.withId("1")
-				.clientId("fmf-algafood-backend")
-				.clientSecret(passwordEncoder.encode("backend123"))
-				.clientAuthenticationMethods(set -> set.add(ClientAuthenticationMethod.CLIENT_SECRET_BASIC))
-				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-				.scope("READ")
-				.tokenSettings(tokenSettings)
-				.build();
-	}
-
-	private RegisteredClient webRegisteredClient(PasswordEncoder passwordEncoder) {
-		TokenSettings tokenSettings = buildTokenSettings(Duration.ofMinutes(15));
-
-		ClientSettings clientSettings = ClientSettings.builder()
-				.requireAuthorizationConsent(true)
-				.build();
-
-		return RegisteredClient.withId("2")
-				.clientId("fmf-algafood-web")
-				.clientSecret(passwordEncoder.encode("web123"))
-				.clientAuthenticationMethods(set -> set.add(ClientAuthenticationMethod.CLIENT_SECRET_BASIC))
-				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.scope("READ").scope("WRITE").scope("DELETE")
-				.tokenSettings(tokenSettings)
-				.redirectUri("http://www.fmf-algafood-web.com.br")
-				.redirectUri("http://127.0.0.1:8080/swagger-ui/index.html/")
-				.clientSettings(clientSettings)
-				.build();
-	}
-
-	private RegisteredClient analyticsRegisteredClient(PasswordEncoder passwordEncoder) {
-		TokenSettings tokenSettings = buildTokenSettings(Duration.ofMinutes(20));
-
-		ClientSettings clientSettings = ClientSettings.builder()
-				.requireAuthorizationConsent(false)
-				.build();
-
-		return RegisteredClient.withId("3")
-				.clientId("fmf-algafood-analytics")
-				.clientSecret(passwordEncoder.encode("analytics123"))
-				.clientAuthenticationMethods(set -> set.add(ClientAuthenticationMethod.CLIENT_SECRET_BASIC))
-				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-				.scope("READ").scope("WRITE")
-				.tokenSettings(tokenSettings)
-				.redirectUri("http://www.fmf-algafood-analytics.com.br")
-				.clientSettings(clientSettings)
-				.build();
-	}
-
-	private TokenSettings buildTokenSettings(Duration timeToLive) {
-		return TokenSettings.builder()
-				.accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
-				.accessTokenTimeToLive(timeToLive)
-				.reuseRefreshTokens(false)
-				.refreshTokenTimeToLive(Duration.ofDays(1))
-				.build();
 	}
 }
