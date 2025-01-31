@@ -159,7 +159,7 @@ INSERT INTO oauth2_registered_client (id, client_id, client_id_issued_at, client
 									  client_name, client_authentication_methods, authorization_grant_types,
 									  redirect_uris, post_logout_redirect_uris, scopes, client_settings, token_settings)
 VALUES ('1', 'fmf-algafood-backend', '2025-01-30 18:51:39.524377', '$2a$10$eOhv8eg0EqL.dbCdI6LlLu2.8x.i0dngn7JKr8YR51iYSGqO7fn72',  -- senha: backend123
-		null, '1', 'client_secret_basic', 'client_credentials', '', null, 'READ',
+		null, 'FMF Algafood Backend', 'client_secret_basic', 'client_credentials', '', null, 'READ',
 		'{"@class":"java.util.Collections$UnmodifiableMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
 		'{"@class":"java.util.Collections$UnmodifiableMap","settings.token.reuse-refresh-tokens":false,"settings.token.id-token-signature-algorithm":["org.springframework.security.oauth2.jose.jws.SignatureAlgorithm","RS256"],"settings.token.access-token-time-to-live":["java.time.Duration",1800.000000000],"settings.token.access-token-format":{"@class":"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat","value":"self-contained"},"settings.token.refresh-token-time-to-live":["java.time.Duration",86400.000000000],"settings.token.authorization-code-time-to-live":["java.time.Duration",300.000000000]}');
 
@@ -167,7 +167,7 @@ INSERT INTO oauth2_registered_client (id, client_id, client_id_issued_at, client
 									  client_name, client_authentication_methods, authorization_grant_types,
 									  redirect_uris, post_logout_redirect_uris, scopes, client_settings, token_settings)
 VALUES ('2', 'fmf-algafood-web', '2025-01-30 18:51:39.556846', '$2a$10$HDpC33w1W19Gp5XeLSBu7uvfJEJ0O/rI3JUSXku/Su1rhYxrgDP1G',  -- senha: web123
-		null, '2', 'client_secret_basic', 'refresh_token,authorization_code', 'http://www.fmf-algafood-web.com.br,http://127.0.0.1:8080/swagger-ui/index.html/', null, 'READ,DELETE,WRITE',
+		null, 'FMF Algafood Web', 'client_secret_basic', 'refresh_token,authorization_code', 'http://www.fmf-algafood-web.com.br,http://127.0.0.1:8080/swagger-ui/index.html/', null, 'READ,DELETE,WRITE',
 		'{"@class":"java.util.Collections$UnmodifiableMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":true}',
 		'{"@class":"java.util.Collections$UnmodifiableMap","settings.token.reuse-refresh-tokens":false,"settings.token.id-token-signature-algorithm":["org.springframework.security.oauth2.jose.jws.SignatureAlgorithm","RS256"],"settings.token.access-token-time-to-live":["java.time.Duration",900.000000000],"settings.token.access-token-format":{"@class":"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat","value":"self-contained"},"settings.token.refresh-token-time-to-live":["java.time.Duration",86400.000000000],"settings.token.authorization-code-time-to-live":["java.time.Duration",300.000000000]}');
 
@@ -175,6 +175,6 @@ INSERT INTO oauth2_registered_client (id, client_id, client_id_issued_at, client
 									  client_name, client_authentication_methods, authorization_grant_types,
 									  redirect_uris, post_logout_redirect_uris, scopes, client_settings, token_settings)
 VALUES ('3', 'fmf-algafood-analytics', '2025-01-30 18:51:39.558907', '$2a$10$T/.NbG7BFgkwjxcR5hISBuIM6nvy51/Obs0cpjzRYB17sHocnjF5a',     -- senha: analytics123
-		null, '3', 'client_secret_basic', 'authorization_code', 'http://www.fmf-algafood-analytics.com.br', null, 'READ,WRITE',
+		null, 'FMF Algafood Analytics', 'client_secret_basic', 'authorization_code', 'http://www.fmf-algafood-analytics.com.br', null, 'READ,WRITE',
 		'{"@class":"java.util.Collections$UnmodifiableMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
 		'{"@class":"java.util.Collections$UnmodifiableMap","settings.token.reuse-refresh-tokens":false,"settings.token.id-token-signature-algorithm":["org.springframework.security.oauth2.jose.jws.SignatureAlgorithm","RS256"],"settings.token.access-token-time-to-live":["java.time.Duration",1200.000000000],"settings.token.access-token-format":{"@class":"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat","value":"self-contained"},"settings.token.refresh-token-time-to-live":["java.time.Duration",86400.000000000],"settings.token.authorization-code-time-to-live":["java.time.Duration",300.000000000]}');
