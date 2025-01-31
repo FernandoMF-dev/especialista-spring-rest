@@ -38,7 +38,7 @@ public interface OrderControllerDocumentation {
 	@PageableParameterDocs
 	@OrderPageFilterParameterDocs
 	ResponseEntity<PagedModel<OrderListDto>> page(@Parameter(hidden = true) OrderPageFilter filter,
-								  @Parameter(hidden = true) Pageable pageable);
+												  @Parameter(hidden = true) Pageable pageable);
 
 	@Operation(summary = "Emits a new order")
 	@ApiResponse(responseCode = "201")

@@ -36,15 +36,15 @@ public interface RestaurantControllerDocumentation {
 	@Operation(summary = "Filter restaurants by freight fee")
 	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RestaurantCollectionModelOpenApi.class)))
 	ResponseEntity<CollectionModel<RestaurantListDto>> filterByFreightFee(@Parameter(description = "Name of the restaurant", example = "Burger King") String name,
-														  @Parameter(description = "Minimum freight fee", example = "5.00") Double min,
-														  @Parameter(description = "Maximum freight fee", example = "15.00") Double max);
+																		  @Parameter(description = "Minimum freight fee", example = "5.00") Double min,
+																		  @Parameter(description = "Maximum freight fee", example = "15.00") Double max);
 
 	@Operation(summary = "Find a paginated list of restaurants with filters")
 	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RestaurantPageModelOpenApi.class)))
 	@PageableParameterDocs
 	@RestaurantPageFilterParameterDocs
 	ResponseEntity<PagedModel<RestaurantListDto>> page(@Parameter(hidden = true) RestaurantPageFilter filter,
-									   @Parameter(hidden = true) Pageable pageable);
+													   @Parameter(hidden = true) Pageable pageable);
 
 	@Operation(summary = "Find the first available restaurant")
 	ResponseEntity<RestaurantDto> findFirst();
