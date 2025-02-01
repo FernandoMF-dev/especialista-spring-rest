@@ -1,9 +1,9 @@
 package br.com.colatina.fmf.algafood.service.domain.exceptions;
 
 import br.com.colatina.fmf.algafood.service.api.handler.ApiErrorType;
-import io.micrometer.core.lang.Nullable;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.web.server.ResponseStatusException;
 
 @Getter

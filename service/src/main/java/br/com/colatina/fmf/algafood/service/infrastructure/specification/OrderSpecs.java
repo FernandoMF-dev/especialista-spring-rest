@@ -1,15 +1,17 @@
 package br.com.colatina.fmf.algafood.service.infrastructure.specification;
 
 import br.com.colatina.fmf.algafood.service.domain.model.AppUser;
+import br.com.colatina.fmf.algafood.service.domain.model.AppUser_;
 import br.com.colatina.fmf.algafood.service.domain.model.Order;
 import br.com.colatina.fmf.algafood.service.domain.model.Order_;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
+import br.com.colatina.fmf.algafood.service.domain.model.Restaurant_;
 import br.com.colatina.fmf.algafood.service.domain.model.enums.OrderStatusEnum;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.Join;
+import jakarta.persistence.criteria.Join;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -38,7 +40,7 @@ public class OrderSpecs extends BaseSpecs<Order> {
 
 			if (Objects.nonNull(restaurantId)) {
 				Join<Order, Restaurant> orderRestaurantJoin = root.join(Order_.restaurant);
-				return criteriaBuilder.equal(orderRestaurantJoin.get("id"), restaurantId);
+				return criteriaBuilder.equal(orderRestaurantJoin.get(Restaurant_.ID), restaurantId);
 			}
 
 			return defaultReturn(criteriaBuilder);
@@ -52,7 +54,7 @@ public class OrderSpecs extends BaseSpecs<Order> {
 
 			if (Objects.nonNull(client)) {
 				Join<Order, AppUser> orderUserJoin = root.join(Order_.customer);
-				return criteriaBuilder.equal(orderUserJoin.get("id"), client);
+				return criteriaBuilder.equal(orderUserJoin.get(AppUser_.ID), client);
 			}
 
 			return defaultReturn(criteriaBuilder);

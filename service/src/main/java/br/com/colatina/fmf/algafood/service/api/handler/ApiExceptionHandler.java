@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import io.micrometer.core.lang.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -19,10 +18,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,7 +50,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private final Map<Class<? extends Throwable>, InvalidBodyFormatHandler> rootExceptionsHandlers;
 
 	@Value("${algafood.error.type.url}")
-	private String errorTypeUrl;
+	private String errorTypeUrl = "";
 
 	public ApiExceptionHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
@@ -67,16 +67,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(BusinessRuleException.class)
+	@Nullable
 	public ResponseEntity<Object> handleBusinessRuleException(BusinessRuleException ex, WebRequest request) {
 		ApiErrorType type = ex.getApiErrorType();
-		String detail = ObjectUtils.defaultIfNull(ex.getReason(), ex.getStatus().getReasonPhrase());
+		String detail = ObjectUtils.defaultIfNull(ex.getReason(), HttpStatus.valueOf(ex.getStatusCode().value()).getReasonPhrase());
 		detail = getMessageSourceIfAvailable(detail, ex.getMessageArgs());
 
-		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatus(), type, detail).userMessage(detail).build();
-		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatus(), request);
+		ApiErrorResponse body = createApiErrorResponseBuilder(ex.getStatusCode(), type, detail).userMessage(detail).build();
+		return handleExceptionInternal(ex, body, new HttpHeaders(), ex.getStatusCode(), request);
 	}
 
 	@ExceptionHandler(InfrastructureException.class)
+	@Nullable
 	public ResponseEntity<Object> handleInfrastructureException(InfrastructureException ex, WebRequest request) {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ApiErrorType type = ApiErrorType.INTERNAL_SERVER_ERROR;
@@ -90,6 +92,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(AccessDeniedException.class)
+	@Nullable
 	public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
 		HttpStatus status = HttpStatus.FORBIDDEN;
 		ApiErrorType type = ApiErrorType.ACCESS_DENIED;
@@ -101,6 +104,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(Exception.class)
+	@Nullable
 	public ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ApiErrorType type = ApiErrorType.INTERNAL_SERVER_ERROR;
@@ -113,12 +117,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		return ResponseEntity.status(status).headers(headers).build();
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Nullable
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.CONSTRAINT_VIOLATION;
 		String detail = getMessageSourceIfAvailable("error.http_request.body_property.constraint_violation");
 		List<ApiErrorResponse.FieldError> fieldErrors = formatUrlParamFieldErrors(ex);
@@ -127,7 +132,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Nullable
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.RESOURCE_NOT_FOUND;
 		String detail = getMessageSourceIfAvailable("error.default.not_found", new String[]{ex.getRequestURL()});
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
@@ -135,20 +141,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		try {
-			ApiErrorType type = ApiErrorType.CONSTRAINT_VIOLATION;
-			String detail = getMessageSourceIfAvailable("error.http_request.url_property.constraint_violation");
-			List<ApiErrorResponse.FieldError> fieldErrors = formatQueryParamFieldErrors(ex);
-			ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).userMessage(detail).fields(fieldErrors).build();
-			return handleExceptionInternal(ex, body, headers, status, request);
-		} catch (Exception ignored) {
-			return super.handleBindException(ex, headers, status, request);
-		}
-	}
-
-	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Nullable
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
 		if (this.rootExceptionsHandlers.containsKey(rootCause.getClass())) {
 			return this.rootExceptionsHandlers.get(rootCause.getClass()).handle(rootCause, headers, status, request);
@@ -161,7 +155,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Nullable
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		if (this.rootExceptionsHandlers.containsKey(ex.getClass())) {
 			return this.rootExceptionsHandlers.get(ex.getClass()).handle(ex, headers, status, request);
 		}
@@ -169,19 +164,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Nullable
+	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		if (Objects.isNull(body)) {
 			body = ApiErrorResponse.builder()
 					.status(status.value())
 					.timestamp(Instant.now())
-					.title(status.getReasonPhrase())
+					.title(HttpStatus.valueOf(status.value()).getReasonPhrase())
 					.userMessage(getMessageSourceIfAvailable(GENERIC_ERROR_USER_MSG))
 					.build();
-		} else if (body instanceof String) {
+		} else if (body instanceof String stringBody) {
 			body = ApiErrorResponse.builder()
 					.status(status.value())
 					.timestamp(Instant.now())
-					.title(getMessageSourceIfAvailable((String) body))
+					.title(getMessageSourceIfAvailable(stringBody))
 					.userMessage(getMessageSourceIfAvailable(GENERIC_ERROR_USER_MSG))
 					.build();
 		}
@@ -189,7 +185,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 
-	private ApiErrorResponse.ApiErrorResponseBuilder createApiErrorResponseBuilder(HttpStatus status, ApiErrorType type, String detail) {
+	private ApiErrorResponse.ApiErrorResponseBuilder createApiErrorResponseBuilder(HttpStatusCode status, ApiErrorType type, String detail) {
 		return ApiErrorResponse.builder()
 				.status(status.value())
 				.timestamp(Instant.now())
@@ -211,16 +207,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 					String message = getFieldErrorMessage(fieldError);
 					return new ApiErrorResponse.FieldError(fieldError.getField(), message);
 				})
-				.collect(Collectors.toList());
-	}
-
-	private List<ApiErrorResponse.FieldError> formatQueryParamFieldErrors(BindException ex) {
-		return ex.getFieldErrors().stream()
-				.map(fieldError -> {
-					String message = getQueryParamFieldErrorMessage(fieldError);
-					return new ApiErrorResponse.FieldError(fieldError.getField(), message);
-				})
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	private String getFieldErrorMessage(FieldError fieldError) {
@@ -244,21 +231,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 	}
 
-	private String getQueryParamFieldErrorMessage(FieldError fieldError) {
-		try {
-			TypeMismatchException typeMismatchException = fieldError.unwrap(TypeMismatchException.class);
-			return getTypeMismatchMessageSource(typeMismatchException, "error.http_request.query_param.type_mismatch");
-		} catch (Exception ignored) {
-			return getFieldErrorMessage(fieldError);
-		}
-	}
-
-	private String getTypeMismatchMessageSource(TypeMismatchException ex, String message) {
-		return getMessageSourceIfAvailable(message, new Object[]{ex.getPropertyName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()});
-	}
-
 	// <editor-fold defaultstate="collapsed" desc="Root or specific exceptions handlers">
-	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Nullable
+	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
 		String propertyPath = formatPropertyPath(ex.getPath());
 		String detail = getMessageSourceIfAvailable("error.http_request.body_property.type_mismatch", new Object[]{propertyPath, ex.getValue(), ex.getTargetType().getSimpleName()});
@@ -266,7 +241,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 
-	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Nullable
+	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
 		String propertyPath = formatPropertyPath(ex.getPath());
 		String detail = getMessageSourceIfAvailable("error.http_request.body_property.not_found", new Object[]{propertyPath});
@@ -274,15 +250,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 
-	private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@Nullable
+	private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		ApiErrorType type = ApiErrorType.MESSAGE_BODY_NOT_READABLE;
-		String detail = getTypeMismatchMessageSource(ex, "error.http_request.url_param.type_mismatch");
+		String detail = getMessageSourceIfAvailable("error.http_request.url_param.type_mismatch", new Object[]{ex.getPropertyName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()});
 		ApiErrorResponse body = createApiErrorResponseBuilder(status, type, detail).build();
 		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 	// </editor-fold>
 
 	private interface InvalidBodyFormatHandler {
-		ResponseEntity<Object> handle(Throwable rootCause, HttpHeaders headers, HttpStatus status, WebRequest request);
+		ResponseEntity<Object> handle(Throwable rootCause, HttpHeaders headers, HttpStatusCode status, WebRequest request);
 	}
 }

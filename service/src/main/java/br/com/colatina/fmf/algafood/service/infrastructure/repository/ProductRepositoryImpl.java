@@ -4,9 +4,9 @@ import br.com.colatina.fmf.algafood.service.domain.model.ProductPicture;
 import br.com.colatina.fmf.algafood.service.domain.repository.queries.ProductRepositoryQueries;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepositoryQueries {

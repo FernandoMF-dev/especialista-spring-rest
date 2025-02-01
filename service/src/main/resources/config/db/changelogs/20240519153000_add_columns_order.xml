@@ -7,7 +7,7 @@
 
 	<changeSet id="20240519153000-1" author="Fernando Martins Ferreira">
 		<addColumn tableName="tb_order">
-			<column name="uuid_code" afterColumn="id" type="${uuid_type}" defaultValueComputed="${uuid_function}"
+			<column name="uuid_code" type="${uuid_type}" defaultValueComputed="${uuid_function}"
 					remarks="UUID to uniquely identify orders in requests">
 				<constraints nullable="false"/>
 			</column>

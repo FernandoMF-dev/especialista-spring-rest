@@ -10,7 +10,7 @@ import lombok.ToString;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Schema(name = "Model <PaymentMethod>", description = "Representation model for payment method")

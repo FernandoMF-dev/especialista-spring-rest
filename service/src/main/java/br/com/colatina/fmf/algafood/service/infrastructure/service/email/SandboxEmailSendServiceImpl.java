@@ -5,7 +5,7 @@ import br.com.colatina.fmf.algafood.service.infrastructure.exceptions.EmailExcep
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMessage;
 
 public class SandboxEmailSendServiceImpl extends SmtpEmailSendServiceImpl {
 	public SandboxEmailSendServiceImpl(EmailProperties emailProperties, JavaMailSender mailSender, EmailTemplateProcessor emailTemplateProcessor) {

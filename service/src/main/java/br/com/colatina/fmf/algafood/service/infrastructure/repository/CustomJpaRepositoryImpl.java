@@ -4,7 +4,7 @@ import br.com.colatina.fmf.algafood.service.domain.repository.CustomJpaRepositor
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;

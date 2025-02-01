@@ -4,8 +4,8 @@ import br.com.colatina.fmf.algafood.service.core.validation.constraints.FileSize
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class FileSizeConstraintValidator implements ConstraintValidator<FileSize, MultipartFile> {
 	private DataSize maxSize;

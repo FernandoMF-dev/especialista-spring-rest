@@ -9,15 +9,15 @@ import br.com.colatina.fmf.algafood.service.domain.service.filter.SalesPerPeriod
 import br.com.colatina.fmf.algafood.service.domain.service.statistics.SalesPerPeriod;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CompoundSelection;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.time.LocalDate;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CompoundSelection;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,24 +28,21 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 	private static final String MONTH = "month";
 	private static final String DAY = "day";
 
-	private static final String FN_DATE_TRUNC = "date_trunc";
-	private static final String FN_AT_TIME_ZONE = "at_time_zone";
-
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	@Override
 	public List<SalesPerPeriod> findSalesPerDay(SalesPerPeriodFilter filter) {
-		SalerPerPeriodCriteria criteria = new SalerPerPeriodCriteria(filter);
+		SalesPerPeriodCriteria criteria = new SalesPerPeriodCriteria(filter);
 
-		var fnDateRegistrationDate = _fnDateRegistrationDate(criteria.builder, criteria.root, filter, DAY);
-		var fnYearRegistrationDate = _fnYearRegistrationDate(criteria.builder, fnDateRegistrationDate);
-		var fnMonthRegistrationDate = _fnMonthRegistrationDate(criteria.builder, fnDateRegistrationDate);
-		var fnDayRegistrationDate = _fnDayRegistrationDate(criteria.builder, fnDateRegistrationDate);
+		var fnDateRegistrationDate = CriteriaFunctionCreator.fnDateRegistrationDate(criteria.cb, criteria.root, filter, DAY);
+		var fnYearRegistrationDate = CriteriaFunctionCreator.fnYearRegistrationDate(criteria.cb, fnDateRegistrationDate);
+		var fnMonthRegistrationDate = CriteriaFunctionCreator.fnMonthRegistrationDate(criteria.cb, fnDateRegistrationDate);
+		var fnDayRegistrationDate = CriteriaFunctionCreator.fnDayRegistrationDate(criteria.cb, fnDateRegistrationDate);
 
-		var selection = criteria.builder.construct(SalesPerPeriod.class,
-				criteria.builder.count(criteria.root.get(Order_.ID)),
-				criteria.builder.sum(criteria.root.get(Order_.TOTAL_VALUE)),
+		var selection = criteria.cb.construct(SalesPerPeriod.class,
+				criteria.cb.count(criteria.root.get(Order_.ID)),
+				criteria.cb.sum(criteria.root.get(Order_.TOTAL_VALUE)),
 				fnYearRegistrationDate,
 				fnMonthRegistrationDate,
 				fnDayRegistrationDate
@@ -57,15 +54,15 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 
 	@Override
 	public List<SalesPerPeriod> findSalesPerMonth(SalesPerPeriodFilter filter) {
-		SalerPerPeriodCriteria criteria = new SalerPerPeriodCriteria(filter);
+		SalesPerPeriodCriteria criteria = new SalesPerPeriodCriteria(filter);
 
-		var fnDateRegistrationDate = _fnDateRegistrationDate(criteria.builder, criteria.root, filter, MONTH);
-		var fnYearRegistrationDate = _fnYearRegistrationDate(criteria.builder, fnDateRegistrationDate);
-		var fnMonthRegistrationDate = _fnMonthRegistrationDate(criteria.builder, fnDateRegistrationDate);
+		var fnDateRegistrationDate = CriteriaFunctionCreator.fnDateRegistrationDate(criteria.cb, criteria.root, filter, MONTH);
+		var fnYearRegistrationDate = CriteriaFunctionCreator.fnYearRegistrationDate(criteria.cb, fnDateRegistrationDate);
+		var fnMonthRegistrationDate = CriteriaFunctionCreator.fnMonthRegistrationDate(criteria.cb, fnDateRegistrationDate);
 
-		var selection = criteria.builder.construct(SalesPerPeriod.class,
-				criteria.builder.count(criteria.root.get(Order_.ID)),
-				criteria.builder.sum(criteria.root.get(Order_.TOTAL_VALUE)),
+		var selection = criteria.cb.construct(SalesPerPeriod.class,
+				criteria.cb.count(criteria.root.get(Order_.ID)),
+				criteria.cb.sum(criteria.root.get(Order_.TOTAL_VALUE)),
 				fnYearRegistrationDate,
 				fnMonthRegistrationDate
 		);
@@ -76,14 +73,14 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 
 	@Override
 	public List<SalesPerPeriod> findSalesPerYear(SalesPerPeriodFilter filter) {
-		SalerPerPeriodCriteria criteria = new SalerPerPeriodCriteria(filter);
+		SalesPerPeriodCriteria criteria = new SalesPerPeriodCriteria(filter);
 
-		var fnDateRegistrationDate = _fnDateRegistrationDate(criteria.builder, criteria.root, filter, YEAR);
-		var fnYearRegistrationDate = _fnYearRegistrationDate(criteria.builder, fnDateRegistrationDate);
+		var fnDateRegistrationDate = CriteriaFunctionCreator.fnDateRegistrationDate(criteria.cb, criteria.root, filter, YEAR);
+		var fnYearRegistrationDate = CriteriaFunctionCreator.fnYearRegistrationDate(criteria.cb, fnDateRegistrationDate);
 
-		var selection = criteria.builder.construct(SalesPerPeriod.class,
-				criteria.builder.count(criteria.root.get(Order_.ID)),
-				criteria.builder.sum(criteria.root.get(Order_.TOTAL_VALUE)),
+		var selection = criteria.cb.construct(SalesPerPeriod.class,
+				criteria.cb.count(criteria.root.get(Order_.ID)),
+				criteria.cb.sum(criteria.root.get(Order_.TOTAL_VALUE)),
 				fnYearRegistrationDate
 		);
 
@@ -91,62 +88,66 @@ public class SalesQueryServiceImpl implements SalesQueryService {
 		return entityManager.createQuery(criteria.query).getResultList();
 	}
 
-	// <editor-fold defaultstate="collapsed" desc="Criteria query expressions">
-	private Expression<LocalDate> _fnDateRegistrationDate(CriteriaBuilder builder, Root<Order> root, SalesPerPeriodFilter filter, String dateTruncParam) {
-		var fnDateRegistrationDate = builder.function(FN_AT_TIME_ZONE, LocalDate.class, root.get(Order_.REGISTRATION_DATE), builder.literal(filter.getTimeOffset()));
-		return builder.function(FN_DATE_TRUNC, LocalDate.class, builder.literal(dateTruncParam), fnDateRegistrationDate);
-	}
-
-	private Expression<Integer> _fnYearRegistrationDate(CriteriaBuilder builder, Expression<LocalDate> fnDateRegistrationDate) {
-		return builder.function(YEAR, Integer.class, fnDateRegistrationDate);
-	}
-
-	private Expression<Integer> _fnMonthRegistrationDate(CriteriaBuilder builder, Expression<LocalDate> fnDateRegistrationDate) {
-		return builder.function(MONTH, Integer.class, fnDateRegistrationDate);
-	}
-
-	private Expression<Integer> _fnDayRegistrationDate(CriteriaBuilder builder, Expression<LocalDate> fnDateRegistrationDate) {
-		return builder.function(DAY, Integer.class, fnDateRegistrationDate);
-	}
-	// </editor-fold>
-
-	private class SalerPerPeriodCriteria {
-		public final CriteriaBuilder builder;
+	private class SalesPerPeriodCriteria {
+		public final CriteriaBuilder cb;
 		public final CriteriaQuery<SalesPerPeriod> query;
 		public final Root<Order> root;
 		public final List<Predicate> predicates;
 
-		public SalerPerPeriodCriteria(SalesPerPeriodFilter filter) {
-			this.builder = entityManager.getCriteriaBuilder();
-			this.query = builder.createQuery(SalesPerPeriod.class);
+		public SalesPerPeriodCriteria(SalesPerPeriodFilter filter) {
+			this.cb = entityManager.getCriteriaBuilder();
+			this.query = cb.createQuery(SalesPerPeriod.class);
 			this.root = query.from(Order.class);
-			this.predicates = getSalerPerPeriodPredicates(filter);
+			this.predicates = getSalesPerPeriodPredicates(filter);
 		}
 
-		public void prepareQuery(CompoundSelection<SalesPerPeriod> selection, Expression<LocalDate> groupBy) {
+		public void prepareQuery(CompoundSelection<SalesPerPeriod> selection, Expression<Timestamp> groupBy) {
 			query.select(selection);
 			query.where(predicates.toArray(new Predicate[0]));
 			query.groupBy(groupBy);
 		}
 
-		private List<Predicate> getSalerPerPeriodPredicates(SalesPerPeriodFilter filter) {
-			List<Predicate> predicates = new ArrayList<>();
+		private List<Predicate> getSalesPerPeriodPredicates(SalesPerPeriodFilter filter) {
+			List<Predicate> predicateList = new ArrayList<>();
 
-			predicates.add(root.get(Order_.STATUS).in(OrderStatusEnum.CONFIRMED, OrderStatusEnum.DELIVERED));
+			predicateList.add(root.get(Order_.STATUS).in(OrderStatusEnum.CONFIRMED, OrderStatusEnum.DELIVERED));
 
 			if (Objects.nonNull(filter.getRestaurantId())) {
-				predicates.add(builder.equal(root.get(Order_.RESTAURANT).get(Restaurant_.ID), filter.getRestaurantId()));
+				predicateList.add(cb.equal(root.get(Order_.RESTAURANT).get(Restaurant_.ID), filter.getRestaurantId()));
 			}
 
 			if (Objects.nonNull(filter.getStartDate())) {
-				predicates.add(builder.greaterThanOrEqualTo(root.get(Order_.REGISTRATION_DATE), filter.getStartDate()));
+				predicateList.add(cb.greaterThanOrEqualTo(root.get(Order_.REGISTRATION_DATE), filter.getStartDate()));
 			}
 
 			if (Objects.nonNull(filter.getEndDate())) {
-				predicates.add(builder.lessThanOrEqualTo(root.get(Order_.REGISTRATION_DATE), filter.getEndDate()));
+				predicateList.add(cb.lessThanOrEqualTo(root.get(Order_.REGISTRATION_DATE), filter.getEndDate()));
 			}
 
-			return predicates;
+			return predicateList;
+		}
+	}
+
+	private static class CriteriaFunctionCreator {
+		private static final String FN_DATE_TRUNC = "date_trunc";
+		private static final String FN_TIME_ZONE = "timezone";
+		public static final String FN_DATE_PART = "date_part";
+
+		public static Expression<Timestamp> fnDateRegistrationDate(CriteriaBuilder cb, Root<Order> root, SalesPerPeriodFilter filter, String dateTruncParam) {
+			var fnDateRegistrationDate = cb.function(FN_TIME_ZONE, Timestamp.class, cb.literal(filter.getTimeOffset()), root.get(Order_.REGISTRATION_DATE));
+			return cb.function(FN_DATE_TRUNC, Timestamp.class, cb.literal(dateTruncParam), fnDateRegistrationDate);
+		}
+
+		public static Expression<Integer> fnYearRegistrationDate(CriteriaBuilder cb, Expression<Timestamp> fnDateRegistrationDate) {
+			return cb.function(FN_DATE_PART, Integer.class, cb.literal(YEAR), fnDateRegistrationDate);
+		}
+
+		public static Expression<Integer> fnMonthRegistrationDate(CriteriaBuilder cb, Expression<Timestamp> fnDateRegistrationDate) {
+			return cb.function(FN_DATE_PART, Integer.class, cb.literal(MONTH), fnDateRegistrationDate);
+		}
+
+		public static Expression<Integer> fnDayRegistrationDate(CriteriaBuilder cb, Expression<Timestamp> fnDateRegistrationDate) {
+			return cb.function(FN_DATE_PART, Integer.class, cb.literal(DAY), fnDateRegistrationDate);
 		}
 	}
 }

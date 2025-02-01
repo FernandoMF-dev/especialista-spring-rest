@@ -14,6 +14,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,6 +30,7 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.io.IOException;
@@ -49,12 +51,14 @@ public class AuthorizationServerConfig {
 		authorizationServerConfigurer.authorizationEndpoint(customizer -> customizer.consentPage("/oauth2/consent"));
 		RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
 
-		httpSecurity.requestMatcher(endpointsMatcher)
-				.authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
+		httpSecurity.securityMatcher(endpointsMatcher)
+				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
 				.csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+				.formLogin(Customizer.withDefaults())
+				.exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
 				.apply(authorizationServerConfigurer);
 
-		return httpSecurity.formLogin(customizer -> customizer.loginPage("/login")).build();
+		return httpSecurity.build();
 	}
 
 	@Bean

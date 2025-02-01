@@ -55,7 +55,7 @@ Esta API é desenvolvida em Java com Spring Boot seguindo os princípios do REST
 Para acessar a documentação da API, basta acessar o link `{{url-da-aplicacao}}/swagger-ui/index.html#/` no seu
 navegador (enquanto a aplicação estiver rodando, é claro).
 <br>
-**Exemplo:** `http://localhost:8080/swagger-ui/index.html#/`
+**Exemplo:** `http://127.0.0.1:8080/swagger-ui/index.html`
 
 Para acessar a documentação da API em formato JSON, basta enviar uma requisição GET para o link
 `{{url-da-aplicacao}}/v3/api-docs`. O retorno será um JSON com a documentação da API.

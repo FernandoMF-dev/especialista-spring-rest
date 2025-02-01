@@ -22,7 +22,12 @@ public class AppSecurity {
 
 	public Long getUserId() {
 		Jwt jwt = (Jwt) getAuthentication().getPrincipal();
-		return jwt.getClaim("user_id");
+		Object userId = jwt.getClaim("user_id");
+
+		if (Objects.isNull(userId)) {
+			return null;
+		}
+		return Long.valueOf(userId.toString());
 	}
 
 	public boolean hasAuthority(String authority) {
