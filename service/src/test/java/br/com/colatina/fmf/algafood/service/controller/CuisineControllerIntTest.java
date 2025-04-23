@@ -8,24 +8,33 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.CuisineDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.CuisineMapper;
 import br.com.colatina.fmf.algafood.service.factory.CuisineFactory;
 import br.com.colatina.fmf.algafood.service.factory.RestaurantFactory;
+import com.jayway.jsonpath.JsonPath;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import net.minidev.json.JSONArray;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.LinkedHashMap;
 
 import static io.restassured.RestAssured.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CuisineControllerIntTest extends BaseCommonControllerIntTest {
-	private static final String API_CUISINE = "/api/cuisines";
+class CuisineControllerIntTest extends BaseCommonControllerIntTest {
+	private static final String API_CUISINE = "/api/v1/cuisines";
 
 	@LocalServerPort
 	protected Integer serverPort;
@@ -47,15 +56,20 @@ public class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
-	public void findAll_success() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void findAll_success() throws Exception {
 		Cuisine entity = cuisineFactory.createAndPersist();
 
-		given().accept(ContentType.JSON)
-				.when().get()
-				.then().statusCode(HttpStatus.OK.value())
-				.body(Matchers.not(Matchers.emptyIterable()))
-				.body(Cuisine_.ID, Matchers.hasItems(entity.getId().intValue()))
-				.body(Cuisine_.NAME, Matchers.hasItems(entity.getName()));
+		MvcResult result = getMockMvc().perform(get(API_CUISINE)
+						.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$._embedded.cuisines").isArray())
+				.andReturn();
+
+		String response = result.getResponse().getContentAsString();
+		JSONArray cuisines = JsonPath.parse(response).read("$._embedded.cuisines");
+
+		Assertions.assertTrue(cuisines.stream().anyMatch(value -> ((LinkedHashMap<String, Object>) value).get("id").equals(entity.getId().intValue())));
 	}
 
 	@Test
