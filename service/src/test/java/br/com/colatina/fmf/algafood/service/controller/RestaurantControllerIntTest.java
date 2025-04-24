@@ -1,6 +1,5 @@
 package br.com.colatina.fmf.algafood.service.controller;
 
-import br.com.colatina.fmf.algafood.service.domain.model.Cuisine_;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant;
 import br.com.colatina.fmf.algafood.service.domain.model.Restaurant_;
 import br.com.colatina.fmf.algafood.service.domain.service.RestaurantCrudService;
@@ -8,32 +7,37 @@ import br.com.colatina.fmf.algafood.service.domain.service.dto.RestaurantFormDto
 import br.com.colatina.fmf.algafood.service.domain.service.filter.RestaurantPageFilter;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.RestaurantFormMapper;
 import br.com.colatina.fmf.algafood.service.factory.RestaurantFactory;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 
-import static io.restassured.RestAssured.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
+	private static final String API_RESTAURANT = "/api/v1/restaurants";
 	public static final double FREIGHT_FEE_DIFFERENCE = 1.1;
-	private static final String API_RESTAURANT = "/api/restaurants";
-	@LocalServerPort
-	protected Integer serverPort;
 
 	@Autowired
 	private RestaurantFactory restaurantFactory;
@@ -42,83 +46,84 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	@Autowired
 	private RestaurantCrudService restaurantCrudService;
 
-	@Override
-	public void setUpConnection() {
-		RestAssured.basePath = API_RESTAURANT;
-		RestAssured.port = serverPort;
-	}
-
 	@Test
-	public void findAll_success() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void findAll_success() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
-		given().accept(ContentType.JSON)
-				.when().get()
-				.then().statusCode(HttpStatus.OK.value())
-				.body(Matchers.not(Matchers.emptyIterable()))
-				.body(Restaurant_.ID, Matchers.hasItems(entity.getId().intValue()))
-				.body(Restaurant_.NAME, Matchers.hasItems(entity.getName()));
+		MvcResult result = getMockMvc().perform(get(API_RESTAURANT))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$._embedded.restaurants").isArray())
+				.andReturn();
+
+		validateEntityPresenceInResponseList(result, entity);
 	}
 
 	@Test
-	public void filterByFreightFee_success_noFilter() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void filterByFreightFee_success_noFilter() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
-		given().accept(ContentType.JSON)
-				.when().get("/freight-fee")
-				.then().statusCode(HttpStatus.OK.value())
-				.body(Matchers.not(Matchers.emptyIterable()))
-				.body(Restaurant_.ID, Matchers.hasItems(entity.getId().intValue()))
-				.body(Restaurant_.NAME, Matchers.hasItems(entity.getName()));
+		MvcResult result = getMockMvc().perform(get(API_RESTAURANT.concat("/freight-fee")))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$._embedded.restaurants").isArray())
+				.andReturn();
+
+		validateEntityPresenceInResponseList(result, entity);
 	}
 
 	@Test
-	public void filterByFreightFee_success_noName() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void filterByFreightFee_success_noName() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
-		given().accept(ContentType.JSON)
-				.queryParam("min", entity.getFreightFee() - FREIGHT_FEE_DIFFERENCE)
-				.queryParam("max", entity.getFreightFee() + FREIGHT_FEE_DIFFERENCE)
-				.when().get("/freight-fee")
-				.then().statusCode(HttpStatus.OK.value())
-				.body(Matchers.not(Matchers.emptyIterable()))
-				.body(Restaurant_.ID, Matchers.hasItems(entity.getId().intValue()))
-				.body(Restaurant_.NAME, Matchers.hasItems(entity.getName()));
+		MvcResult result = getMockMvc().perform(get(API_RESTAURANT.concat("/freight-fee"))
+						.queryParam("min", String.valueOf(entity.getFreightFee() - FREIGHT_FEE_DIFFERENCE))
+						.queryParam("max", String.valueOf(entity.getFreightFee() + FREIGHT_FEE_DIFFERENCE)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$._embedded.restaurants").isArray())
+				.andReturn();
+
+		validateEntityPresenceInResponseList(result, entity);
 	}
 
 	@Test
-	public void filterByFreightFee_success_withName() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void filterByFreightFee_success_withName() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
-		given().accept(ContentType.JSON)
-				.queryParam("name", entity.getName())
-				.queryParam("min", entity.getFreightFee() - FREIGHT_FEE_DIFFERENCE)
-				.queryParam("max", entity.getFreightFee() + FREIGHT_FEE_DIFFERENCE)
-				.when().get("/freight-fee")
-				.then().statusCode(HttpStatus.OK.value())
-				.body(Matchers.not(Matchers.emptyIterable()))
-				.body(Restaurant_.ID, Matchers.hasItems(entity.getId().intValue()))
-				.body(Restaurant_.NAME, Matchers.hasItems(entity.getName()));
+		MvcResult result = getMockMvc().perform(get(API_RESTAURANT.concat("/freight-fee"))
+						.queryParam("name", entity.getName())
+						.queryParam("min", String.valueOf(entity.getFreightFee() - FREIGHT_FEE_DIFFERENCE))
+						.queryParam("max", String.valueOf(entity.getFreightFee() + FREIGHT_FEE_DIFFERENCE)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$._embedded.restaurants").isArray())
+				.andReturn();
+
+		validateEntityPresenceInResponseList(result, entity);
 	}
 
 	@Test
-	public void page_success_noFilterAndPaged() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void page_success_noFilterAndPaged() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		Pageable pageable = Pageable.unpaged();
 		RestaurantPageFilter filter = new RestaurantPageFilter();
 
-		given().accept(ContentType.JSON)
-				.params(convertPageableToParams(pageable))
-				.params(convertObjectToParams(filter))
-				.when().get("/page")
-				.then().statusCode(HttpStatus.OK.value())
-				.body("content", Matchers.not(Matchers.emptyIterable()))
-				.body("content." + Restaurant_.ID, Matchers.hasItems(entity.getId().intValue()))
-				.body("content." + Restaurant_.NAME, Matchers.hasItems(entity.getName()));
+		MvcResult result = getMockMvc().perform(get(API_RESTAURANT.concat("/page"))
+						.queryParams(convertPageableToParams(pageable))
+						.queryParams(convertObjectToParams(filter)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$._embedded.restaurants").isArray())
+				.andExpect(jsonPath("$.page.totalElements", Matchers.greaterThanOrEqualTo(1)))
+				.andReturn();
+
+		validateEntityPresenceInResponseList(result, entity);
 	}
 
 	@Test
-	public void page_success_withFilterAndPage() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void page_success_withFilterAndPage() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, Restaurant_.NAME);
 		RestaurantPageFilter filter = new RestaurantPageFilter();
@@ -129,324 +134,323 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 		filter.setMinFreightFee(entity.getFreightFee() - FREIGHT_FEE_DIFFERENCE);
 		filter.setMaxFreightFee(entity.getFreightFee() + FREIGHT_FEE_DIFFERENCE);
 
-		given().accept(ContentType.JSON)
-				.params(convertPageableToParams(pageable))
-				.params(convertObjectToParams(filter))
-				.when().get("/page")
-				.then().statusCode(HttpStatus.OK.value())
-				.body("content", Matchers.not(Matchers.emptyIterable()))
-				.body("content." + Restaurant_.ID, Matchers.hasItems(entity.getId().intValue()))
-				.body("content." + Restaurant_.NAME, Matchers.hasItems(entity.getName()));
+		MvcResult result = getMockMvc().perform(get(API_RESTAURANT.concat("/page"))
+						.queryParams(convertPageableToParams(pageable))
+						.queryParams(convertObjectToParams(filter)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$._embedded.restaurants").isArray())
+				.andExpect(jsonPath("$.page.totalElements", Matchers.greaterThanOrEqualTo(1)))
+				.andReturn();
+
+		validateEntityPresenceInResponseList(result, entity);
 	}
 
 	@Test
-	public void findFirst_success() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void findFirst_success() throws Exception {
 		restaurantFactory.createAndPersist();
 
-		given().accept(ContentType.JSON)
-				.when().get("first")
-				.then().statusCode(HttpStatus.OK.value())
-				.body(Restaurant_.ID, Matchers.notNullValue());
+		getMockMvc().perform(get(API_RESTAURANT.concat("/first")))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$." + Restaurant_.ID, Matchers.notNullValue()));
 	}
 
 	@Test
-	public void findById_success() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void findById_success() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
-		given().accept(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.when().get("/{id}")
-				.then().statusCode(HttpStatus.OK.value())
-				.body(Restaurant_.ID, Matchers.equalTo(entity.getId().intValue()))
-				.body(Restaurant_.NAME, Matchers.equalTo(entity.getName()));
+		getMockMvc().perform(get(API_RESTAURANT.concat("/{id}"), entity.getId()))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$." + Restaurant_.ID, Matchers.equalTo(entity.getId().intValue())))
+				.andExpect(jsonPath("$." + Restaurant_.NAME, Matchers.equalTo(entity.getName())));
 	}
 
 	@Test
-	public void findById_fail_nonExistentEntity() {
-		given().accept(ContentType.JSON)
-				.pathParam("id", NON_EXISTING_ID)
-				.when().get("/{id}")
-				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void findById_fail_nonExistentEntity() throws Exception {
+		getMockMvc().perform(get(API_RESTAURANT.concat("/{id}"), NON_EXISTENT_ID))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
-	public void findById_fail_deletedEntity() {
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void findById_fail_deletedEntity() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
 		restaurantCrudService.delete(entity.getId());
 
-		given().accept(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.when().get("/{id}")
-				.then().statusCode(HttpStatus.NOT_FOUND.value());
+		getMockMvc().perform(get(API_RESTAURANT.concat("/{id}"), entity.getId()))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
-	public void insert_success() {
+	@WithMockUser(username = "tester", authorities = {"CREATE_RESTAURANT", "SCOPE_WRITE"})
+	void insert_success() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.CREATED.value())
-				.body(Restaurant_.ID, Matchers.notNullValue())
-				.body(Restaurant_.NAME, Matchers.equalTo(entity.getName()));
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isCreated())
+				.andExpect(header().exists(HttpHeaders.LOCATION))
+				.andExpect(jsonPath("$." + Restaurant_.ID, Matchers.notNullValue()))
+				.andExpect(jsonPath("$." + Restaurant_.NAME, Matchers.equalTo(entity.getName())));
 	}
 
 	@Test
-	public void insert_fail_blankName() {
+	@WithMockUser(username = "tester", authorities = {"CREATE_RESTAURANT", "SCOPE_WRITE"})
+	void insert_fail_blankName() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(BLANK_STRING);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void insert_fail_nullFreightFee() {
+	@WithMockUser(username = "tester", authorities = {"CREATE_RESTAURANT", "SCOPE_WRITE"})
+	void insert_fail_nullFreightFee() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setFreightFee(null);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void insert_fail_negativeFreightFee() {
+	@WithMockUser(username = "tester", authorities = {"CREATE_RESTAURANT", "SCOPE_WRITE"})
+	void insert_fail_negativeFreightFee() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setFreightFee(-dto.getFreightFee());
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void insert_fail_nullCuisineId() {
+	@WithMockUser(username = "tester", authorities = {"CREATE_RESTAURANT", "SCOPE_WRITE"})
+	void insert_fail_nullCuisineId() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setCuisineId(null);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void insert_fail_nonExistentCuisineId() {
+	@WithMockUser(username = "tester", authorities = {"CREATE_RESTAURANT", "SCOPE_WRITE"})
+	void insert_fail_nonExistentCuisineId() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
-		dto.setCuisineId(NON_EXISTING_ID);
+		dto.setCuisineId(NON_EXISTENT_ID);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void insert_fail_emptyPaymentMethod() {
+	@WithMockUser(username = "tester", authorities = {"CREATE_RESTAURANT", "SCOPE_WRITE"})
+	void insert_fail_emptyPaymentMethod() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setPaymentMethods(new HashSet<>());
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void insert_fail_nonExistentPaymentMethod() {
+	@WithMockUser(username = "tester", authorities = {"CREATE_RESTAURANT", "SCOPE_WRITE"})
+	void insert_fail_nonExistentPaymentMethod() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
-		dto.getPaymentMethods().add(NON_EXISTING_ID);
+		dto.getPaymentMethods().add(NON_EXISTENT_ID);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.body(dto)
-				.when().post()
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void update_success() {
-		Restaurant entity = restaurantFactory.createAndPersist();
-		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
-		dto.setName(dto.getName() + " update");
-
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.OK.value())
-				.body(Cuisine_.ID, Matchers.equalTo(entity.getId().intValue()))
-				.body(Cuisine_.NAME, Matchers.equalTo(dto.getName()));
-	}
-
-	@Test
-	public void update_fail_nonExistentEntity() {
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_success() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(dto.getName() + " update");
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", NON_EXISTING_ID)
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.NOT_FOUND.value());
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$." + Restaurant_.ID, Matchers.equalTo(dto.getId().intValue())))
+				.andExpect(jsonPath("$." + Restaurant_.NAME, Matchers.equalTo(dto.getName())));
 	}
 
 	@Test
-	public void update_fail_deletedEntity() {
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_fail_nonExistentEntity() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), NON_EXISTENT_ID)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_fail_deletedEntity() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(dto.getName() + " update");
 
 		restaurantCrudService.delete(entity.getId());
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", dto.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.NOT_FOUND.value());
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
-	public void update_fail_blankName() {
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_fail_blankName() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setName(BLANK_STRING);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void update_fail_nullFreightFee() {
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_fail_nullFreightFee() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setFreightFee(null);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void update_fail_negativeFreightFee() {
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_fail_negativeFreightFee() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setFreightFee(-dto.getFreightFee());
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void update_fail_nullCuisineId() {
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_fail_nullCuisineId() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
 		dto.setCuisineId(null);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void update_fail_nonExistentCuisineId() {
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_fail_nonExistentCuisineId() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
-		dto.setCuisineId(NON_EXISTING_ID);
+		dto.setCuisineId(NON_EXISTENT_ID);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void update_fail_nonExistentPaymentMethod() {
+	@WithMockUser(username = "tester", authorities = {"UPDATE_RESTAURANT", "SCOPE_WRITE"})
+	void update_fail_nonExistentPaymentMethod() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
-		dto.getPaymentMethods().add(NON_EXISTING_ID);
+		dto.getPaymentMethods().add(NON_EXISTENT_ID);
 
-		given().accept(ContentType.JSON)
-				.contentType(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.body(dto)
-				.when().put("/{id}")
-				.then().statusCode(HttpStatus.BAD_REQUEST.value());
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void delete_success() {
+	@WithMockUser(username = "tester", authorities = {"DELETE_RESTAURANT", "SCOPE_DELETE"})
+	void delete_success() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
-		given().accept(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.when().delete("/{id}")
-				.then().statusCode(HttpStatus.NO_CONTENT.value())
-				.body(Matchers.emptyOrNullString());
+		getMockMvc().perform(delete(API_RESTAURANT.concat("/{id}"), entity.getId()))
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$").doesNotExist());
 
 		Restaurant deleted = restaurantFactory.getById(entity.getId());
-		Assert.assertTrue(deleted.getExcluded());
+		Assertions.assertTrue(deleted.getExcluded());
 	}
 
 	@Test
-	public void delete_fail_nonExistentEntity() {
-		given().accept(ContentType.JSON)
-				.pathParam("id", NON_EXISTING_ID)
-				.when().delete("/{id}")
-				.then().statusCode(HttpStatus.NOT_FOUND.value());
+	@WithMockUser(username = "tester", authorities = {"DELETE_RESTAURANT", "SCOPE_DELETE"})
+	void delete_fail_nonExistentEntity() throws Exception {
+		getMockMvc().perform(delete(API_RESTAURANT.concat("/{id}"), NON_EXISTENT_ID))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
-	public void delete_fail_deletedEntity() {
+	@WithMockUser(username = "tester", authorities = {"DELETE_RESTAURANT", "SCOPE_DELETE"})
+	void delete_fail_deletedEntity() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 
 		restaurantCrudService.delete(entity.getId());
 
-		given().accept(ContentType.JSON)
-				.pathParam("id", entity.getId())
-				.when().delete("/{id}")
-				.then().statusCode(HttpStatus.NOT_FOUND.value());
+		getMockMvc().perform(delete(API_RESTAURANT.concat("/{id}"), entity.getId()))
+				.andExpect(status().isNotFound());
+	}
+
+	private void validateEntityPresenceInResponseList(MvcResult result, Restaurant entity) throws UnsupportedEncodingException {
+		String response = result.getResponse().getContentAsString();
+		JSONArray restaurants = JsonPath.parse(response).read("$._embedded.restaurants");
+
+		Assertions.assertTrue(restaurants.stream().anyMatch(element -> {
+			if (element instanceof LinkedHashMap) {
+				return ((LinkedHashMap<?, ?>) element).get(Restaurant_.ID).equals(entity.getId().intValue());
+			}
+			return false;
+		}));
 	}
 }

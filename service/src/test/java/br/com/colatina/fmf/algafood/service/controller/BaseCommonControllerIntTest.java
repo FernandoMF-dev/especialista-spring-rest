@@ -2,18 +2,16 @@ package br.com.colatina.fmf.algafood.service.controller;
 
 import br.com.colatina.fmf.algafood.service.utils.BaseCommonIntTest;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseCommonControllerIntTest extends BaseCommonIntTest {
@@ -22,34 +20,32 @@ public abstract class BaseCommonControllerIntTest extends BaseCommonIntTest {
 	private MockMvc mockMvc;
 
 	@BeforeEach
-	public void setUp() {
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
+	void setUp() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
 				.apply(SecurityMockMvcConfigurers.springSecurity())
 				.build();
 	}
 
-	@Before
-	public abstract void setUpConnection();
-
 	protected MockMvc getMockMvc() {
 		return mockMvc;
 	}
 
-	protected Map<String, Object> convertObjectToParams(Object obj) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.convertValue(obj, new TypeReference<>() {
+	protected MultiValueMap<String, String> convertObjectToParams(Object obj) {
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		Map<String, String> maps = MAPPER.convertValue(obj, new TypeReference<>() {
 		});
+
+		params.setAll(maps);
+		return params;
 	}
 
-	protected Map<String, Object> convertPageableToParams(Pageable pageable) {
-		Map<String, Object> params = new HashMap<>();
+	protected MultiValueMap<String, String> convertPageableToParams(Pageable pageable) {
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
 		if (pageable.isPaged()) {
-			params.put("page", pageable.getPageNumber());
-			params.put("size", pageable.getPageSize());
-			params.put("sort", pageable.getSort().toString().replaceAll(": ", ","));
+			params.add("page", String.valueOf(pageable.getPageNumber()));
+			params.add("size", String.valueOf(pageable.getPageSize()));
+			params.add("sort", pageable.getSort().toString().replaceAll(": ", ","));
 		}
 
 		return params;

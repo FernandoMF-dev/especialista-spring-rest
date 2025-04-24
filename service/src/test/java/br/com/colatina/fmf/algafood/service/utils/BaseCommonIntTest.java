@@ -19,7 +19,7 @@ import java.io.IOException;
 @ContextConfiguration(initializers = {BaseCommonIntTest.Initializer.class})
 public abstract class BaseCommonIntTest {
 	protected static final ObjectMapper MAPPER = createObjectMapper();
-	protected static final Long NON_EXISTING_ID = 0L;
+	protected static final Long NON_EXISTENT_ID = 0L;
 	protected static final String BLANK_STRING = "";
 
 	static {

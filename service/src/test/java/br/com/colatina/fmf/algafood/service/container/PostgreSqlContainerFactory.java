@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostgreSqlContainerFactory {
-	private static final String DOCKER_IMAGE_NAME = PostgreSQLContainer.IMAGE + ":14.1-alpine";
+	private static final String DOCKER_IMAGE_NAME = PostgreSQLContainer.IMAGE + ":16.3-alpine";
 
 	private static PostgreSQLContainer container;
 

@@ -69,7 +69,7 @@ public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 
 	@Test
 	public void findDtoById_fail_nonExistentEntity() {
-		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.findDtoById(NON_EXISTING_ID));
+		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.findDtoById(NON_EXISTENT_ID));
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 
 	@Test
 	public void findEntityById_fail_nonExistentEntity() {
-		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.findEntityById(NON_EXISTING_ID));
+		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.findEntityById(NON_EXISTENT_ID));
 	}
 
 	@Test
@@ -148,7 +148,7 @@ public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 		Cuisine cuisine = cuisineFactory.createAndPersist();
 		CuisineDto cuisineDto = cuisineMapper.toDto(cuisine);
 
-		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.update(cuisineDto, NON_EXISTING_ID));
+		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.update(cuisineDto, NON_EXISTENT_ID));
 	}
 
 	public void update_fail_deletedEntity() {
@@ -175,7 +175,7 @@ public class CuisineCrudServiceIntTest extends BaseCommonIntTest {
 
 	@Test
 	public void delete_fail_nonExistentEntity() {
-		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.delete(NON_EXISTING_ID));
+		Assert.assertThrows(ResourceNotFoundException.class, () -> cuisineCrudService.delete(NON_EXISTENT_ID));
 	}
 
 	@Test
