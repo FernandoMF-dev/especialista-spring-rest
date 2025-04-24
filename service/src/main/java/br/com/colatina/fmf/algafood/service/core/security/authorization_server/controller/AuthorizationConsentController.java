@@ -1,4 +1,4 @@
-package br.com.colatina.fmf.algafood.service.core.security.authorization_server;
+package br.com.colatina.fmf.algafood.service.core.security.authorization_server.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;

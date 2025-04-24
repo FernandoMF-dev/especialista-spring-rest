@@ -1,5 +1,6 @@
-package br.com.colatina.fmf.algafood.service.core.security.authorization_server;
+package br.com.colatina.fmf.algafood.service.core.security.authorization_server.controller;
 
+import br.com.colatina.fmf.algafood.service.core.security.authorization_server.OAuth2AuthorizationQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;

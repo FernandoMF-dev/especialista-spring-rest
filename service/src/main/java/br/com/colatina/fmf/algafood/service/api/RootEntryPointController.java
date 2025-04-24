@@ -12,6 +12,7 @@ import br.com.colatina.fmf.algafood.service.api.v1.controller.StatisticsControll
 import br.com.colatina.fmf.algafood.service.api.v1.documentation.controller.RootEntryPointControllerDocumentation;
 import br.com.colatina.fmf.algafood.service.api.v1.model.HypermediaModel;
 import br.com.colatina.fmf.algafood.service.api.v2.controller.CityControllerV2;
+import br.com.colatina.fmf.algafood.service.core.security.CheckSecurity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -30,8 +31,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointController implements RootEntryPointControllerDocumentation {
-	@GetMapping()
 	@Override
+	@GetMapping()
+	@CheckSecurity.Public
 	public HypermediaModel root() {
 		log.debug("REST request to get root entry point");
 		HypermediaModel root = new HypermediaModel();
@@ -43,8 +45,9 @@ public class RootEntryPointController implements RootEntryPointControllerDocumen
 		return root;
 	}
 
-	@GetMapping("/api")
 	@Override
+	@GetMapping("/api")
+	@CheckSecurity.Public
 	public HypermediaModel rootApi() {
 		log.debug("REST request to get root entry point of the API");
 		HypermediaModel root = new HypermediaModel();
@@ -55,8 +58,9 @@ public class RootEntryPointController implements RootEntryPointControllerDocumen
 		return root;
 	}
 
-	@GetMapping("/api/v1")
 	@Override
+	@GetMapping("/api/v1")
+	@CheckSecurity.Public
 	public HypermediaModel rootApiV1() {
 		log.debug("REST request to get root entry point of the API (v1)");
 		HypermediaModel root = new HypermediaModel();
@@ -74,8 +78,9 @@ public class RootEntryPointController implements RootEntryPointControllerDocumen
 		return root;
 	}
 
-	@GetMapping("/api/v2")
 	@Override
+	@GetMapping("/api/v2")
+	@CheckSecurity.Public
 	public HypermediaModel rootApiV2() {
 		log.debug("REST request to get root entry point of the API (v2)");
 		HypermediaModel root = new HypermediaModel();
@@ -85,8 +90,9 @@ public class RootEntryPointController implements RootEntryPointControllerDocumen
 		return root;
 	}
 
-	@GetMapping("/hostcheck")
 	@Override
+	@GetMapping("/hostcheck")
+	@CheckSecurity.Public
 	public String checkHost() throws UnknownHostException {
 		log.debug("REST request check the availability of the host");
 		return InetAddress.getLocalHost().getHostAddress() + " - " + InetAddress.getLocalHost().getHostName();

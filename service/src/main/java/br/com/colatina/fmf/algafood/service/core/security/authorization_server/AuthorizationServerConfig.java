@@ -1,5 +1,7 @@
 package br.com.colatina.fmf.algafood.service.core.security.authorization_server;
 
+import br.com.colatina.fmf.algafood.service.core.security.authorization_server.properties.AlgafoodSecurityProperties;
+import br.com.colatina.fmf.algafood.service.core.security.authorization_server.properties.JwtKeystoreProperties;
 import br.com.colatina.fmf.algafood.service.domain.model.AppUser;
 import br.com.colatina.fmf.algafood.service.domain.repository.AppUserRepository;
 import com.nimbusds.jose.JOSEException;

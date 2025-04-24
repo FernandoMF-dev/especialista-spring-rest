@@ -1,4 +1,4 @@
-package br.com.colatina.fmf.algafood.service.core.security.authorization_server;
+package br.com.colatina.fmf.algafood.service.core.security.authorization_server.properties;
 
 import lombok.Getter;
 import lombok.Setter;
