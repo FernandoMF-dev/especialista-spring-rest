@@ -10,7 +10,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class CityCrudService {
 		return save(dto);
 	}
 
-	public CityDto update(CityDto dto, @PathVariable Long id) {
+	public CityDto update(CityDto dto, Long id) {
 		CityDto saved = findDtoById(id);
 		BeanUtils.copyProperties(dto, saved, "id");
 		return save(saved);

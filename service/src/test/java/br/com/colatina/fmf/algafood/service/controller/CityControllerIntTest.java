@@ -2,6 +2,7 @@ package br.com.colatina.fmf.algafood.service.controller;
 
 import br.com.colatina.fmf.algafood.service.domain.model.City;
 import br.com.colatina.fmf.algafood.service.domain.model.City_;
+import br.com.colatina.fmf.algafood.service.domain.service.CityCrudService;
 import br.com.colatina.fmf.algafood.service.domain.service.dto.CityDto;
 import br.com.colatina.fmf.algafood.service.domain.service.mapper.CityMapper;
 import br.com.colatina.fmf.algafood.service.factory.CityFactory;
@@ -33,6 +34,8 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 	private CityFactory cityFactory;
 	@Autowired
 	private CityMapper cityMapper;
+	@Autowired
+	private CityCrudService cityCrudService;
 
 	@Test
 	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
@@ -69,6 +72,24 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void findById_fail_nonExistentEntity() throws Exception {
+		getMockMvc().perform(get(API_CITY.concat("/{id}"), NON_EXISTENT_ID))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void findById_fail_deletedEntity() throws Exception {
+		City entity = cityFactory.createAndPersist();
+
+		cityCrudService.delete(entity.getId());
+
+		getMockMvc().perform(get(API_CITY.concat("/{id}"), entity.getId()))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
 	@WithMockUser(username = "tester")
 	void findById_fail_unauthorized() throws Exception {
 		City entity = cityFactory.createAndPersist();
@@ -90,6 +111,58 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 				.andExpect(header().exists(HttpHeaders.LOCATION))
 				.andExpect(jsonPath("$." + City_.ID, Matchers.notNullValue()))
 				.andExpect(jsonPath("$." + City_.NAME, Matchers.equalTo(entity.getName())));
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"CREATE_CITY", "SCOPE_WRITE"})
+	void insert_fail_nullAcronym() throws Exception {
+		City entity = cityFactory.createEntity();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.setAcronym(null);
+
+		getMockMvc().perform(post(API_CITY)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"CREATE_CITY", "SCOPE_WRITE"})
+	void insert_fail_blankName() throws Exception {
+		City entity = cityFactory.createEntity();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.setName(BLANK_STRING);
+
+		getMockMvc().perform(post(API_CITY)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"CREATE_CITY", "SCOPE_WRITE"})
+	void insert_fail_nullState() throws Exception {
+		City entity = cityFactory.createEntity();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.setState(null);
+
+		getMockMvc().perform(post(API_CITY)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"CREATE_CITY", "SCOPE_WRITE"})
+	void insert_fail_nonExistentState() throws Exception {
+		City entity = cityFactory.createEntity();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.getState().setId(NON_EXISTENT_ID);
+
+		getMockMvc().perform(post(API_CITY)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -120,6 +193,58 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester", authorities = {"UPDATE_CITY", "SCOPE_WRITE"})
+	void update_fail_nullAcronym() throws Exception {
+		City entity = cityFactory.createAndPersist();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.setAcronym(null);
+
+		getMockMvc().perform(put(API_CITY.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"UPDATE_CITY", "SCOPE_WRITE"})
+	void update_fail_blankName() throws Exception {
+		City entity = cityFactory.createAndPersist();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.setName(BLANK_STRING);
+
+		getMockMvc().perform(put(API_CITY.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"UPDATE_CITY", "SCOPE_WRITE"})
+	void update_fail_nullState() throws Exception {
+		City entity = cityFactory.createAndPersist();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.setState(null);
+
+		getMockMvc().perform(put(API_CITY.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"UPDATE_CITY", "SCOPE_WRITE"})
+	void update_fail_nonExistentState() throws Exception {
+		City entity = cityFactory.createAndPersist();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.getState().setId(NON_EXISTENT_ID);
+
+		getMockMvc().perform(put(API_CITY.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
 	void update_fail_unauthorized() throws Exception {
 		City entity = cityFactory.createAndPersist();
@@ -143,6 +268,24 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 
 		City deleted = cityFactory.getById(entity.getId());
 		Assertions.assertTrue(deleted.getExcluded());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"DELETE_CITY", "SCOPE_DELETE"})
+	void delete_fail_nonExistentEntity() throws Exception {
+		getMockMvc().perform(delete(API_CITY.concat("/{id}"), NON_EXISTENT_ID))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"DELETE_CITY", "SCOPE_DELETE"})
+	void delete_fail_deletedEntity() throws Exception {
+		City entity = cityFactory.createAndPersist();
+
+		cityCrudService.delete(entity.getId());
+
+		getMockMvc().perform(delete(API_CITY.concat("/{id}"), entity.getId()))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
