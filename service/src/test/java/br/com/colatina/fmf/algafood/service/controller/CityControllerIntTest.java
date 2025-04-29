@@ -51,6 +51,13 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester")
+	void findAll_fail_unauthorized() throws Exception {
+		getMockMvc().perform(get(API_CITY))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
 	void findById_success() throws Exception {
 		City entity = cityFactory.createAndPersist();
@@ -59,6 +66,15 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$." + City_.ID, Matchers.equalTo(entity.getId().intValue())))
 				.andExpect(jsonPath("$." + City_.NAME, Matchers.equalTo(entity.getName())));
+	}
+
+	@Test
+	@WithMockUser(username = "tester")
+	void findById_fail_unauthorized() throws Exception {
+		City entity = cityFactory.createAndPersist();
+
+		getMockMvc().perform(get(API_CITY.concat("/{id}"), entity.getId()))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -77,6 +93,18 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void insert_fail_unauthorized() throws Exception {
+		City entity = cityFactory.createEntity();
+		CityDto dto = cityMapper.toDto(entity);
+
+		getMockMvc().perform(post(API_CITY)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"UPDATE_CITY", "SCOPE_WRITE"})
 	void update_success() throws Exception {
 		City entity = cityFactory.createAndPersist();
@@ -92,6 +120,19 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void update_fail_unauthorized() throws Exception {
+		City entity = cityFactory.createAndPersist();
+		CityDto dto = cityMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+
+		getMockMvc().perform(put(API_CITY.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"DELETE_CITY", "SCOPE_DELETE"})
 	void delete_success() throws Exception {
 		City entity = cityFactory.createAndPersist();
@@ -102,5 +143,14 @@ class CityControllerIntTest extends BaseCommonControllerIntTest {
 
 		City deleted = cityFactory.getById(entity.getId());
 		Assertions.assertTrue(deleted.getExcluded());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ", "SCOPE_WRITE"})
+	void delete_fail_unauthorized() throws Exception {
+		City entity = cityFactory.createAndPersist();
+
+		getMockMvc().perform(delete(API_CITY.concat("/{id}"), entity.getId()))
+				.andExpect(status().isForbidden());
 	}
 }
