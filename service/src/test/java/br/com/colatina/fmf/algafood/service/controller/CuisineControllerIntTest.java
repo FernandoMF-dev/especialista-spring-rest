@@ -20,8 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.LinkedHashMap;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -57,12 +55,7 @@ class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 		String response = result.getResponse().getContentAsString();
 		JSONArray cuisines = JsonPath.parse(response).read("$._embedded.cuisines");
 
-		Assertions.assertTrue(cuisines.stream().anyMatch(element -> {
-			if (element instanceof LinkedHashMap) {
-				return ((LinkedHashMap<?, ?>) element).get(Cuisine_.ID).equals(entity.getId().intValue());
-			}
-			return false;
-		}));
+		validateEntityPresenceInResponseList(cuisines, entity.getId());
 	}
 
 	@Test

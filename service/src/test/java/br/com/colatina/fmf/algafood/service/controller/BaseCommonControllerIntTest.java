@@ -2,6 +2,8 @@ package br.com.colatina.fmf.algafood.service.controller;
 
 import br.com.colatina.fmf.algafood.service.utils.BaseCommonIntTest;
 import com.fasterxml.jackson.core.type.TypeReference;
+import net.minidev.json.JSONArray;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -49,5 +51,14 @@ public abstract class BaseCommonControllerIntTest extends BaseCommonIntTest {
 		}
 
 		return params;
+	}
+
+	protected void validateEntityPresenceInResponseList(JSONArray list, Number id) {
+		Assertions.assertTrue(list.stream().anyMatch(element -> {
+			if (element instanceof Map) {
+				return ((Map<?, ?>) element).get("id").equals(id.intValue());
+			}
+			return false;
+		}));
 	}
 }

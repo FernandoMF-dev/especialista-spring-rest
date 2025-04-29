@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -672,11 +671,6 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 		String response = result.getResponse().getContentAsString();
 		JSONArray restaurants = JsonPath.parse(response).read("$._embedded.restaurants");
 
-		Assertions.assertTrue(restaurants.stream().anyMatch(element -> {
-			if (element instanceof LinkedHashMap) {
-				return ((LinkedHashMap<?, ?>) element).get(Restaurant_.ID).equals(entity.getId().intValue());
-			}
-			return false;
-		}));
+		super.validateEntityPresenceInResponseList(restaurants, entity.getId());
 	}
 }
