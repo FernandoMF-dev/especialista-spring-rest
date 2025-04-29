@@ -21,12 +21,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -61,7 +59,7 @@ public class RestaurantCrudService {
 	public List<RestaurantListDto> filterByFreightFee(String name, Double min, Double max) {
 		return restaurantRepository.filterEntityByFreightFee(name, min, max).stream()
 				.map(restaurantMapper::toListDto)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public Page<RestaurantListDto> page(RestaurantPageFilter filter, Pageable pageable) {
@@ -94,7 +92,7 @@ public class RestaurantCrudService {
 		return save(entity);
 	}
 
-	public RestaurantDto update(RestaurantFormDto dto, @PathVariable Long id) {
+	public RestaurantDto update(RestaurantFormDto dto, Long id) {
 		dto.setId(id);
 
 		Restaurant saved = findEntityById(id);
@@ -172,7 +170,7 @@ public class RestaurantCrudService {
 	private void validateSave(Restaurant entity) {
 		try {
 			cuisineCrudService.findEntityById(entity.getCuisine().getId());
-			paymentMethodCrudService.verifyExistence(entity.getPaymentMethods().stream().map(PaymentMethod::getId).collect(Collectors.toList()));
+			paymentMethodCrudService.verifyExistence(entity.getPaymentMethods().stream().map(PaymentMethod::getId).toList());
 		} catch (ResourceNotFoundException e) {
 			throw new ResourceNotFoundException(e, HttpStatus.BAD_REQUEST);
 		}

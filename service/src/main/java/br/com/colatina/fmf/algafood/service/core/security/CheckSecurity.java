@@ -72,6 +72,12 @@ public @interface CheckSecurity {
 		@interface Activate {
 		}
 
+		@PreAuthorize("(hasAuthority('ACTIVATE_RESTAURANT') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_WRITE')")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		@interface AllActivate {
+		}
+
 		@PreAuthorize("(hasAuthority('DELETE_RESTAURANT') or hasAuthority('ADMINISTRATOR')) and hasAuthority('SCOPE_DELETE')")
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)

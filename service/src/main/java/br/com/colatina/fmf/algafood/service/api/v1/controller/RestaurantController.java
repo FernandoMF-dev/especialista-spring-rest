@@ -123,7 +123,7 @@ public class RestaurantController implements RestaurantControllerDocumentation {
 
 	@Override
 	@PatchMapping("/active")
-	@CheckSecurity.Restaurant.Activate
+	@CheckSecurity.Restaurant.AllActivate
 	public ResponseEntity<Void> toggleAllActive(@RequestParam(value = "value") Boolean active, @RequestBody List<Long> restaurantIds) {
 		log.debug("REST request to toggle the active status of all restaurants {} with the value: {}", restaurantIds, active);
 		restaurantCrudService.toggleActive(restaurantIds, active);

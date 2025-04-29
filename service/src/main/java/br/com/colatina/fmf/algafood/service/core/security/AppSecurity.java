@@ -21,12 +21,16 @@ public class AppSecurity {
 	}
 
 	public Long getUserId() {
-		Jwt jwt = (Jwt) getAuthentication().getPrincipal();
-		Object userId = jwt.getClaim("user_id");
+		var principal = getAuthentication().getPrincipal();
+		if (!(principal instanceof Jwt jwt)) {
+			return null;
+		}
 
+		Object userId = jwt.getClaim("user_id");
 		if (Objects.isNull(userId)) {
 			return null;
 		}
+
 		return Long.valueOf(userId.toString());
 	}
 

@@ -25,9 +25,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -57,6 +59,13 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 				.andReturn();
 
 		validateEntityPresenceInResponseList(result, entity);
+	}
+
+	@Test
+	@WithMockUser(username = "tester")
+	void findAll_fail_unauthorized() throws Exception {
+		getMockMvc().perform(get(API_RESTAURANT))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -104,8 +113,15 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester")
+	void filterByFreightFee_fail_unauthorized() throws Exception {
+		getMockMvc().perform(get(API_RESTAURANT.concat("/freight-fee")))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
-	void page_success_noFilterAndPaged() throws Exception {
+	void page_success_noFilterAndUnpaged() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
 		Pageable pageable = Pageable.unpaged();
 		RestaurantPageFilter filter = new RestaurantPageFilter();
@@ -146,6 +162,18 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester")
+	void page_fail_unauthorized() throws Exception {
+		Pageable pageable = Pageable.unpaged();
+		RestaurantPageFilter filter = new RestaurantPageFilter();
+
+		getMockMvc().perform(get(API_RESTAURANT.concat("/page"))
+						.queryParams(convertPageableToParams(pageable))
+						.queryParams(convertObjectToParams(filter)))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
 	void findFirst_success() throws Exception {
 		restaurantFactory.createAndPersist();
@@ -153,6 +181,15 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 		getMockMvc().perform(get(API_RESTAURANT.concat("/first")))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$." + Restaurant_.ID, Matchers.notNullValue()));
+	}
+
+	@Test
+	@WithMockUser(username = "tester")
+	void findFirst_fail_unauthorized() throws Exception {
+		restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(get(API_RESTAURANT.concat("/first")))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -182,6 +219,15 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 
 		getMockMvc().perform(get(API_RESTAURANT.concat("/{id}"), entity.getId()))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@WithMockUser(username = "tester")
+	void findById_fail_unauthorized() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(get(API_RESTAURANT.concat("/{id}"), entity.getId()))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -288,6 +334,18 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 						.contentType(MediaType.APPLICATION_JSON_VALUE)
 						.content(convertObjectToJsonBytes(dto)))
 				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void insert_fail_unauthorized() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+
+		getMockMvc().perform(post(API_RESTAURANT)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -412,6 +470,165 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void update_fail_unauthorized() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+		RestaurantFormDto dto = restaurantFormMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+
+		getMockMvc().perform(put(API_RESTAURANT.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"ACTIVATE_RESTAURANT", "SCOPE_WRITE"})
+	void toggleActive_success_true() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/{id}/active"), entity.getId())
+						.queryParam("value", Boolean.TRUE.toString()))
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$").doesNotExist());
+
+		Restaurant updated = restaurantFactory.getById(entity.getId());
+		Assertions.assertTrue(updated.getActive());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"ACTIVATE_RESTAURANT", "SCOPE_WRITE"})
+	void toggleActive_success_false() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/{id}/active"), entity.getId())
+						.queryParam("value", Boolean.FALSE.toString()))
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$").doesNotExist());
+
+		Restaurant updated = restaurantFactory.getById(entity.getId());
+		Assertions.assertFalse(updated.getActive());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"ACTIVATE_RESTAURANT", "SCOPE_WRITE"})
+	void toggleActive_fail_nonExistentEntity() throws Exception {
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/{id}/active"), NON_EXISTENT_ID)
+						.queryParam("value", Boolean.FALSE.toString()))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void toggleActive_fail_unauthorized() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/{id}/active"), entity.getId())
+						.queryParam("value", Boolean.TRUE.toString()))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"ACTIVATE_RESTAURANT", "SCOPE_WRITE"})
+	void toggleAllActive_success_true() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/active"))
+						.queryParam("value", Boolean.TRUE.toString())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(List.of(entity.getId()))))
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$").doesNotExist());
+
+		Restaurant updated = restaurantFactory.getById(entity.getId());
+		Assertions.assertTrue(updated.getActive());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"ACTIVATE_RESTAURANT", "SCOPE_WRITE"})
+	void toggleAllActive_success_false() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/active"))
+						.queryParam("value", Boolean.FALSE.toString())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(List.of(entity.getId()))))
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$").doesNotExist());
+
+		Restaurant updated = restaurantFactory.getById(entity.getId());
+		Assertions.assertFalse(updated.getActive());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"ACTIVATE_RESTAURANT", "SCOPE_WRITE"})
+	void toggleAllActive_fail_nonExistentEntity() throws Exception {
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/active"))
+						.queryParam("value", Boolean.FALSE.toString())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(List.of(NON_EXISTENT_ID))))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void toggleAllActive_fail_unauthorized() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/active"))
+						.queryParam("value", Boolean.TRUE.toString())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(List.of(entity.getId()))))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"OPEN_RESTAURANT", "SCOPE_WRITE"})
+	void toggleOpen_success_true() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/{id}/open"), entity.getId())
+						.queryParam("value", Boolean.TRUE.toString()))
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$").doesNotExist());
+
+		Restaurant updated = restaurantFactory.getById(entity.getId());
+		Assertions.assertTrue(updated.getOpen());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"OPEN_RESTAURANT", "SCOPE_WRITE"})
+	void toggleOpen_success_false() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/{id}/open"), entity.getId())
+						.queryParam("value", Boolean.FALSE.toString()))
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$").doesNotExist());
+
+		Restaurant updated = restaurantFactory.getById(entity.getId());
+		Assertions.assertFalse(updated.getOpen());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"OPEN_RESTAURANT", "SCOPE_WRITE"})
+	void toggleOpen_fail_nonExistentEntity() throws Exception {
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/{id}/open"), NON_EXISTENT_ID)
+						.queryParam("value", Boolean.FALSE.toString()))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void toggleOpen_fail_unauthorized() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(patch(API_RESTAURANT.concat("/{id}/open"), entity.getId())
+						.queryParam("value", Boolean.TRUE.toString()))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"DELETE_RESTAURANT", "SCOPE_DELETE"})
 	void delete_success() throws Exception {
 		Restaurant entity = restaurantFactory.createAndPersist();
@@ -440,6 +657,15 @@ public class RestaurantControllerIntTest extends BaseCommonControllerIntTest {
 
 		getMockMvc().perform(delete(API_RESTAURANT.concat("/{id}"), entity.getId()))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ", "SCOPE_WRITE"})
+	void delete_fail_unauthorized() throws Exception {
+		Restaurant entity = restaurantFactory.createAndPersist();
+
+		getMockMvc().perform(delete(API_RESTAURANT.concat("/{id}"), entity.getId()))
+				.andExpect(status().isForbidden());
 	}
 
 	private void validateEntityPresenceInResponseList(MvcResult result, Restaurant entity) throws UnsupportedEncodingException {

@@ -66,6 +66,13 @@ class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester")
+	void findAll_fail_unauthorized() throws Exception {
+		getMockMvc().perform(get(API_CUISINE))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
 	void findAllXml_success() throws Exception {
 		cuisineFactory.createAndPersist();
@@ -76,10 +83,17 @@ class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester")
+	void findAllXml_fail_unauthorized() throws Exception {
+		getMockMvc().perform(get(API_CUISINE)
+						.accept(MediaType.APPLICATION_XML_VALUE))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
 	void findById_success() throws Exception {
 		Cuisine entity = cuisineFactory.createAndPersist();
-
 
 		getMockMvc().perform(get(API_CUISINE.concat("/{id}"), entity.getId()))
 				.andExpect(status().isOk())
@@ -103,6 +117,15 @@ class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 
 		getMockMvc().perform(get(API_CUISINE.concat("/{id}"), entity.getId()))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@WithMockUser(username = "tester")
+	void findById_fail_unauthorized() throws Exception {
+		Cuisine entity = cuisineFactory.createAndPersist();
+
+		getMockMvc().perform(get(API_CUISINE.concat("/{id}"), entity.getId()))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -154,6 +177,18 @@ class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 						.contentType(MediaType.APPLICATION_JSON_VALUE)
 						.content(convertObjectToJsonBytes(dto)))
 				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void insert_fail_unauthorized() throws Exception {
+		Cuisine entity = cuisineFactory.createEntity();
+		CuisineDto dto = cuisineMapper.toDto(entity);
+
+		getMockMvc().perform(post(API_CUISINE)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -226,6 +261,19 @@ class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ"})
+	void update_fail_unauthorized() throws Exception {
+		Cuisine entity = cuisineFactory.createAndPersist();
+		CuisineDto dto = cuisineMapper.toDto(entity);
+		dto.setName(dto.getName() + " update");
+
+		getMockMvc().perform(put(API_CUISINE.concat("/{id}"), entity.getId())
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(convertObjectToJsonBytes(dto)))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"DELETE_CUISINE", "SCOPE_DELETE"})
 	void delete_success() throws Exception {
 		Cuisine entity = cuisineFactory.createAndPersist();
@@ -264,5 +312,14 @@ class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 
 		getMockMvc().perform(delete(API_CUISINE.concat("/{id}"), entity.getId()))
 				.andExpect(status().isConflict());
+	}
+
+	@Test
+	@WithMockUser(username = "tester", authorities = {"SCOPE_READ", "SCOPE_WRITE"})
+	void delete_fail_unauthorized() throws Exception {
+		Cuisine entity = cuisineFactory.createAndPersist();
+
+		getMockMvc().perform(delete(API_CUISINE.concat("/{id}"), entity.getId()))
+				.andExpect(status().isForbidden());
 	}
 }

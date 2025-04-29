@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +54,7 @@ public class CuisineCrudService {
 		return save(dto);
 	}
 
-	public CuisineDto update(CuisineDto dto, @PathVariable Long id) {
+	public CuisineDto update(CuisineDto dto, Long id) {
 		CuisineDto saved = findDtoById(id);
 		BeanUtils.copyProperties(dto, saved, "id");
 		return save(saved);
