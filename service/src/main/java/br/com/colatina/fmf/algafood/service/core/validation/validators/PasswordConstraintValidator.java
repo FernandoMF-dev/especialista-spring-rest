@@ -1,6 +1,7 @@
 package br.com.colatina.fmf.algafood.service.core.validation.validators;
 
 import br.com.colatina.fmf.algafood.service.core.validation.constraints.Password;
+import org.apache.commons.lang3.ObjectUtils;
 import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
@@ -27,6 +28,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<Password
 	public boolean isValid(String password, ConstraintValidatorContext context) {
 		List<Rule> rules = new ArrayList<>();
 
+		password = ObjectUtils.defaultIfNull(password, "");
 		addCharacterDataRule(rules, EnglishCharacterData.LowerCase, constraint.lowerCase());
 		addCharacterDataRule(rules, EnglishCharacterData.UpperCase, constraint.upperCase());
 		addCharacterDataRule(rules, EnglishCharacterData.Digit, constraint.numerical());

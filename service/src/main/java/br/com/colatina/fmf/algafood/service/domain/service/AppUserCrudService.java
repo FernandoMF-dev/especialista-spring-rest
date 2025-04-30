@@ -16,7 +16,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +52,7 @@ public class AppUserCrudService {
 		return save(entity);
 	}
 
-	public AppUserDto update(AppUserDto dto, @PathVariable Long id) {
+	public AppUserDto update(AppUserDto dto, Long id) {
 		AppUser saved = findEntityById(id);
 		BeanUtils.copyProperties(dto, saved, "id", "password");
 		return save(saved);
@@ -64,7 +63,8 @@ public class AppUserCrudService {
 		if (!passwordEncoder.matches(dto.getCurrentPassword(), appUser.getPassword())) {
 			throw new PasswordMismatchException("password_change.current.mismatch");
 		}
-		appUser.setPassword(dto.getNewPassword());
+		String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
+		appUser.setPassword(encodedPassword);
 		appUserRepository.save(appUser);
 	}
 

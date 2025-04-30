@@ -3,7 +3,9 @@ package br.com.colatina.fmf.algafood.service.domain.service.dto;
 import br.com.colatina.fmf.algafood.service.core.validation.constraints.Password;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -14,6 +16,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class PasswordChangeDto implements Serializable {
 	@Schema(description = "Current password of the user", name = "current")
 	@JsonProperty("current")
