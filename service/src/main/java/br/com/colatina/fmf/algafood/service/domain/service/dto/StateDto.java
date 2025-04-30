@@ -32,7 +32,7 @@ public class StateDto extends RepresentationModel<StateDto> implements Serializa
 
 	@Schema(description = "Acronym of the state", example = "ES")
 	@NotBlank(message = "state.acronym.not_null")
-	@Size(max = 2, message = "state.acronym.max_size")
+	@Size(max = 5, message = "state.acronym.max_size")
 	private String acronym;
 
 	@Schema(description = "Full name of the state", example = "Espírito Santo")

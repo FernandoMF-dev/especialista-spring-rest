@@ -24,7 +24,7 @@ public class State implements Serializable {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "acronym", length = 2, nullable = false)
+	@Column(name = "acronym", length = 5, nullable = false)
 	private String acronym;
 
 	@Column(name = "name", nullable = false)

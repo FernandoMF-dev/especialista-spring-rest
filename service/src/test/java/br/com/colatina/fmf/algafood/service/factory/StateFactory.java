@@ -21,7 +21,7 @@ public class StateFactory extends BaseEntityFactory<State> {
 	public State createEntity() {
 		State state = new State();
 		state.setName(String.format("State %d", System.currentTimeMillis()));
-		state.setAcronym(String.valueOf(System.currentTimeMillis()).substring(0, 2));
+		state.setAcronym(String.valueOf(System.currentTimeMillis()).substring(0, 5));
 		return state;
 	}
 
