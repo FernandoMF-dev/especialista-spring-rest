@@ -41,10 +41,10 @@ public class CityControllerV2 implements CityControllerV2Documentation {
 	@GetMapping()
 	@Override
 	@CheckSecurity.City.Read
-	public CollectionModel<CityModelV2> findAll() {
+	public ResponseEntity<CollectionModel<CityModelV2>> findAll() {
 		log.debug("REST V2 request to find all cities");
 		List<CityDto> cities = cityCrudService.findAll();
-		return cityModelAssemblerV2.toCollectionModel(cities);
+		return new ResponseEntity<>(cityModelAssemblerV2.toCollectionModel(cities), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")

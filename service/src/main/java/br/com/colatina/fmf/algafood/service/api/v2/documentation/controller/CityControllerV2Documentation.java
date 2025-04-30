@@ -21,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 public interface CityControllerV2Documentation {
 	@Operation(summary = "Find a list of all available cities")
 	@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CityCollectionModelOpenApiV2.class)))
-	CollectionModel<CityModelV2> findAll();
+	ResponseEntity<CollectionModel<CityModelV2>> findAll();
 
 	@Operation(summary = "Find a city by its ID")
 	ResponseEntity<CityModelV2> findById(@Parameter(description = "ID of a city", example = "1", required = true) Long id);
