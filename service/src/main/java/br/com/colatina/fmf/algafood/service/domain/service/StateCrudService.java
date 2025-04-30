@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class StateCrudService {
 		return save(dto);
 	}
 
-	public StateDto update(StateDto dto, @PathVariable Long id) {
+	public StateDto update(StateDto dto, Long id) {
 		StateDto saved = findDtoById(id);
 		BeanUtils.copyProperties(dto, saved, "id");
 		return save(saved);
