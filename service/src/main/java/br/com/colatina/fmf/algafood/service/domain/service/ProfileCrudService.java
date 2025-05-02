@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Set;
@@ -45,7 +44,7 @@ public class ProfileCrudService {
 		return save(entity);
 	}
 
-	public ProfileDto update(ProfileDto dto, @PathVariable Long id) {
+	public ProfileDto update(ProfileDto dto, Long id) {
 		Profile saved = findEntityById(id);
 		BeanUtils.copyProperties(dto, saved, "id");
 		return save(saved);
