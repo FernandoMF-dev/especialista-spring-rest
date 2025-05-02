@@ -27,7 +27,6 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import jakarta.validation.Valid;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -45,7 +44,7 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 		log.debug("REST request to find all payment methods");
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		OffsetDateTime lastUpdate = paymentMethodCrudService.findLastUpdate();
-		String eTag = getDeepETag(lastUpdate);
+		String eTag = ResourceUriUtils.getDeepETag(lastUpdate);
 		if (request.checkNotModified(eTag)) {
 			return null;
 		}
@@ -65,7 +64,7 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 		log.debug("REST request to find the payment method with ID: {}", id);
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		OffsetDateTime lastUpdate = paymentMethodCrudService.findLastUpdateById(id);
-		String eTag = getDeepETag(lastUpdate);
+		String eTag = ResourceUriUtils.getDeepETag(lastUpdate);
 		if (request.checkNotModified(eTag)) {
 			return null;
 		}
@@ -103,13 +102,5 @@ public class PaymentMethodController implements PaymentMethodControllerDocumenta
 		log.debug("REST request to delete payment method with id {}", id);
 		paymentMethodCrudService.delete(id);
 		return ResponseEntity.noContent().build();
-	}
-
-	private String getDeepETag(OffsetDateTime lastUpdate) {
-		String eTag = "0";
-		if (Objects.nonNull(lastUpdate)) {
-			eTag = String.valueOf(lastUpdate.toEpochSecond());
-		}
-		return eTag;
 	}
 }

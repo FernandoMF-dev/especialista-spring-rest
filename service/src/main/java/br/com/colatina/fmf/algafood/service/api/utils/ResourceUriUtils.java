@@ -8,6 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @UtilityClass
@@ -22,5 +23,13 @@ public class ResourceUriUtils {
 		HttpServletResponse response = Objects.requireNonNull(requestAttributes).getResponse();
 
 		Objects.requireNonNull(response).setHeader(HttpHeaders.LOCATION, uri.toString());
+	}
+
+	public static String getDeepETag(OffsetDateTime lastUpdate) {
+		String eTag = "0";
+		if (Objects.nonNull(lastUpdate)) {
+			eTag = String.valueOf(lastUpdate.toEpochSecond());
+		}
+		return eTag;
 	}
 }
