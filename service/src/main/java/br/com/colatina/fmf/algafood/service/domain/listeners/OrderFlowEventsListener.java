@@ -15,7 +15,7 @@ public class OrderFlowEventsListener {
 
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void whenOrderConfirmed(OrderConfirmedEvent event) {
-		var order = event.getOrder();
+		var order = event.order();
 
 		var email = EmailSendService.Email.builder()
 				.subject(order.getRestaurant().getName() + " - Pedido confirmado")
@@ -29,7 +29,7 @@ public class OrderFlowEventsListener {
 
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void whenOrderCanceled(OrderCanceledEvent event) {
-		var order = event.getOrder();
+		var order = event.order();
 
 		var email = EmailSendService.Email.builder()
 				.subject(order.getRestaurant().getName() + " - Pedido cancelado")
