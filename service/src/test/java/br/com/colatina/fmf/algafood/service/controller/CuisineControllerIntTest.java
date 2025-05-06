@@ -132,6 +132,15 @@ class CuisineControllerIntTest extends BaseCommonControllerIntTest {
 	}
 
 	@Test
+	@WithMockUser(username = "tester")
+	void findFirst_fail_unauthorized() throws Exception {
+		cuisineFactory.createAndPersist();
+
+		getMockMvc().perform(get(API_CUISINE.concat("/first")))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	@WithMockUser(username = "tester", authorities = {"CREATE_CUISINE", "SCOPE_WRITE"})
 	void insert_success() throws Exception {
 		Cuisine entity = cuisineFactory.createEntity();

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class ProductCrudService {
 		return save(dto, restaurantId);
 	}
 
-	public ProductDto update(Long restaurantId, ProductDto dto, @PathVariable Long productId) {
+	public ProductDto update(Long restaurantId, ProductDto dto, Long productId) {
 		ProductDto saved = findDtoById(restaurantId, productId);
 		BeanUtils.copyProperties(dto, saved, "id");
 		return save(saved, restaurantId);
