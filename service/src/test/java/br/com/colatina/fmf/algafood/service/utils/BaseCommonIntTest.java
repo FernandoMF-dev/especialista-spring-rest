@@ -33,6 +33,7 @@ public abstract class BaseCommonIntTest {
 	private static ObjectMapper createObjectMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false);
+		mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 		mapper.registerModule(new JavaTimeModule());
 		return mapper;

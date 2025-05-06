@@ -126,5 +126,4 @@ public class OrderCrudService {
 	private boolean doesRestaurantOffersProduct(Product orderProduct, Product restaurantProduct) {
 		return Objects.equals(restaurantProduct, orderProduct) && restaurantProduct.getActive() && !restaurantProduct.getExcluded();
 	}
-
 }

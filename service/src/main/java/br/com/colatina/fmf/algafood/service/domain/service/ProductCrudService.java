@@ -43,7 +43,7 @@ public class ProductCrudService {
 		return save(dto, restaurantId);
 	}
 
-	public ProductDto update(Long restaurantId, ProductDto dto, Long productId) {
+	public ProductDto update(Long restaurantId, Long productId, ProductDto dto) {
 		ProductDto saved = findDtoById(restaurantId, productId);
 		BeanUtils.copyProperties(dto, saved, "id");
 		return save(saved, restaurantId);

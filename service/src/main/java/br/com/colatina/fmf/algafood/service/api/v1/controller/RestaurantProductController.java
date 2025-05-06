@@ -68,7 +68,7 @@ public class RestaurantProductController implements RestaurantProductControllerD
 	public ResponseEntity<ProductDto> update(@PathVariable Long restaurantId, @PathVariable Long productId,
 											 @Valid @RequestBody ProductDto dto) {
 		log.debug("REST request to update product with id {} in restaurant {}: {}", productId, restaurantId, dto);
-		ProductDto product = productCrudService.update(restaurantId, dto, productId);
+		ProductDto product = productCrudService.update(restaurantId, productId, dto);
 		return new ResponseEntity<>(productHateoas.mapModel(product), HttpStatus.OK);
 	}
 

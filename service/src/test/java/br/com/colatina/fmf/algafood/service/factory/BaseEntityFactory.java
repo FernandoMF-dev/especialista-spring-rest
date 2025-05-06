@@ -1,5 +1,6 @@
 package br.com.colatina.fmf.algafood.service.factory;
 
+import java.util.Objects;
 
 /**
  * Base class for creating entity factories for automated tests.
@@ -7,9 +8,6 @@ package br.com.colatina.fmf.algafood.service.factory;
  * @param <E> Entity type to be built
  */
 public abstract class BaseEntityFactory<E> {
-
-	private EntityCustomizer<E> customization;
-
 	/**
 	 * This method must return an instance of the entity initialized with the default data for all tests.
 	 *
@@ -29,9 +27,23 @@ public abstract class BaseEntityFactory<E> {
 	 * This method must return the entity corresponding to the parameter <b>id</b>
 	 *
 	 * @param id id of the entity
-	 * @return Persisted entity. If not found, returns <b>null</b>
+	 * @return Persisted entity. If not found, return <b>null</b>
 	 */
 	public abstract E getById(Long id);
+
+	/**
+	 * This method must return an instance of the entity initialized with the default data for all tests.
+	 *
+	 * @param customization Customization to be applied on the entity. This customization will be applied after the default data is set.
+	 * @return Built entity
+	 */
+	public E createEntity(EntityCustomizer<E> customization) {
+		final E entidade = createEntity();
+		if (Objects.nonNull(customization)) {
+			customization.execute(entidade);
+		}
+		return entidade;
+	}
 
 	/**
 	 * Builds the entity, performing customizations if necessary, and persists it in the database
@@ -39,45 +51,18 @@ public abstract class BaseEntityFactory<E> {
 	 * @return Persisted entity
 	 */
 	public E createAndPersist() {
-		final E entidade = createEntity();
-		if (isCustomized()) {
-			customization.execute(entidade);
-			removeCustomization();
-		}
+		return createAndPersist(null);
+	}
+
+	/**
+	 * Builds the entity, performing customizations if necessary, and persists it in the database
+	 *
+	 * @param customization Customization to be applied on the entity. This customization will be applied after the default data is set before it is persisted.
+	 * @return Persisted entity
+	 */
+	public E createAndPersist(EntityCustomizer<E> customization) {
+		final E entidade = createEntity(customization);
 		return persist(entidade);
-	}
-
-	/**
-	 * Builds the entity, performing customizations if necessary
-	 *
-	 * @return Built entity
-	 */
-	public E createCustomEntity() {
-		final E entidade = createEntity();
-		if (isCustomized()) {
-			customization.execute(entidade);
-			removeCustomization();
-		}
-		return entidade;
-	}
-
-	private boolean isCustomized() {
-		return this.customization != null;
-	}
-
-	private void removeCustomization() {
-		this.customization = null;
-	}
-
-	/**
-	 * This method allows customization of the entity attributes before its persistence
-	 *
-	 * @param customization Customization to be applied on the entity
-	 * @return Customized entity
-	 */
-	public BaseEntityFactory<E> customize(EntityCustomizer<E> customization) {
-		this.customization = customization;
-		return this;
 	}
 
 	/**
