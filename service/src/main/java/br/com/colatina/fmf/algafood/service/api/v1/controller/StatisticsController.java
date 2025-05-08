@@ -33,6 +33,7 @@ public class StatisticsController implements StatisticsControllerDocumentation {
 
 	@GetMapping
 	@Override
+	@CheckSecurity.Public
 	public HypermediaModel statistics() {
 		log.debug("REST request to get the available statistics endpoints");
 		return statisticsHateoas.getRootHypermediaModel();

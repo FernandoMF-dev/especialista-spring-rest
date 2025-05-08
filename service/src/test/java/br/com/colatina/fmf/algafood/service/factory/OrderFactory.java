@@ -65,6 +65,7 @@ public class OrderFactory extends BaseEntityFactory<Order> {
 	protected Order persist(Order entity) {
 		OrderInsertDto insert = orderInsertMapper.toDto(entity);
 		OrderDto dto = orderCrudService.insert(insert);
+		dto = orderCrudService.findDtoByUuid(dto.getCode());
 		return orderMapper.toEntity(dto);
 	}
 
