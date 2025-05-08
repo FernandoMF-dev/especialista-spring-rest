@@ -29,7 +29,7 @@ public @interface FileContentType {
 	Class<?>[] groups() default {};
 
 	/**
-	 * @return the payload associated to the constraint
+	 * @return the payload associated with the constraint
 	 */
 	Class<? extends Payload>[] payload() default {};
 

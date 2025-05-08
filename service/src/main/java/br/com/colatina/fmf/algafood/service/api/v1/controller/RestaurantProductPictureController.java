@@ -51,7 +51,7 @@ public class RestaurantProductPictureController implements RestaurantProductPict
 	@GetMapping(produces = MediaType.ALL_VALUE)
 	@CheckSecurity.Restaurant.Product.Read
 	public ResponseEntity<InputStreamResource> getPictureFile(@PathVariable Long restaurantId, @PathVariable Long productId,
-															  @RequestHeader("accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
+															  @RequestHeader(HttpHeaders.ACCEPT) String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		log.debug("REST request to the picture file for the product {} from the restaurant {}", productId, restaurantId);
 		try {
 			ProductPictureDto picture = productPictureCrudService.findPictureDto(restaurantId, productId);
